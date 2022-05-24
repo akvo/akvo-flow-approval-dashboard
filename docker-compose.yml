@@ -1,0 +1,40 @@
+---
+version: "3.9"
+services:
+  mainnetwork:
+    image: alpine:3.14.0
+    command: ["tail", "-f", "/dev/null"]
+  db:
+    image: postgres:12-alpine
+    volumes:
+      - ./db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - pg-data:/var/lib/postgresql/data
+      - ./db/script:/script:ro
+    environment:
+      - POSTGRES_PASSWORD=password
+    ports:
+      - 5432:5432
+  backend:
+    image: python:3.8.5
+    working_dir: /app
+    command: ["./run.sh"]
+    volumes:
+      - ./backend:/app:delegated
+    environment:
+      - DATABASE_URL=postgresql://akvotc:password@db:5432/akvo-flow-approval
+      - SECRET_KEY=36ca26dbc9f6a435aa7ad404491d1650cd9485eef9ca8ea60501495b0526d4df
+      - BUCKET_FOLDER=local
+      - CLIENT_ID=test
+      - CLIENT_SECRET=test
+    depends_on:
+      - db
+    network_mode: service:mainnetwork
+  frontend:
+    image: akvo/akvo-node-17-alpine:20220121.024749.f30b815
+    working_dir: /app
+    command: ["./start.sh"]
+    volumes:
+      - ./frontend:/app:delegated
+    network_mode: service:mainnetwork
+volumes:
+  pg-data:

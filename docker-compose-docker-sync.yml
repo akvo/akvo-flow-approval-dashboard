@@ -1,0 +1,9 @@
+---
+version: "3.9"
+services:
+  frontend:
+    volumes:
+      - akvo-flow-approval-docker-sync:/app/node_modules:nocopy
+volumes:
+  akvo-flow-approval-docker-sync:
+    external: true
