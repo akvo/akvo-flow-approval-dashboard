@@ -3,11 +3,11 @@
 
 set -euo pipefail
 
-deployment_name="isco"
-deployment_version_label="isco-version"
-github_project="isco"
+deployment_name="akvo-flow-approval-dashboard"
+deployment_version_label="akvo-flow-approval-dashboard-version"
+github_project="akvo-flow-approval-dashboard"
 notification="zulip"
-zulip_stream="ISCO"
+zulip_stream="TC"
 
 docker run \
        --rm \
