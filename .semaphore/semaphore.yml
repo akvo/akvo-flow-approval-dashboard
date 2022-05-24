@@ -8,6 +8,7 @@ agent:
 global_job_config:
   secrets:
     - name: GCP
+    - name: docker-hub-credentials
   prologue:
     commands:
       - echo "${DOCKER_PASSWORD}" | docker login --username
