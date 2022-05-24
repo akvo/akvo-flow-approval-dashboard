@@ -1,0 +1,11 @@
+/.ipynb_checkpoints
+/.pytest_cache
+/.pip
+__pycache__
+node_modules
+credentials
+test
+/tmp/images/*.jpg
+/tmp/images/*.png
+/tmp/images/*.jpeg
+/tmp/*.zip
