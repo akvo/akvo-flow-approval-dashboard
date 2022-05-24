@@ -17,7 +17,7 @@ config = context.config
 
 # overwrite sqlalchemy.url path with local environment
 # check docker-compose.yml deh
-DATABASE_URL = os.environ["SQLALCHEMY_DATABASE_URI"].replace('%', '%%')
+DATABASE_URL = os.environ["DATABASE_URL"].replace('%', '%%')
 
 # sets up loggers
 fileConfig(config.config_file_name)
