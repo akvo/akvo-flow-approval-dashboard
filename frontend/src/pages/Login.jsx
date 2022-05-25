@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "../Components/Header/Header";
 import Main from "../Components/Main/Main";
-import { Button, Input, Checkbox, Row, Tabs } from "antd";
+import { Button, Checkbox, Row, Tabs, Form, Input } from "antd";
 
 const { TabPane } = Tabs;
 
@@ -33,46 +33,54 @@ const GoogleIcon = () => {
   );
 };
 
-const Login = () => {
+const Login = ({ onFinish }) => {
   return (
     <div>
       <Header />
       <Main>
         <div className="main_container">
-          <div className="main_header">
-            <h1>Log in to Akvo flow</h1>
-            <Tabs defaultActiveKey="1">
-              <TabPane tab="Log in" key="1" size="large" />
-              <TabPane tab="Sign up" key="2" size="large" />
-            </Tabs>
-          </div>
-          <div className="login_with_social">
-            <Row>
-              <p>You can sign in with social</p>
-              <Button shape="circle" size={36}>
-                <GoogleIcon />
-              </Button>
-            </Row>
-          </div>
-          <div className="login_input">
-            <Row>
-              <Input size="large" placeholder="E-mail" />
-            </Row>
-            <Row>
-              <Input size="large" placeholder="Your password" />
-            </Row>
-            <Row>
-              <Checkbox>
-                I accept the terms of the offer of the
-                <a href="privacy-policy"> privacy policy</a>
-              </Checkbox>
-            </Row>
-            <Row>
-              <Button type="primary" block>
-                Log in
-              </Button>
-            </Row>
-          </div>
+          <Form onFinish={onFinish}>
+            <div className="main_header">
+              <h1>Log in to Akvo flow</h1>
+              <Tabs defaultActiveKey="1">
+                <TabPane tab="Log in" key="1" size="large" />
+                <TabPane tab="Sign up" key="2" size="large" />
+              </Tabs>
+            </div>
+            <div className="login_with_social">
+              <Row>
+                <p>You can sign in with social</p>
+                <Button shape="circle" size={36}>
+                  <GoogleIcon />
+                </Button>
+              </Row>
+            </div>
+            <div className="login_input">
+              <Row>
+                <Form.Item name="email">
+                  <Input size="large" placeholder="E-mail" />
+                </Form.Item>
+              </Row>
+              <Row>
+                <Form.Item name="password">
+                  <Input.Password placeholder="Your password" />
+                </Form.Item>
+              </Row>
+              <Row>
+                <Form.Item>
+                  <Checkbox>
+                    I accept the terms of the offer of the
+                    <a href="privacy-policy"> privacy policy</a>
+                  </Checkbox>
+                </Form.Item>
+              </Row>
+              <Row>
+                <Button type="primary" htmlType="submit" block>
+                  Log in
+                </Button>
+              </Row>
+            </div>
+          </Form>
         </div>
       </Main>
     </div>
