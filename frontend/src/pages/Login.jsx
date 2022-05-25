@@ -37,7 +37,7 @@ const Login = ({ onFinish }) => {
   return (
     <div>
       <Header />
-      <Main>
+      <Main isLoginPage={true}>
         <div className="main_container">
           <Form onFinish={onFinish}>
             <div className="main_header">

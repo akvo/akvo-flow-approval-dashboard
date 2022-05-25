@@ -1,6 +1,5 @@
 .main {
   background-color: #f7f8fc;
-  padding: 156px 20px;
 
   .main_container {
     max-width: 440px;
@@ -97,6 +96,78 @@
       .ant-checkbox + span {
         font-weight: 700;
         line-height: 14px;
+      }
+    }
+  }
+
+  .main-page {
+    padding: 20px 30px 39px 30px;
+
+    .pending-data {
+      padding-bottom: 20px;
+      border-radius: 10px;
+
+      h2 {
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 21px;
+      }
+
+      div {
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 16px;
+      }
+
+      .ant-row {
+        justify-content: space-between;
+        align-items: center;
+
+        .ant-row {
+          gap: 20px;
+        }
+      }
+    }
+
+    .data {
+      padding: 20px;
+      border: 1px solid #bfbfbf;
+      border-radius: 10px;
+      background-color: #ffffff;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 15px;
+      row-gap: 20px;
+
+      @media screen and (max-width: 500px) {
+        grid-template-columns: 1fr;
+      }
+
+      .data-container {
+        padding: 25px;
+        border: 1px solid #bfbfbf;
+        border-radius: 10px;
+      }
+
+      h1,
+      span {
+        font-weight: 700;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      .button {
+        display: flex;
+        justify-content: end;
+      }
+
+      .ant-btn {
+        border-radius: 4px;
+        width: 70px;
+        height: 36px;
+        margin-top: 7px;
       }
     }
   }
