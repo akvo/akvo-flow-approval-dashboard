@@ -1,14 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Login from "./Login";
 
 const Home = () => {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
+
   const handleOnFinish = (values) => {
     const { email, password } = values;
-    console.log("email", email);
-    console.log("password", password);
+    setEmail(email);
+    setPassword(password);
   };
+
+  useEffect(() => {
+    handleOnFinish();
+  }, [email, password]);
 
   return (
     <div>
