@@ -1,18 +1,17 @@
 .main {
-  background-color: #F7F8FC;
-  // padding: 156px 20px;
-  
+  background-color: #f7f8fc;
+
   .main_container {
     max-width: 440px;
     margin: auto;
-    border: 1px solid #BFBFBF;
+    border: 1px solid #bfbfbf;
     border-radius: 10px;
-    font-family: 'Roboto';
-    
+    font-family: "Roboto";
+
     .main_header {
       border-top-left-radius: 10px;
       border-top-right-radius: 10px;
-      background-color: #FFFFFF;
+      background-color: #ffffff;
       padding: 20px 20px 0 20px;
 
       h1 {
@@ -24,18 +23,18 @@
         font-size: 14px;
         line-height: 20px;
         font-weight: 700;
-        color: #BFBFBF;
+        color: #bfbfbf;
         width: 70px;
         height: 64px;
         justify-content: center;
       }
 
       .ant-tabs-tab.ant-tabs-tab-active {
-        border-bottom: 2px solid #00AAF1;
+        border-bottom: 2px solid #00aaf1;
       }
 
       .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-        color: #000 ;
+        color: #000;
       }
 
       .ant-tabs > .ant-tabs-nav {
@@ -50,8 +49,8 @@
 
     .login_with_social {
       padding: 20px;
-      border-top: 1px solid #BFBFBF;
-      border-bottom: 1px solid #BFBFBF;
+      border-top: 1px solid #bfbfbf;
+      border-bottom: 1px solid #bfbfbf;
       align-items: center;
 
       p {
@@ -74,9 +73,9 @@
     }
 
     .login_input {
-      background-color: #FFFFFF;
+      background-color: #ffffff;
       padding: 20px;
-      border-top: 1px solid #BFBFBF;
+      border-top: 1px solid #bfbfbf;
       border-bottom-left-radius: 10px;
       border-bottom-right-radius: 10px;
       display: grid;
@@ -130,21 +129,26 @@
 
     .data {
       padding: 20px;
-      border: 1px solid #BFBFBF;
+      border: 1px solid #bfbfbf;
       border-radius: 10px;
-      background-color: #FFFFFF;
+      background-color: #ffffff;
       display: grid;
       grid-template-columns: 1fr 1fr;
       column-gap: 15px;
       row-gap: 20px;
-      
+
+      @media screen and (max-width: 500px) {
+        grid-template-columns: 1fr;
+      }
+
       .data-container {
         padding: 25px;
-        border: 1px solid #BFBFBF;
+        border: 1px solid #bfbfbf;
         border-radius: 10px;
       }
 
-      h1, span {
+      h1,
+      span {
         font-weight: 700;
       }
 
