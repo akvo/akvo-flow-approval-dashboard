@@ -16,10 +16,8 @@ const Home = () => {
     const { email, password } = values;
 
     const payload = new FormData();
-    payload.append("grant_type", "password");
     payload.append("username", email);
     payload.append("password", password);
-    payload.append("scope", "openid email");
 
     api
       .post(`/login`, payload)
