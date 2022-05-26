@@ -30,7 +30,7 @@ const Home = () => {
           s.isLoggedIn = true;
           s.user = data;
         });
-        navigate("/main-page");
+        navigate("/main-dashboard");
       })
       .catch((err) => {
         notify({
@@ -43,7 +43,7 @@ const Home = () => {
   return (
     <Routes>
       <Route path="/login" element={<Login onFinish={handleLoginOnFinish} />} />
-      <Route path="/main-page" element={<MainPage />} />
+      <Route path="/main-dashboard" element={<MainPage />} />
     </Routes>
   );
 };
