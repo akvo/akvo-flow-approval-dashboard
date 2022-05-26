@@ -1,5 +1,6 @@
 .main {
   background-color: #f7f8fc;
+  height: 100%;
 
   .main_container {
     max-width: 440px;
@@ -17,58 +18,8 @@
       h1 {
         font-size: 20px;
         line-height: 23px;
-      }
-
-      .ant-tabs-tab {
-        font-size: 14px;
-        line-height: 20px;
-        font-weight: 700;
-        color: #bfbfbf;
-        width: 70px;
-        height: 64px;
-        justify-content: center;
-      }
-
-      .ant-tabs-tab.ant-tabs-tab-active {
-        border-bottom: 2px solid #00aaf1;
-      }
-
-      .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-        color: #000;
-      }
-
-      .ant-tabs > .ant-tabs-nav {
-        border-bottom: none;
-        margin-bottom: 0;
-      }
-
-      .ant-tabs-tab + .ant-tabs-tab {
         margin: 0;
-      }
-    }
-
-    .login_with_social {
-      padding: 20px;
-      border-top: 1px solid #bfbfbf;
-      border-bottom: 1px solid #bfbfbf;
-      align-items: center;
-
-      p {
-        margin: 0;
-      }
-
-      .ant-row {
-        justify-content: space-between;
-      }
-
-      .ant-btn {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .ant-btn-circle {
-        border-color: transparent;
+        padding: 0 0 28px 0;
       }
     }
 
@@ -135,9 +86,13 @@
       border-radius: 10px;
       background-color: #ffffff;
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
       column-gap: 15px;
       row-gap: 20px;
+
+      @media screen and (max-width: 800px) {
+        grid-template-columns: 1fr 1fr;
+      }
 
       @media screen and (max-width: 500px) {
         grid-template-columns: 1fr;
