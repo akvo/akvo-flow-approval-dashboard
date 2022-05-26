@@ -18,3 +18,6 @@ openpyxl==3.0.5
 XlsxWriter==3.0.2
 aiofiles==0.7.0
 python-multipart==0.0.5
+cffi==1.15.0
+cryptography==3.4.8
+pycparser==2.21

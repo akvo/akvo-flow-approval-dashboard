@@ -1,33 +1,35 @@
-import requests as r
-from fastapi import APIRouter, HTTPException, Request, Form
+from fastapi import APIRouter, Request, Depends, Form
+from util.auth0 import Auth0
+from fastapi.security import HTTPBearer
 from models.auth import Oauth2Base
+from models.user import UserBase
 from pydantic import SecretStr
 
 auth_route = APIRouter()
-auth_domain = "https://akvofoundation.eu.auth0.com/oauth/token"
-
-
-def get_token(username: str, password: SecretStr) -> Oauth2Base:
-    data = {
-        "client_id": "S6Pm0WF4LHONRPRKjepPXZoX1muXm1JS",
-        "username": username,
-        "password": password.get_secret_value(),
-        "grant_type": "password",
-        "scope": "offline_access"
-    }
-    req = r.post(auth_domain, data=data)
-    if req.status_code != 200:
-        raise HTTPException(
-                status_code=401,
-                detail="")
-    return req.json()
+security = HTTPBearer()
 
 
 @auth_route.post('/login',
-                 response_model=Oauth2Base,
+                 response_model=UserBase,
                  summary="Login",
                  tags=["Auth"])
 def login(
     req: Request, username: str = Form(...), password: SecretStr = Form(...)
 ) -> Oauth2Base:
-    return get_token(username=username, password=password)
+    auth0 = Auth0()
+    token = auth0.get_token(username=username, password=password)
+    id_token = token.get("id_token")
+    data = auth0.verify(id_token)
+    data.update({"id_token": id_token, "is_admin": True})
+    return data
+
+
+@auth_route.get('/profile',
+                response_model=UserBase,
+                summary="Check Profile",
+                tags=["Auth"])
+def profile(token: str = Depends(security)):
+    auth0 = Auth0()
+    data = auth0.verify(token.credentials)
+    data.update({"id_token": token.credentials, "is_admin": True})
+    return data
