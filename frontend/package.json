@@ -5,9 +5,11 @@
   "dependencies": {
     "antd": "^4.19.1",
     "axios": "^0.26.1",
+    "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
     "pullstate": "^1.23.0",
     "react": "^18.1.0",
+    "react-cookie": "^4.1.1",
     "react-dom": "^18.1.0",
     "react-icons": "^4.3.1",
     "react-router-dom": "^6.2.2",
