@@ -3,7 +3,7 @@ import Header from "../Components/Header/Header";
 import Main from "../Components/Main/Main";
 import { Button, Checkbox, Row, Form, Input } from "antd";
 
-const Login = ({ onFinish, isLoginPage }) => {
+const Login = ({ onFinish }) => {
   return (
     <div>
       <Header />
