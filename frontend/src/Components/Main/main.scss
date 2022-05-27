@@ -126,4 +126,48 @@
       }
     }
   }
+
+  .ant-row {
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .service {
+    .ant-tabs-tab + .ant-tabs-tab {
+      margin: 0 0 0 10px;
+    }
+
+    .ant-tabs > .ant-tabs-nav {
+      margin: 0;
+    }
+
+    .ant-tabs-top > .ant-tabs-nav::before,
+    .ant-tabs-bottom > .ant-tabs-nav::before,
+    .ant-tabs-top > div > .ant-tabs-nav::before,
+    .ant-tabs-bottom > div > .ant-tabs-nav::before {
+      border: none;
+    }
+  }
+
+  .service-overview {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+
+    .ant-table-thead > tr .ant-table-cell {
+      background-color: #ffffff;
+      border-bottom: 0;
+    }
+
+    .ant-table-thead
+      > tr
+      > th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
+      background-color: transparent;
+    }
+
+    h2,
+    div {
+      font-weight: 700;
+    }
+  }
 }
