@@ -28,7 +28,7 @@ const Home = () => {
         const { data } = res;
         removeCookie("AUTH_TOKEN");
         setCookie("AUTH_TOKEN", data?.id_token);
-        api.setToken(cookies?.AUTH_TOKEN);
+        api.setToken(data?.id_token);
         store.update((s) => {
           s.isLoggedIn = true;
           s.user = data;
@@ -47,10 +47,10 @@ const Home = () => {
     if (cookies?.AUTH_TOKEN && pathname !== "/login") {
       api
         .get(`/profile`)
-        .then((res) => {
-          store.update((s) => {
-            s.isLoggedIn = true;
-            s.user = res.data;
+        .then(() => {
+          notify({
+            type: "success",
+            message: "You are already logged in",
           });
         })
         .catch((err) => {
