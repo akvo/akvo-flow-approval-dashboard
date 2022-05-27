@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Login from "./Login";
-import { Route, Routes, useNavigate } from "react-router";
+import { Route, Routes, useNavigate, useLocation } from "react-router";
 import { useCookies } from "react-cookie";
 import MainPage from "./Main";
 import api from "../lib/api";
@@ -8,6 +8,9 @@ import store from "../lib/store";
 import useNotification from "../util/useNotification";
 
 const Home = () => {
+  const location = useLocation();
+  const { pathname } = location;
+
   const navigate = useNavigate();
   const { notify } = useNotification();
   const [cookies, setCookie, removeCookie] = useCookies(["AUTH_TOKEN"]);
@@ -39,6 +42,27 @@ const Home = () => {
         });
       });
   };
+
+  useEffect(() => {
+    if (cookies?.AUTH_TOKEN && pathname !== "/login") {
+      api
+        .get(`/profile`)
+        .then((res) => {
+          store.update((s) => {
+            s.isLoggedIn = true;
+            s.user = res.data;
+          });
+        })
+        .catch((err) => {
+          notify({
+            type: "error",
+            message: err,
+          });
+        });
+    } else {
+      navigate("/login");
+    }
+  }, [cookies?.AUTH_TOKEN, navigate, notify, pathname]);
 
   return (
     <Routes>
