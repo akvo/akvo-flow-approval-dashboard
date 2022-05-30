@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Col } from "antd";
+import { Link } from "react-router-dom";
 
 const ApproveData = () => {
   return (
@@ -15,7 +16,9 @@ const ApproveData = () => {
           <span style={{ color: "#27AE60" }}> 23</span>
         </p>
         <div className="button">
-          <Button type="primary">Button</Button>
+          <Button type="primary">
+            <Link to="/service-overview">View</Link>
+          </Button>
         </div>
       </div>
     </Col>
