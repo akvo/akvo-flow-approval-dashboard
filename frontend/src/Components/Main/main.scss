@@ -131,6 +131,7 @@
   .ant-row {
     justify-content: space-between;
     align-items: center;
+    position: relative;
   }
 
   .service {
@@ -170,5 +171,22 @@
     div {
       font-weight: 700;
     }
+
+    .total {
+      position: absolute;
+      left: 89%;
+      top: 174px;
+    }
+
+    .ant-tabs-tab-btn {
+      font-size: 18px;
+    }
+
+    
+    .ant-table-tbody > tr > td:first-of-type {
+      color: #00AAF1;
+      font-size: 18px;
+    }
+    
   }
 }

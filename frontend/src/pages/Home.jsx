@@ -69,7 +69,7 @@ const Home = () => {
     <Routes>
       <Route path="/login" element={<Login onFinish={handleLoginOnFinish} />} />
       <Route path="/main-dashboard" element={<MainPage />} />
-      <Route path="/service-overview" element={<ServicesPage />} />
+      <Route path="/main-dashboard/:id" element={<ServicesPage />} />
     </Routes>
   );
 };

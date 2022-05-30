@@ -6,11 +6,11 @@ import { Row, Tabs, Table } from "antd";
 const columns = [
   {
     title: "Sort by",
-    dataIndex: "sort",
+    dataIndex: "name",
   },
   {
     title: "Submittant",
-    dataIndex: "submittant",
+    dataIndex: "submitted_by",
   },
   {
     title: "Attachments",
@@ -18,7 +18,7 @@ const columns = [
   },
   {
     title: "Submittance data",
-    dataIndex: "submittance-data",
+    dataIndex: "submitted_date",
   },
   {
     title: "Location",
@@ -27,6 +27,22 @@ const columns = [
 ];
 
 const ServicesPage = () => {
+  const data = {
+    total: 20,
+    per_page: 10,
+    page: 1,
+    data: [
+      {
+        id: 1,
+        name: "Card Name",
+        submitted_by: "Joy Ghosh",
+        attachments: 4,
+        submitted_date: "June, 23 2020",
+        location: "Sri Lanka",
+      },
+    ],
+  };
+
   return (
     <div>
       <Header />
@@ -43,16 +59,19 @@ const ServicesPage = () => {
           </Row>
         </div>
         <div className="service-overview">
-          <Row>
-            <h2>Pending data points</h2>
-            <div>
+          <Tabs defaultActiveKey="1">
+            <Tabs.TabPane tab="Pending data points" key="1">
+              <Table columns={columns} dataSource={data.data} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Approved data points" key="2">
+              <Table columns={columns} />
+              test
+            </Tabs.TabPane>
+            <div className="total">
               Total:
               <span style={{ color: "#00AAF1" }}> 55</span>
             </div>
-          </Row>
-          <div>
-            <Table columns={columns} />
-          </div>
+          </Tabs>
         </div>
       </Main>
     </div>
