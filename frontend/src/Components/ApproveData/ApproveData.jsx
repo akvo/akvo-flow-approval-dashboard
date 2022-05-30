@@ -28,7 +28,7 @@ const ApproveData = () => {
     <Fragment>
       {data.map((d) => {
         return (
-          <div className="data-container" key={d.id}>
+          <div className="data-container" key={d?.id}>
             <h1>{d.name}</h1>
             <p>
               Waiting for approval:

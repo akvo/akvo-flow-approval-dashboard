@@ -1,7 +1,8 @@
 import React from "react";
 import Header from "../Components/Header/Header";
 import Main from "../Components/Main/Main";
-import { Row, Tabs, Table } from "antd";
+import { Row, Tabs, Table, Button } from "antd";
+import { AiOutlinePlus } from "react-icons/ai";
 
 const columns = [
   {
@@ -23,6 +24,17 @@ const columns = [
   {
     title: "Location",
     dataIndex: "location",
+  },
+  {
+    title: "Action",
+    dataIndex: "",
+    render: () => {
+      return (
+        <Button className="add-btn" type="primary">
+          <AiOutlinePlus />
+        </Button>
+      );
+    },
   },
 ];
 
@@ -64,8 +76,7 @@ const ServicesPage = () => {
               <Table columns={columns} dataSource={data.data} />
             </Tabs.TabPane>
             <Tabs.TabPane tab="Approved data points" key="2">
-              <Table columns={columns} />
-              test
+              <Table columns={columns} dataSource={data.data} />
             </Tabs.TabPane>
             <div className="total">
               Total:
