@@ -20,7 +20,8 @@ def upgrade():
         'form',
         sa.Column('id', sa.Integer(), primary_key=True),
         sa.Column('prod_id', sa.Integer(), nullable=False),
-        sa.Column('name', sa.String(length=254)),
+        sa.Column('url', sa.String(), nullable=False),
+        sa.Column('name', sa.String(length=254), nullable=False),
         sa.PrimaryKeyConstraint('id'),
     )
     op.create_index(op.f('ix_form_id'), 'form', ['id'], unique=True)

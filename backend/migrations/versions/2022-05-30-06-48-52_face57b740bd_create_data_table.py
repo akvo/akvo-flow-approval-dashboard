@@ -23,6 +23,8 @@ def upgrade():
                   sa.Integer(),
                   sa.ForeignKey('form.id', ondelete="CASCADE"),
                   nullable=False),
+        sa.Column('name', sa.String(), nullable=True),
+        sa.Column('device', sa.String(), nullable=False),
         sa.Column('value', pg.JSONB(), nullable=False),
         sa.Column('status',
                   sa.Enum('pending',
