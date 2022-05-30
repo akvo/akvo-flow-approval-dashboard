@@ -48,8 +48,6 @@ def data_handler(data, qType):
             return handle_list(data, "name")
         if qType == ['PHOTO', 'VIDEO']:
             return data.get('filename')
-        if qType == 'VIDEO':
-            return data.get('filename')
         if qType == 'GEO':
             return {'lat': data.get('lat'), 'long': data.get('long')}
         if qType == 'SIGNATURE':

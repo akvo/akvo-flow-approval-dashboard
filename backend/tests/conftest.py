@@ -48,26 +48,6 @@ def app(apply_migrations: None) -> FastAPI:
     return app
 
 
-@pytest.fixture
-def worker(apply_migrations: None) -> FastAPI:
-    from worker import worker
-    engine = create_engine(get_db_url())
-    Base.metadata.create_all(bind=engine)
-    TestingSessionLocal = sessionmaker(autocommit=False,
-                                       autoflush=False,
-                                       bind=engine)
-
-    def override_get_db():
-        try:
-            db = TestingSessionLocal()
-            yield db
-        finally:
-            db.close()
-
-    worker.dependency_overrides[get_session] = override_get_db
-    return worker
-
-
 # Grab a reference to our database when needed
 @pytest.fixture
 def session() -> Session:
