@@ -21,4 +21,4 @@ python-multipart==0.0.5
 cffi==1.15.0
 cryptography==3.4.8
 pycparser==2.21
-pandas==1.4.2
+pandas==1.4.0
