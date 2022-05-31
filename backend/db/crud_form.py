@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from models.form import Form, FormSummary
 
 
-def get_forms(session: Session) -> List[FormSummary]:
+def get_form(session: Session) -> List[FormSummary]:
     forms = session.query(Form).all()
     forms = [f.serialize for f in forms]
     for form in forms:

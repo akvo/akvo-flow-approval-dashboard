@@ -67,3 +67,10 @@ async def client(app: FastAPI) -> AsyncClient:
         async with AsyncClient(app=app,
                                base_url="http://testserver") as client:
             yield client
+
+
+def pytest_exception_interact(node, call, report):
+    excinfo = call.excinfo
+    if 'seeder' in node.funcargs:
+        excinfo.traceback = excinfo.traceback.cut(path=node.funcargs['seeder'])
+    report.longrepr = node.repr_failure(excinfo)

@@ -1,4 +1,5 @@
 import enum
+from pydantic import BaseModel
 from typing import Optional, List
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy import Integer, String, Enum
@@ -13,6 +14,20 @@ class DataStatus(enum.Enum):
     pending = 'pending'
     approved = 'approved'
     rejected = 'rejected'
+
+
+class DataBase(BaseModel):
+    id: int
+    name: str
+    device: str
+    approved_by: Optional[str] = None
+
+
+class DataResponse(BaseModel):
+    current: int
+    data: List[DataBase]
+    total: int
+    total_page: int
 
 
 class Data(Base):
@@ -44,3 +59,12 @@ class Data(Base):
 
     def __repr__(self) -> int:
         return f"<Data {self.id}>"
+
+    @property
+    def serialize(self) -> DataBase:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "device": self.device,
+            "approved_by": self.approved_by_user.email
+        }
