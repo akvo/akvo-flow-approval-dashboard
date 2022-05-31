@@ -7,13 +7,9 @@ import { useParams } from "react-router-dom";
 import api from "../lib/api";
 import useNotification from "../util/useNotification";
 import { useCookies } from "react-cookie";
+import store from "../lib/store";
 
 const ServicesPage = () => {
-  const { id } = useParams();
-  const { notify } = useNotification();
-  const [cookies] = useCookies(["AUTH_TOKEN"]);
-  const [data, setData] = useState(null);
-
   const columns = [
     {
       title: "Sort by",
@@ -60,6 +56,11 @@ const ServicesPage = () => {
     },
   ];
 
+  const { id } = useParams();
+  const { notify } = useNotification();
+  const [cookies] = useCookies(["AUTH_TOKEN"]);
+  const { dashboardData } = store.currentState;
+  const [data, setData] = useState(null);
   const [selectTab, setSelectTab] = useState({
     activeKey: panes[0].key,
     panes,
@@ -69,7 +70,7 @@ const ServicesPage = () => {
   const handleTabsChange = (activeKey) => {
     const activePane = panes.find((p) => p.key === activeKey);
     setSelectTab({ activeKey });
-    setStatus(activePane.title.toLocaleLowerCase());
+    setStatus(activePane?.title.toLowerCase());
   };
 
   useEffect(() => {
@@ -82,6 +83,7 @@ const ServicesPage = () => {
       .then((res) => {
         const { data } = res;
         setData(data);
+        api.setToken(cookies?.AUTH_TOKEN);
       })
       .catch((err) => {
         notify({
@@ -97,11 +99,11 @@ const ServicesPage = () => {
       <Main>
         <div className="service">
           <Row>
-            <h2 style={{ color: "#00AAF1" }}>Citizen services</h2>
+            <h2 style={{ color: "#00AAF1" }}>{dashboardData[0]?.name}</h2>
             <Row>
               <Tabs defaultActiveKey="1">
-                <Tabs.TabPane tab="Pending data >" key="1" />
-                <Tabs.TabPane tab="Citizen services >" key="2" />
+                <Tabs.TabPane tab={`${status} >`} key="1" />
+                <Tabs.TabPane tab={`${dashboardData[0]?.name} >`} key="2" />
               </Tabs>
             </Row>
           </Row>
@@ -112,13 +114,14 @@ const ServicesPage = () => {
             activeKey={selectTab.activeKey}
             onChange={handleTabsChange}
           >
-            {panes.map((p) => {
-              return (
-                <Tabs.TabPane tab={p.title} key={p.key}>
-                  <Table columns={columns} dataSource={data?.data} />
-                </Tabs.TabPane>
-              );
-            })}
+            {panes &&
+              panes.map((p) => {
+                return (
+                  <Tabs.TabPane tab={p.title} key={p.key}>
+                    <Table columns={columns} dataSource={data?.data} />
+                  </Tabs.TabPane>
+                );
+              })}
             <div className="total">
               Total:
               <span style={{ color: "#00AAF1" }}> {data?.total}</span>

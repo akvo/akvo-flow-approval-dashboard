@@ -6,6 +6,7 @@ import ApproveData from "../Components/ApproveData/ApproveData";
 import api from "../lib/api";
 import useNotification from "../util/useNotification";
 import { useCookies } from "react-cookie";
+import store from "../lib/store";
 
 const MainPage = () => {
   const { notify } = useNotification();
@@ -29,6 +30,9 @@ const MainPage = () => {
         const approved = data.map((d) => d?.approved);
         setPendingData(pending);
         setApprovedData(approved);
+        store.update((s) => {
+          s.dashboardData = data;
+        });
         api.setToken(cookies?.AUTH_TOKEN);
       })
       .catch((err) => {
