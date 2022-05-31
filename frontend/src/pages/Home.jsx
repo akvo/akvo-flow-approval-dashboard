@@ -44,7 +44,6 @@ const Home = () => {
       });
   };
 
-  console.log(cookies?.AUTH_TOKEN);
   useEffect(() => {
     if (cookies?.AUTH_TOKEN && pathname !== "/login") {
       api
