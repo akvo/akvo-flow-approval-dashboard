@@ -78,6 +78,9 @@ const ServicesPage = () => {
             <Tabs.TabPane tab="Approved data points" key="2">
               <Table columns={columns} dataSource={data.data} />
             </Tabs.TabPane>
+            <Tabs.TabPane tab="Rejected data points" key="3">
+              <Table columns={columns} dataSource={data.data} />
+            </Tabs.TabPane>
             <div className="total">
               Total:
               <span style={{ color: "#00AAF1" }}> 55</span>
