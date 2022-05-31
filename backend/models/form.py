@@ -7,6 +7,9 @@ from .webform import WebFormBase
 class FormBase(BaseModel):
     id: int
     name: str
+
+
+class FormSummary(FormBase):
     pending: int
     approved: int
     rejected: int
@@ -35,3 +38,7 @@ class Form(Base):
 
     def __repr__(self) -> int:
         return f"<Form {self.id}>"
+
+    @property
+    def serialize(self) -> FormBase:
+        return {"id": self.id, "name": self.name}

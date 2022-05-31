@@ -1,5 +1,14 @@
+from typing import List
 from sqlalchemy.orm import Session
-from models.form import Form
+from models.form import Form, FormSummary
+
+
+def get_forms(session: Session) -> List[FormSummary]:
+    forms = session.query(Form).all()
+    forms = [f.serialize for f in forms]
+    for form in forms:
+        form.update({"pending": 0, "approved": 0, "rejected": 0})
+    return forms
 
 
 def get_form_by_id(session: Session, id: int) -> Form:
