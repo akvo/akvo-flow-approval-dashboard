@@ -40,7 +40,7 @@ const ApproveData = () => {
             </p>
             <div className="button">
               <Button type="primary">
-                <Link to={`/main-dashboard/${d.id}`}>View</Link>
+                <Link to={`/dashboard/${d.id}`}>View</Link>
               </Button>
             </div>
           </div>

@@ -34,7 +34,7 @@ const Home = () => {
           s.isLoggedIn = true;
           s.user = data;
         });
-        navigate("/main-dashboard");
+        navigate("/dashboard");
       })
       .catch((err) => {
         notify({
@@ -44,15 +44,17 @@ const Home = () => {
       });
   };
 
+  console.log(cookies?.AUTH_TOKEN);
   useEffect(() => {
     if (cookies?.AUTH_TOKEN && pathname !== "/login") {
       api
-        .get(`/profile`)
+        .get(`/profile`, {
+          headers: {
+            Authorization: `Bearer ${cookies?.AUTH_TOKEN}`,
+          },
+        })
         .then(() => {
-          notify({
-            type: "success",
-            message: "You are already logged in",
-          });
+          api.setToken(cookies?.AUTH_TOKEN);
         })
         .catch((err) => {
           notify({
@@ -69,7 +71,7 @@ const Home = () => {
     <Routes>
       <Route path="/login" element={<Login onFinish={handleLoginOnFinish} />} />
       <Route path="/main-dashboard" element={<MainPage />} />
-      <Route path="/main-dashboard/:id" element={<ServicesPage />} />
+      <Route path="/dashboard/:id" element={<ServicesPage />} />
     </Routes>
   );
 };

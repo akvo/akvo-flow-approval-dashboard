@@ -15,7 +15,6 @@ const API = () => {
           headers: {
             ...config.headers,
             Authorization: `Bearer ${api.token}`,
-            token: api.token,
           },
         }
       : config;
