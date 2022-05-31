@@ -4,6 +4,9 @@ const defaultUIState = {
   isLoggedIn: false,
   user: null,
   formId: null,
+  pending: null,
+  approved: null,
+  rejected: null,
 };
 
 const store = new Store(defaultUIState);

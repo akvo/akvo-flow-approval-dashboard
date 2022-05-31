@@ -3,7 +3,6 @@ import { Row } from "antd";
 import Header from "../Components/Header/Header";
 import Main from "../Components/Main/Main";
 import ApproveData from "../Components/ApproveData/ApproveData";
-import store from "../lib/store";
 import api from "../lib/api";
 import useNotification from "../util/useNotification";
 import { useCookies } from "react-cookie";
@@ -15,7 +14,6 @@ const MainPage = () => {
   const [dashboardData, setDashboardData] = useState(null);
   const [pendingData, setPendingData] = useState(null);
   const [approvedData, setApprovedData] = useState(null);
-  const [formId, setFormId] = useState(null);
 
   useEffect(() => {
     api
@@ -27,15 +25,10 @@ const MainPage = () => {
       .then((res) => {
         const { data } = res;
         setDashboardData(data);
-        const id = data.map((d) => d?.id);
         const pending = data.map((d) => d?.pending);
         const approved = data.map((d) => d?.approved);
-        store.update((s) => {
-          s.formId = id[0];
-        });
         setPendingData(pending);
         setApprovedData(approved);
-        setFormId(id);
         api.setToken(cookies?.AUTH_TOKEN);
       })
       .catch((err) => {
@@ -44,7 +37,7 @@ const MainPage = () => {
           message: err,
         });
       });
-  }, [formId, notify, cookies?.AUTH_TOKEN]);
+  }, [notify, cookies?.AUTH_TOKEN]);
 
   return (
     <div>
