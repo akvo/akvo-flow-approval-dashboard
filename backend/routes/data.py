@@ -26,6 +26,7 @@ def get(req: Request,
     auth0.verify(token.credentials)
     data = get_data(session=session,
                     form=form_id,
+                    status=status,
                     skip=(perpage * (page - 1)),
                     perpage=perpage)
     if not data["count"]:
