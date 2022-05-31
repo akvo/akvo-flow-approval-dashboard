@@ -37,23 +37,16 @@ def fetch_all(url, headers, formInstances=[]):
 
 def data_handler(data, qType):
     if data:
-        if qType in [
-                'FREE_TEXT', 'NUMBER', 'BARCODE', 'DATE', 'GEOSHAPE', 'SCAN',
-                'CADDISFLY'
-        ]:
+        if qType in ['FREE_TEXT', 'NUMBER', 'DATE']:
             return data
         if qType == 'OPTION':
             return handle_list(data, "text")
         if qType == ['CASCADE']:
             return handle_list(data, "name")
-        if qType == ['PHOTO', 'VIDEO']:
-            return data.get('filename')
-        if qType == 'VIDEO':
+        if qType == ['PHOTO']:
             return data.get('filename')
         if qType == 'GEO':
             return {'lat': data.get('lat'), 'long': data.get('long')}
-        if qType == 'SIGNATURE':
-            return data.get("name")
     return None
 
 
