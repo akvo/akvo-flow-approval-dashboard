@@ -1,24 +1,52 @@
-import React from "react";
-import { Button, Col } from "antd";
+import React, { Fragment } from "react";
+import { Button } from "antd";
+import { Link } from "react-router-dom";
 
 const ApproveData = () => {
+  const data = [
+    {
+      id: 1,
+      name: "Citizen service",
+      approved: 23,
+      pending: 55,
+    },
+    {
+      id: 2,
+      name: "Citizen service",
+      approved: 23,
+      pending: 55,
+    },
+    {
+      id: 3,
+      name: "Citizen service",
+      approved: 23,
+      pending: 55,
+    },
+  ];
+
   return (
-    <Col>
-      <div className="data-container">
-        <h1>Citizen services</h1>
-        <p>
-          Waiting for approval:
-          <span style={{ color: "#C7302B" }}> 55</span>
-        </p>
-        <p>
-          Approved data:
-          <span style={{ color: "#27AE60" }}> 23</span>
-        </p>
-        <div className="button">
-          <Button type="primary">Button</Button>
-        </div>
-      </div>
-    </Col>
+    <Fragment>
+      {data.map((d) => {
+        return (
+          <div className="data-container" key={d?.id}>
+            <h1>{d.name}</h1>
+            <p>
+              Waiting for approval:
+              <span style={{ color: "#C7302B" }}> {d.approved}</span>
+            </p>
+            <p>
+              Approved data:
+              <span style={{ color: "#27AE60" }}> {d.pending}</span>
+            </p>
+            <div className="button">
+              <Button type="primary">
+                <Link to={`/dashboard/${d.id}`}>View</Link>
+              </Button>
+            </div>
+          </div>
+        );
+      })}
+    </Fragment>
   );
 };
 

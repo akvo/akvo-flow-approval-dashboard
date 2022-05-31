@@ -6,6 +6,7 @@ import MainPage from "./Main";
 import api from "../lib/api";
 import store from "../lib/store";
 import useNotification from "../util/useNotification";
+import ServicesPage from "./ServicesPage";
 
 const Home = () => {
   const location = useLocation();
@@ -33,7 +34,7 @@ const Home = () => {
           s.isLoggedIn = true;
           s.user = data;
         });
-        navigate("/main-dashboard");
+        navigate("/dashboard");
       })
       .catch((err) => {
         notify({
@@ -46,12 +47,13 @@ const Home = () => {
   useEffect(() => {
     if (cookies?.AUTH_TOKEN && pathname !== "/login") {
       api
-        .get(`/profile`)
+        .get(`/profile`, {
+          headers: {
+            Authorization: `Bearer ${cookies?.AUTH_TOKEN}`,
+          },
+        })
         .then(() => {
-          notify({
-            type: "success",
-            message: "You are already logged in",
-          });
+          api.setToken(cookies?.AUTH_TOKEN);
         })
         .catch((err) => {
           notify({
@@ -68,6 +70,7 @@ const Home = () => {
     <Routes>
       <Route path="/login" element={<Login onFinish={handleLoginOnFinish} />} />
       <Route path="/main-dashboard" element={<MainPage />} />
+      <Route path="/dashboard/:id" element={<ServicesPage />} />
     </Routes>
   );
 };

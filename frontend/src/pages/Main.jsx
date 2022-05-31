@@ -27,9 +27,6 @@ const MainPage = () => {
           </div>
           <div className="data">
             <ApproveData />
-            <ApproveData />
-            <ApproveData />
-            <ApproveData />
           </div>
         </div>
       </Main>
