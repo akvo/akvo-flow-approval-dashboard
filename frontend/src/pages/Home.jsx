@@ -53,13 +53,13 @@ const Home = () => {
           },
         })
         .then(() => {
+          if (pathname === "/") {
+            navigate("/dashboard");
+          }
           api.setToken(cookies?.AUTH_TOKEN);
         })
         .catch((err) => {
-          notify({
-            type: "error",
-            message: err,
-          });
+          navigate("/login");
         });
     } else {
       navigate("/login");
