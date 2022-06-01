@@ -61,25 +61,18 @@ const ServicesPage = () => {
   const [cookies] = useCookies(["AUTH_TOKEN"]);
   const { dashboardData } = store.currentState;
   const [data, setData] = useState(null);
-  const [selectTab, setSelectTab] = useState({
-    activeKey: panes[0].key,
-    panes,
-  });
+  const [selectTab, setSelectTab] = useState(panes[0].key);
   const [status, setStatus] = useState("pending");
 
   const handleTabsChange = (activeKey) => {
     const activePane = panes.find((p) => p.key === activeKey);
-    setSelectTab({ activeKey });
+    setSelectTab(activeKey);
     setStatus(activePane?.title.toLowerCase());
   };
 
   useEffect(() => {
     api
-      .get(`/data?form_id=${id}&status=${status}&page=1&perpage=10`, {
-        headers: {
-          Authorization: `Bearer ${cookies?.AUTH_TOKEN}`,
-        },
-      })
+      .get(`/data?form_id=${id}&status=${status}&page=1&perpage=10`)
       .then((res) => {
         const { data } = res;
         setData(data);

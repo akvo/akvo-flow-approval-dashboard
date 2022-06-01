@@ -18,11 +18,7 @@ const MainPage = () => {
 
   useEffect(() => {
     api
-      .get(`/form`, {
-        headers: {
-          Authorization: `Bearer ${cookies?.AUTH_TOKEN}`,
-        },
-      })
+      .get(`/form`)
       .then((res) => {
         const { data } = res;
         setDashboardData(data);
