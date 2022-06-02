@@ -21,7 +21,10 @@ const Login = ({ onFinish }) => {
               </Row>
               <Row>
                 <Form.Item name="password">
-                  <Input.Password placeholder="Your password" />
+                  <Input.Password
+                    placeholder="Your password"
+                    style={{ paddingLeft: "0" }}
+                  />
                 </Form.Item>
               </Row>
               <Row>

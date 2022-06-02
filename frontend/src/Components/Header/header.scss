@@ -1,12 +1,80 @@
 .header {
   background-color: #ffffff;
-  padding: 20px;
+  padding: 15px 20px;
+  border: 1px solid #bfbfbf;
 
   .ant-row {
     justify-content: space-between;
+    align-items: start;
+  }
+
+  .header-menu {
+    display: none;
   }
 
   .ant-btn {
     border-radius: 4px;
+  }
+
+  .ant-tabs > .ant-tabs-nav .ant-tabs-nav-wrap::before {
+    display: none;
+  }
+
+  .ant-tabs-tab {
+    padding: 0;
+  }
+
+  .ant-tabs > .ant-tabs-nav {
+    margin: 10px 0 0 0;
+  }
+
+  .ant-tabs-tab-btn {
+    color: #bfbfbf;
+    position: relative;
+    border: none;
+  }
+
+  .ant-tabs-top > .ant-tabs-nav::before {
+    border: none;
+  }
+
+  .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+    position: relative;
+    font-weight: 700;
+    color: #1e1e1f;
+  }
+
+  .user {
+    margin: 3px 20px 0 0;
+    display: none;
+    position: relative;
+
+    .ant-btn {
+      padding: 0;
+      border: none;
+      background-color: transparent;
+    }
+
+    .ant-image-mask-info .anticon {
+      margin: 5px;
+    }
+  }
+
+  @media (min-width: 786px) {
+    .header-menu {
+      display: block;
+    }
+
+    .header-menu-btn {
+      display: none;
+    }
+
+    .user {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    padding: 15px 70px;
   }
 }

@@ -1,6 +1,6 @@
 .main {
   background-color: #f7f8fc;
-  height: 100%;
+  height: 100vh;
 
   .main_container {
     max-width: 440px;
@@ -105,6 +105,11 @@
         border-radius: 10px;
       }
 
+      h1 {
+        font-size: 32px;
+        line-height: 38px;
+      }
+
       h1,
       span {
         font-weight: 700;
@@ -112,6 +117,7 @@
 
       p {
         margin: 0;
+        font-size: 14px;
       }
 
       .button {
@@ -134,61 +140,99 @@
     position: relative;
   }
 
-  .service {
-    .ant-tabs-tab + .ant-tabs-tab {
-      margin: 0 0 0 10px;
+  .service-container {
+    padding: 20px;
+
+    .service {
+      h2 {
+        font-weight: 700;
+        font-size: 28px;
+        line-height: 38px;
+        color: #00aaf1;
+      }
+
+      .ant-tabs-tab + .ant-tabs-tab {
+        margin: 0 0 0 10px;
+      }
+
+      .ant-tabs > .ant-tabs-nav {
+        margin: 0;
+      }
+
+      .ant-tabs-top > .ant-tabs-nav::before,
+      .ant-tabs-bottom > .ant-tabs-nav::before,
+      .ant-tabs-top > div > .ant-tabs-nav::before,
+      .ant-tabs-bottom > div > .ant-tabs-nav::before {
+        border: none;
+      }
     }
 
-    .ant-tabs > .ant-tabs-nav {
-      margin: 0;
-    }
+    .service-overview {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
 
-    .ant-tabs-top > .ant-tabs-nav::before,
-    .ant-tabs-bottom > .ant-tabs-nav::before,
-    .ant-tabs-top > div > .ant-tabs-nav::before,
-    .ant-tabs-bottom > div > .ant-tabs-nav::before {
-      border: none;
+      .ant-table-thead > tr .ant-table-cell {
+        background-color: #ffffff;
+        border-bottom: 0;
+      }
+
+      .ant-table-thead
+        > tr
+        > th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
+        background-color: transparent;
+      }
+
+      h2,
+      div {
+        font-weight: 700;
+      }
+
+      .total {
+        position: absolute;
+        left: 83%;
+        top: 172px;
+      }
+
+      .ant-tabs-tab-btn {
+        font-size: 18px;
+      }
+
+      .ant-table-tbody > tr > td:first-of-type {
+        color: #00aaf1;
+        font-size: 18px;
+      }
+
+      .add-btn {
+        border-radius: 4px;
+      }
     }
   }
 
-  .service-overview {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-
-    .ant-table-thead > tr .ant-table-cell {
-      background-color: #ffffff;
-      border-bottom: 0;
+  @media (min-width: 786px) {
+    .main-page,
+    .service-container {
+      padding: 30px 70px;
     }
 
-    .ant-table-thead
-      > tr
-      > th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
-      background-color: transparent;
+    .service-container {
+      .service-overview {
+        .total {
+          top: 188px;
+        }
+      }
     }
 
-    h2,
-    div {
-      font-weight: 700;
-    }
+    .service {
+      h2 {
+        color: #1e1e1f;
+      }
 
-    .total {
-      position: absolute;
-      left: 89%;
-      top: 174px;
-    }
-
-    .ant-tabs-tab-btn {
-      font-size: 18px;
-    }
-
-    .ant-table-tbody > tr > td:first-of-type {
-      color: #00aaf1;
-      font-size: 18px;
-    }
-
-    .add-btn {
-      border-radius: 4px;
+      .ant-row {
+        .ant-row {
+          display: none;
+        }
+      }
     }
   }
 }
