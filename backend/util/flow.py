@@ -1,6 +1,7 @@
 import requests as r
 from util.auth0 import Auth0
 from models.form import Form
+from datetime import datetime
 
 instance_base = 'https://api-auth0.akvo.org/flow/orgs/'
 
@@ -26,9 +27,9 @@ def data_handler(data, qType):
             return data
         if qType == 'OPTION':
             return handle_list(data, "text")
-        if qType == ['CASCADE']:
+        if qType == 'CASCADE':
             return handle_list(data, "name")
-        if qType == ['PHOTO']:
+        if qType == 'PHOTO':
             return data.get('filename')
         if qType == 'GEO':
             return {'lat': data.get('lat'), 'long': data.get('long')}
@@ -43,7 +44,11 @@ def handle_list(data, target):
                                            value.get(target)))
         else:
             response.append(value.get(target))
-    return "|".join(response)
+    return response
+
+
+def handle_date(ds: str):
+    return datetime.strptime(ds, '%Y-%m-%dT%XZ')
 
 
 def get_page(form: Form, refresh_token: str):
@@ -54,35 +59,34 @@ def get_page(form: Form, refresh_token: str):
     instance_uri = '{}{}'.format(instance_base, instance)
     form_instance_url = '{}/form_instances?survey_id={}&form_id={}'.format(
         instance_uri, survey_id, form.id)
-    collections = fetch_all(form_instance_url, headers)
+    collections = fetch_all(form_instance_url, headers, [])
     form_definition = get_data('{}/surveys/{}'.format(instance_uri, survey_id),
                                headers)
     form_definition = form_definition.get('forms')
     form_definition = list(
         filter(lambda x: int(x['id']) == form.id,
                form_definition))[0].get('questionGroups')
-    results = []
-    for col in collections:
-        dt = {}
+    questions = []
+    for question_group in form_definition:
+        questions += question_group["questions"]
+    for collection in collections:
+        groups = collection.get("responses")
         responses = []
-        for c in col:
-            values = col.get(c)
-            if c != 'responses':
-                dt.update({c: values})
-            else:
-                for g in form_definition:
-                    answers = values.get(g['id'])
-                    for q in g['questions']:
-                        qid = q["id"]
-                        if answers:
-                            for i, a in enumerate(answers):
-                                d = data_handler(a.get(qid), q["type"])
-                                responses.append({
-                                    "id": qid,
-                                    "repeat": i,
-                                    "name": q["name"],
-                                    "value": d
-                                })
-        dt.update({"responses": responses})
-        results.append(dt)
-    return results
+        for group_id in groups:
+            for repeat, group_list in enumerate(groups[group_id]):
+                for question_id in group_list:
+                    value = groups[group_id][repeat][question_id]
+                    question = list(
+                        filter(lambda x: x["id"] == question_id, questions))
+                    qtype = question[0]["type"]
+                    responses.append({
+                        "id": question_id,
+                        "repeat": repeat,
+                        "value": data_handler(value, qtype)
+                    })
+        submissionDate = handle_date(collection.get("submissionDate"))
+        collection.update({
+            "responses": responses,
+            "submissionDate": submissionDate
+        })
+    return collections

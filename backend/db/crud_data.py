@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Union, Optional
 from typing_extensions import TypedDict
 from sqlalchemy.orm import Session
 from models.data import Data, DataStatus, DataBase
@@ -20,7 +20,7 @@ def get_data(session: Session, form: int, skip: int, status: DataStatus,
     return PaginatedData(data=data, count=count)
 
 
-def get_data_by_id(session: Session, id: int) -> Data:
+def get_data_by_id(session: Session, id: int) -> Union[Data, None]:
     data = session.query(Data).filter(Data.id == id).first()
     return data
 
