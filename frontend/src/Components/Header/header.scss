@@ -50,25 +50,8 @@
       background-color: transparent;
     }
 
-    .user-option {
-      position: absolute;
-      left: 24px;
-      top: 39px;
-      padding: 5px 10px;
-      background-color: #e5e5e5;
-      width: 100px;
-      z-index: 99;
-
-      .ant-btn {
-        padding-left: 3px;
-      }
-
-      .ant-btn:hover {
-        background-color: #1890ff;
-        color: #ffffff;
-        width: 100%;
-        text-align: start;
-      }
+    .ant-image-mask-info .anticon {
+      margin: 5px;
     }
   }
 

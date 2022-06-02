@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import { Button, Col, Row, Tabs, Avatar, Image } from "antd";
+import { Button, Col, Row, Tabs, Avatar, Image, Menu, Dropdown } from "antd";
 import { PlusOutlined, MenuOutlined, DownOutlined } from "@ant-design/icons";
 import "./header.scss";
 import store from "../../lib/store";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
 const Header = () => {
   const { isLoggedIn, user } = store.useState((state) => state);
+  const userName = user?.nickname[0].toUpperCase() + user?.nickname.slice(1);
   const navigate = useNavigate();
   const [cookies, removeCookie] = useCookies(["AUTH_TOKEN"]);
   const [selectTab, setSelectTab] = useState("1");
-  const [showSelect, setShowSelect] = useState(false);
 
   const panes = [
     {
@@ -36,33 +36,50 @@ const Header = () => {
       s.isLoggedIn = false;
       s.user = null;
     });
-    setShowSelect(false);
     navigate("/login");
   };
 
+  const userMenu = (
+    <Menu>
+      <Menu.Item key="profile">
+        <Link to="/profile">My Profile</Link>
+      </Menu.Item>
+      <Menu.Item key="handleLogOut" danger>
+        <a onClick={handleLogOut}>Sign out</a>
+      </Menu.Item>
+    </Menu>
+  );
+
   return (
-    <div className="header">
+    <div
+      className="header"
+      style={{ paddingBottom: isLoggedIn ? "0px" : "20px" }}
+    >
       <Row>
         <div className="header-menu">
           <Col>
-            <Row>
-              <Tabs
-                defaultActiveKey="1"
-                onChange={handleTabsChange}
-                activeKey={selectTab}
-              >
-                {panes.map((p) => (
-                  <Tabs.TabPane tab={p.title} key={p.key} />
-                ))}
-              </Tabs>
-            </Row>
+            {!isLoggedIn ? (
+              <Link to="/login">Home</Link>
+            ) : (
+              <Row>
+                <Tabs
+                  defaultActiveKey="1"
+                  onChange={handleTabsChange}
+                  activeKey={selectTab}
+                >
+                  {panes.map((p) => (
+                    <Tabs.TabPane tab={p.title} key={p.key} />
+                  ))}
+                </Tabs>
+              </Row>
+            )}
           </Col>
         </div>
         <Col>
           <Row>
             {isLoggedIn && (
               <div className="user">
-                <span>Account</span>
+                <span>{userName}</span>
                 <Avatar
                   src={
                     <Image
@@ -71,22 +88,16 @@ const Header = () => {
                     />
                   }
                 />
-                <Button onClick={() => setShowSelect(!showSelect)}>
-                  <DownOutlined />
-                </Button>
-                {showSelect && (
-                  <div className="user-option">
-                    <Row>
-                      <Button onClick={handleLogOut}>Log out</Button>
-                    </Row>
-                    <Row>
-                      <Button>Log out</Button>
-                    </Row>
-                    <Row>
-                      <Button>Log out</Button>
-                    </Row>
-                  </div>
-                )}
+                <Dropdown overlay={userMenu}>
+                  <a
+                    className="ant-dropdown-link"
+                    onClick={(e) => {
+                      e.preventDefault();
+                    }}
+                  >
+                    <DownOutlined />
+                  </a>
+                </Dropdown>
               </div>
             )}
             <Button type="primary" ghost icon={<PlusOutlined />}>
