@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Button, Col, Row, Tabs, Avatar, Image, Menu, Dropdown } from "antd";
 import { PlusOutlined, MenuOutlined, DownOutlined } from "@ant-design/icons";
-import "./header.scss";
 import store from "../../lib/store";
 import { useNavigate, Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
