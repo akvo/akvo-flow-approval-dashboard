@@ -1,23 +1,8 @@
 import requests as r
+from util.auth0 import Auth0
+from models.form import Form
 
 instance_base = 'https://api-auth0.akvo.org/flow/orgs/'
-
-
-def get_headers(token: str):
-    login = {
-        'client_id': 'S6Pm0WF4LHONRPRKjepPXZoX1muXm1JS',
-        'grant_type': 'refresh_token',
-        'refresh_token': token,
-        'scope': 'openid email'
-    }
-    req = r.post("https://akvofoundation.eu.auth0.com/oauth/token", data=login)
-    if req.status_code != 200:
-        return False
-    return {
-        'Content-Type': 'application/json',
-        'Accept': 'application/vnd.akvo.flow.v2+json',
-        'Authorization': 'Bearer {}'.format(req.json().get('id_token'))
-    }
 
 
 def get_data(uri, auth):
@@ -61,30 +46,43 @@ def handle_list(data, target):
     return "|".join(response)
 
 
-def get_page(instance: str, survey_id: int, form_id: int, token: str):
-    headers = get_headers(token)
+def get_page(form: Form, refresh_token: str):
+    instance = form.instance
+    survey_id = form.survey_id
+    auth0 = Auth0()
+    headers = auth0.get_headers(refresh_token=refresh_token)
     instance_uri = '{}{}'.format(instance_base, instance)
     form_instance_url = '{}/form_instances?survey_id={}&form_id={}'.format(
-        instance_uri, survey_id, form_id)
+        instance_uri, survey_id, form.id)
     collections = fetch_all(form_instance_url, headers)
     form_definition = get_data('{}/surveys/{}'.format(instance_uri, survey_id),
                                headers)
     form_definition = form_definition.get('forms')
     form_definition = list(
-        filter(lambda x: int(x['id']) == form_id,
+        filter(lambda x: int(x['id']) == form.id,
                form_definition))[0].get('questionGroups')
     results = []
     for col in collections:
         dt = {}
+        responses = []
         for c in col:
+            values = col.get(c)
             if c != 'responses':
-                dt.update({c: col[c]})
+                dt.update({c: values})
             else:
                 for g in form_definition:
-                    answers = col[c][g['id']]
+                    answers = values.get(g['id'])
                     for q in g['questions']:
-                        d = data_handler(answers[0].get(q['id']), q['type'])
-                        n = "{}|{}".format(q['id'], q['name'])
-                        dt.update({n: d})
+                        qid = q["id"]
+                        if answers:
+                            for i, a in enumerate(answers):
+                                d = data_handler(a.get(qid), q["type"])
+                                responses.append({
+                                    "id": qid,
+                                    "repeat": i,
+                                    "name": q["name"],
+                                    "value": d
+                                })
+        dt.update({"responses": responses})
         results.append(dt)
     return results
