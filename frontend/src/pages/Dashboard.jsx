@@ -8,7 +8,7 @@ import useNotification from "../util/useNotification";
 import { useCookies } from "react-cookie";
 import store from "../lib/store";
 
-const MainPage = () => {
+const Dashboard = () => {
   const { notify } = useNotification();
   const [cookies] = useCookies(["AUTH_TOKEN"]);
 
@@ -37,7 +37,7 @@ const MainPage = () => {
           message: err,
         });
       });
-  }, [notify, cookies?.AUTH_TOKEN]);
+  }, [cookies?.AUTH_TOKEN, notify]);
 
   return (
     <div>
@@ -68,4 +68,4 @@ const MainPage = () => {
   );
 };
 
-export default MainPage;
+export default Dashboard;

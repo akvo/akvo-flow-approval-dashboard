@@ -56,7 +56,7 @@ const Header = () => {
           <div className="header-menu">
             <Col>
               {!isLoggedIn ? (
-                <Link to="/login">Home</Link>
+                <Link to="/dashboard">Home</Link>
               ) : (
                 <Row>
                   <Tabs

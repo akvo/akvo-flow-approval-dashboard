@@ -122,7 +122,8 @@
   width: 100%;
 }
 
-.login_input .ant-input {
+.login_input .ant-input,
+.login_input .ant-input-affix-wrapper .ant-input {
   padding: 15px;
   border-radius: 4px;
 }
