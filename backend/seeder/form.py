@@ -58,7 +58,7 @@ for form in forms:
     raw = get_frame(raw_id, "raw")
     prod = get_frame(prod_id, "prod")
     merged = raw.merge(prod, on='variable_name')
-    webform = r.get(f"{webform_url}/generate/{instance}/{prod_id}")
+    webform = r.get(f"{webform_url}/generate/{instance}/{raw_id}")
     webform_id = webform.text
     webform = r.get(f"{webform_url}/form/{webform_id}")
     webform = webform.json()
@@ -71,6 +71,7 @@ for form in forms:
     if not form:
         form = add_form(session=session,
                         id=raw_id,
+                        survey_id=webform["surveyGroupId"],
                         prod_id=prod_id,
                         url=webform_id,
                         name=webform["name"])

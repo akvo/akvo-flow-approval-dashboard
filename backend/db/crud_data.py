@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List, Optional
 from typing_extensions import TypedDict
 from sqlalchemy.orm import Session
@@ -29,6 +30,7 @@ def add_data(session: Session,
              device: str,
              name: str,
              submitter: str,
+             submitted_at: datetime,
              status: Optional[DataStatus] = DataStatus.pending,
              approved_by: Optional[int] = None,
              value: Optional[List[dict]] = None,
@@ -40,6 +42,7 @@ def add_data(session: Session,
                 value=value,
                 name=name,
                 submitter=submitter,
+                submitted_at=submitted_at,
                 approved_by=approved_by)
     session.add(data)
     session.commit()
