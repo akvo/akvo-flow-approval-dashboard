@@ -87,7 +87,7 @@ const ServicesPage = () => {
           message: err,
         });
       });
-  }, [id, notify, cookies?.AUTH_TOKEN, status, selectTab]);
+  }, [id, notify, cookies?.AUTH_TOKEN, status, selectTab, currentPage]);
 
   const handlePaginationChange = (e) => {
     setCurrentPage(e.current);
