@@ -1,12 +1,92 @@
 .header {
   background-color: #ffffff;
   padding: 20px;
+  border: 1px solid #bfbfbf;
 
   .ant-row {
     justify-content: space-between;
+    align-items: start;
+  }
+
+  .header-menu {
+    display: none;
   }
 
   .ant-btn {
     border-radius: 4px;
+  }
+
+  .ant-tabs > .ant-tabs-nav .ant-tabs-nav-wrap::before {
+    display: none;
+  }
+
+  .ant-tabs-tab {
+    padding: 0;
+  }
+
+  .ant-tabs > .ant-tabs-nav {
+    margin: 10px 0 0 0;
+  }
+
+  .ant-tabs-tab-btn {
+    padding-bottom: 20px;
+    color: #bfbfbf;
+  }
+
+  .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+    border-bottom: 1px solid #00aaf1;
+    font-weight: 700;
+    color: #1e1e1f;
+  }
+
+  .user {
+    margin: 3px 20px 0 0;
+    display: none;
+    position: relative;
+
+    .ant-btn {
+      padding: 0;
+      border: none;
+      background-color: transparent;
+    }
+
+    .user-option {
+      position: absolute;
+      left: 24px;
+      top: 39px;
+      padding: 5px 10px;
+      background-color: #e5e5e5;
+      width: 100px;
+      z-index: 99;
+
+      .ant-btn {
+        padding-left: 3px;
+      }
+
+      .ant-btn:hover {
+        background-color: #1890ff;
+        color: #ffffff;
+        width: 100%;
+        text-align: start;
+      }
+    }
+  }
+
+  @media (min-width: 786px) {
+    padding-bottom: 0;
+
+    .header-menu {
+      display: block;
+    }
+
+    .header-menu-btn {
+      display: none;
+    }
+
+    .user {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
   }
 }

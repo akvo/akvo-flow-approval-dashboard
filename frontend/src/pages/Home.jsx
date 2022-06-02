@@ -58,7 +58,7 @@ const Home = () => {
           }
           api.setToken(cookies?.AUTH_TOKEN);
         })
-        .catch((err) => {
+        .catch(() => {
           navigate("/login");
         });
     } else {
