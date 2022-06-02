@@ -11,7 +11,15 @@ Base.metadata.create_all(bind=engine)
 session = SessionLocal()
 
 webform_url = "https://webform.akvo.org/api"
-forms = [{"raw_id": 611800981, "prod_id": 628680982, "instance": "seap"}]
+forms = [{
+    "raw_id": 611800981,
+    "prod_id": 628680982,
+    "instance": "seap"
+}, {
+    "raw_id": 630280917,
+    "prod_id": 656830977,
+    "instance": "seap"
+}]
 
 
 def get_frame(file_id, rename):
