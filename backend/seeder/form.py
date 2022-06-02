@@ -71,6 +71,7 @@ for form in forms:
     if not form:
         form = add_form(session=session,
                         id=raw_id,
+                        instance=webform["alias"],
                         survey_id=webform["surveyGroupId"],
                         prod_id=prod_id,
                         url=webform_id,

@@ -17,6 +17,7 @@ class FormSummary(FormBase):
 
 class FormDetail(BaseModel):
     id: int
+    instance: str
     prod_id: int
     name: str
     url: str
@@ -26,14 +27,16 @@ class FormDetail(BaseModel):
 class Form(Base):
     __tablename__ = "form"
     id = Column(Integer, primary_key=True, index=True, nullable=True)
+    instance = Column(String, nullable=False)
     survey_id = Column(Integer, nullable=False)
     prod_id = Column(Integer, unique=True, nullable=False)
     url = Column(String, nullable=False)
     name = Column(String, nullable=False)
 
-    def __init__(self, id: int, survey_id: int, prod_id: int, url: str,
-                 name: str):
+    def __init__(self, id: int, instance: str, survey_id: int, prod_id: int,
+                 url: str, name: str):
         self.id = id
+        self.instance = instance
         self.survey_id = survey_id
         self.prod_id = prod_id
         self.url = url

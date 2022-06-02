@@ -16,9 +16,10 @@ def get_form_by_id(session: Session, id: int) -> Form:
     return form
 
 
-def add_form(session: Session, id: int, survey_id: int, prod_id: int, url: str,
-             name: str) -> Form:
+def add_form(session: Session, id: int, instance: str, survey_id: int,
+             prod_id: int, url: str, name: str) -> Form:
     form = Form(id=id,
+                instance=instance,
                 survey_id=survey_id,
                 prod_id=prod_id,
                 url=url,
