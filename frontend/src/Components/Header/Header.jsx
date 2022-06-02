@@ -51,68 +51,67 @@ const Header = () => {
   );
 
   return (
-    <div
-      className="header"
-      style={{ paddingBottom: isLoggedIn ? "0px" : "20px" }}
-    >
-      <Row>
-        <div className="header-menu">
-          <Col>
-            {!isLoggedIn ? (
-              <Link to="/login">Home</Link>
-            ) : (
-              <Row>
-                <Tabs
-                  defaultActiveKey="1"
-                  onChange={handleTabsChange}
-                  activeKey={selectTab}
-                >
-                  {panes.map((p) => (
-                    <Tabs.TabPane tab={p.title} key={p.key} />
-                  ))}
-                </Tabs>
-              </Row>
-            )}
-          </Col>
-        </div>
-        <Col>
-          <Row>
-            {isLoggedIn && (
-              <div className="user">
-                <span>{userName}</span>
-                <Avatar
-                  src={
-                    <Image
-                      src={user.picture}
-                      style={{ width: "32px", height: "32px" }}
-                    />
-                  }
-                />
-                <Dropdown overlay={userMenu}>
-                  <a
-                    className="ant-dropdown-link"
-                    onClick={(e) => {
-                      e.preventDefault();
-                    }}
+    <div className="header">
+      <div className="header-container">
+        <Row>
+          <div className="header-menu">
+            <Col>
+              {!isLoggedIn ? (
+                <Link to="/login">Home</Link>
+              ) : (
+                <Row>
+                  <Tabs
+                    defaultActiveKey="1"
+                    onChange={handleTabsChange}
+                    activeKey={selectTab}
                   >
-                    <DownOutlined />
-                  </a>
-                </Dropdown>
-              </div>
-            )}
-            <Button type="primary" ghost icon={<PlusOutlined />}>
-              Synchronize
-            </Button>
-          </Row>
-        </Col>
-        <div className="header-menu-btn">
+                    {panes.map((p) => (
+                      <Tabs.TabPane tab={p.title} key={p.key} />
+                    ))}
+                  </Tabs>
+                </Row>
+              )}
+            </Col>
+          </div>
           <Col>
-            <Button type="primary" ghost align="end">
-              <MenuOutlined />
-            </Button>
+            <Row>
+              {isLoggedIn && (
+                <div className="user">
+                  <span>{userName}</span>
+                  <Avatar
+                    src={
+                      <Image
+                        src={user.picture}
+                        style={{ width: "32px", height: "32px" }}
+                      />
+                    }
+                  />
+                  <Dropdown overlay={userMenu}>
+                    <a
+                      className="ant-dropdown-link"
+                      onClick={(e) => {
+                        e.preventDefault();
+                      }}
+                    >
+                      <DownOutlined />
+                    </a>
+                  </Dropdown>
+                </div>
+              )}
+              <Button type="primary" ghost icon={<PlusOutlined />}>
+                Synchronize
+              </Button>
+            </Row>
           </Col>
-        </div>
-      </Row>
+          <div className="header-menu-btn">
+            <Col>
+              <Button type="primary" ghost align="end">
+                <MenuOutlined />
+              </Button>
+            </Col>
+          </div>
+        </Row>
+      </div>
     </div>
   );
 };

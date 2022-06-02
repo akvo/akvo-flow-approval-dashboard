@@ -1,6 +1,6 @@
 .header {
   background-color: #ffffff;
-  padding: 20px;
+  padding: 15px 20px;
   border: 1px solid #bfbfbf;
 
   .ant-row {
@@ -29,12 +29,17 @@
   }
 
   .ant-tabs-tab-btn {
-    padding-bottom: 20px;
     color: #bfbfbf;
+    position: relative;
+    border: none;
+  }
+
+  .ant-tabs-top > .ant-tabs-nav::before {
+    border: none;
   }
 
   .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-    border-bottom: 1px solid #00aaf1;
+    position: relative;
     font-weight: 700;
     color: #1e1e1f;
   }
@@ -56,8 +61,6 @@
   }
 
   @media (min-width: 786px) {
-    padding-bottom: 0;
-
     .header-menu {
       display: block;
     }
@@ -71,5 +74,7 @@
       align-items: center;
       gap: 14px;
     }
+
+    padding: 15px 70px;
   }
 }

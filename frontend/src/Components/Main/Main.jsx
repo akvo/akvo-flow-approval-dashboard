@@ -5,7 +5,12 @@ const Main = ({ children, isLoginPage }) => {
   return (
     <div
       className="main"
-      style={{ padding: isLoginPage ? "156px 20px" : "20px" }}
+      style={
+        isLoginPage && {
+          padding: "156px 20px",
+          width: "100%",
+        }
+      }
     >
       {children}
     </div>

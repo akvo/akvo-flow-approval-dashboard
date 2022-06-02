@@ -90,36 +90,38 @@ const ServicesPage = () => {
     <div>
       <Header />
       <Main>
-        <div className="service">
-          <Row>
-            <h2 style={{ color: "#00AAF1" }}>{dashboardData[0]?.name}</h2>
+        <div className="service-container">
+          <div className="service">
             <Row>
-              <Tabs defaultActiveKey="1">
-                <Tabs.TabPane tab={`${status} >`} key="1" />
-                <Tabs.TabPane tab={`${dashboardData[0]?.name} >`} key="2" />
-              </Tabs>
+              <h2>{dashboardData[0]?.name}</h2>
+              <Row>
+                <Tabs defaultActiveKey="1">
+                  <Tabs.TabPane tab={`${status} >`} key="1" />
+                  <Tabs.TabPane tab={`${dashboardData[0]?.name} >`} key="2" />
+                </Tabs>
+              </Row>
             </Row>
-          </Row>
-        </div>
-        <div className="service-overview">
-          <Tabs
-            defaultActiveKey="1"
-            activeKey={selectTab.activeKey}
-            onChange={handleTabsChange}
-          >
-            {panes &&
-              panes.map((p) => {
-                return (
-                  <Tabs.TabPane tab={p.title} key={p.key}>
-                    <Table columns={columns} dataSource={data?.data} />
-                  </Tabs.TabPane>
-                );
-              })}
-            <div className="total">
-              Total:
-              <span style={{ color: "#00AAF1" }}> {data?.total}</span>
-            </div>
-          </Tabs>
+          </div>
+          <div className="service-overview">
+            <Tabs
+              defaultActiveKey="1"
+              activeKey={selectTab.activeKey}
+              onChange={handleTabsChange}
+            >
+              {panes &&
+                panes.map((p) => {
+                  return (
+                    <Tabs.TabPane tab={p.title} key={p.key}>
+                      <Table columns={columns} dataSource={data?.data} />
+                    </Tabs.TabPane>
+                  );
+                })}
+              <div className="total">
+                Total:
+                <span style={{ color: "#00AAF1" }}> {data?.total}</span>
+              </div>
+            </Tabs>
+          </div>
         </div>
       </Main>
     </div>
