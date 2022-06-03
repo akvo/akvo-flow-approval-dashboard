@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./app.scss";
 import Login from "./pages/Login";
-import { Route, Routes, useNavigate, useLocation } from "react-router";
+import { Route, Routes, useNavigate } from "react-router";
 import { useCookies } from "react-cookie";
 import Dashboard from "./pages/Dashboard";
 import api from "./lib/api";
@@ -12,9 +12,7 @@ import ServicesPage from "./pages/ServicesPage";
 const App = () => {
   const navigate = useNavigate();
   const { notify } = useNotification();
-  const [cookies, setCookie, removeCookie] = useCookies(["AUTH_TOKEN"]);
-  const location = useLocation();
-  const { pathname } = location;
+  const [setCookie, removeCookie] = useCookies(["AUTH_TOKEN"]);
 
   const handleLoginOnFinish = (values) => {
     const { email, password } = values;
@@ -43,28 +41,6 @@ const App = () => {
         });
       });
   };
-
-  useEffect(() => {
-    if (cookies?.AUTH_TOKEN && pathname !== "/login") {
-      api
-        .get(`/profile`, {
-          headers: {
-            Authorization: `Bearer ${cookies?.AUTH_TOKEN}`,
-          },
-        })
-        .then(() => {
-          if (pathname === "/") {
-            navigate("/dashboard");
-          }
-          api.setToken(cookies?.AUTH_TOKEN);
-        })
-        .catch(() => {
-          navigate("/login");
-        });
-    } else {
-      navigate("/login");
-    }
-  }, [cookies?.AUTH_TOKEN, pathname, navigate]);
 
   return (
     <Routes>
