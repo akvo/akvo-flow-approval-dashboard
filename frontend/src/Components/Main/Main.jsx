@@ -1,5 +1,4 @@
 import React from "react";
-import "./main.scss";
 
 const Main = ({ children, isLoginPage }) => {
   return (

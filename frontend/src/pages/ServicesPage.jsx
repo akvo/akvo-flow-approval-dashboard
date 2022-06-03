@@ -63,6 +63,7 @@ const ServicesPage = () => {
   const [data, setData] = useState(null);
   const [selectTab, setSelectTab] = useState(panes[0].key);
   const [status, setStatus] = useState("pending");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const handleTabsChange = (activeKey) => {
     const activePane = panes.find((p) => p.key === activeKey);
@@ -72,7 +73,9 @@ const ServicesPage = () => {
 
   useEffect(() => {
     api
-      .get(`/data?form_id=${id}&status=${status}&page=1&perpage=10`)
+      .get(
+        `/data?form_id=${id}&status=${status}&page=${currentPage}&perpage=10`
+      )
       .then((res) => {
         const { data } = res;
         setData(data);
@@ -84,7 +87,11 @@ const ServicesPage = () => {
           message: err,
         });
       });
-  }, [id, notify, cookies?.AUTH_TOKEN, status, selectTab]);
+  }, [id, notify, cookies?.AUTH_TOKEN, status, selectTab, currentPage]);
+
+  const handlePaginationChange = (e) => {
+    setCurrentPage(e.current);
+  };
 
   return (
     <div>
@@ -112,7 +119,17 @@ const ServicesPage = () => {
                 panes.map((p) => {
                   return (
                     <Tabs.TabPane tab={p.title} key={p.key}>
-                      <Table columns={columns} dataSource={data?.data} />
+                      <Table
+                        columns={columns}
+                        dataSource={data?.data}
+                        onChange={handlePaginationChange}
+                        pagination={{
+                          current: currentPage,
+                          total: data?.total,
+                          pageSize: 10,
+                          showSizeChanger: false,
+                        }}
+                      />
                     </Tabs.TabPane>
                   );
                 })}

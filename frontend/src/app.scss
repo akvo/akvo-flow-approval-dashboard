@@ -1,0 +1,329 @@
+// ----- HEADER ------
+.header {
+  background-color: #ffffff;
+  padding: 15px 20px;
+  border: 1px solid #bfbfbf;
+
+  @media (min-width: 786px) {
+    padding: 15px 70px;
+  }
+}
+
+.header .ant-row {
+  justify-content: space-between;
+  align-items: start;
+}
+
+.header .header-menu {
+  display: none;
+
+  @media (min-width: 786px) {
+    display: block;
+  }
+}
+
+.header .ant-btn {
+  border-radius: 4px;
+}
+
+.header .ant-tabs .ant-tabs-nav .ant-tabs-nav-wrap::before {
+  display: none;
+}
+
+.header .ant-tabs-tab {
+  padding: 0;
+}
+
+.header .header-menu-btn {
+  @media (min-width: 786px) {
+    display: none;
+  }
+}
+
+.header .ant-tabs .ant-tabs-nav {
+  margin: 10px 0 0 0;
+}
+
+.header .ant-tabs-tab-btn {
+  color: #bfbfbf;
+  position: relative;
+  border: none;
+}
+
+.header .ant-tabs-top .ant-tabs-nav::before {
+  border: none;
+}
+
+.header .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  position: relative;
+  font-weight: 700;
+  color: #1e1e1f;
+}
+
+.header .user {
+  margin: 3px 20px 0 0;
+  display: none;
+  position: relative;
+
+  @media (min-width: 786px) {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+}
+
+.header .user .ant-btn {
+  padding: 0;
+  border: none;
+  background-color: transparent;
+}
+
+.header .user .ant-image-mask-info .anticon {
+  margin: 5px;
+}
+
+// ------- MAIN -----
+.main {
+  background-color: #f7f8fc;
+  height: 100vh;
+}
+
+.main_container {
+  max-width: 440px;
+  margin: auto;
+  border: 1px solid #bfbfbf;
+  border-radius: 10px;
+  font-family: "Roboto";
+}
+
+.main_container .main_header {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  background-color: #ffffff;
+  padding: 20px 20px 0 20px;
+}
+
+.main_container .main_header h1 {
+  font-size: 20px;
+  line-height: 23px;
+  margin: 0;
+  padding: 0 0 28px 0;
+}
+
+.login_input {
+  background-color: #ffffff;
+  padding: 20px;
+  border-top: 1px solid #bfbfbf;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.login_input .ant-row {
+  width: 100%;
+}
+
+.login_input .ant-input,
+.login_input .ant-input-affix-wrapper .ant-input {
+  padding: 15px;
+  border-radius: 4px;
+}
+
+.login_input .ant-btn.ant-btn-block {
+  font-size: 12px;
+  border-radius: 4px;
+}
+
+.login_input .ant-checkbox + span {
+  font-weight: 700;
+  line-height: 14px;
+}
+
+.main-page {
+  padding: 20px 30px 39px 30px;
+
+  @media (min-width: 786px) {
+    padding: 30px 70px;
+  }
+}
+
+.main-page .pending-data {
+  padding-bottom: 20px;
+  border-radius: 10px;
+}
+
+.main-page .pending-data h2 {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 21px;
+  margin: 0;
+}
+
+.main-page .pending-data div {
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 16px;
+}
+
+.main-page .pending-data .ant-row {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.main-page .pending-data .ant-row h2 {
+  margin-bottom: 30px;
+
+  @media (min-width: 453px) {
+    margin: 0;
+  }
+}
+
+.main-page .pending-data .ant-row .ant-row {
+  gap: 10px;
+
+  @media (min-width: 786px) {
+    gap: 20px;
+  }
+}
+
+.data {
+  padding: 20px;
+  border: 1px solid #bfbfbf;
+  border-radius: 10px;
+  background-color: #ffffff;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  column-gap: 15px;
+  row-gap: 20px;
+
+  @media screen and (max-width: 800px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media screen and (max-width: 500px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.data .data-container {
+  padding: 25px;
+  border: 1px solid #bfbfbf;
+  border-radius: 10px;
+}
+
+.data .data-container h1 {
+  font-size: 32px;
+  line-height: 38px;
+}
+
+.data .data-container h1,
+.data .data-container span {
+  font-weight: 700;
+}
+
+.data .data-container p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.data .data-container .button {
+  display: flex;
+  justify-content: end;
+}
+
+.data .data-container .ant-btn {
+  border-radius: 4px;
+  width: 70px;
+  height: 36px;
+  margin-top: 7px;
+}
+
+.main .ant-row {
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+// ------ SERVICE ------
+.service-container {
+  padding: 20px;
+
+  @media (min-width: 786px) {
+    padding: 30px 70px;
+  }
+}
+
+.service-container .service h2 {
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 38px;
+  color: #00aaf1;
+
+  @media (min-width: 786px) {
+    color: #1e1e1f;
+  }
+}
+
+.service-container .service .ant-tabs-tab + .ant-tabs-tab {
+  margin: 0 0 0 10px;
+}
+
+.service-container .service .ant-tabs .ant-tabs-nav {
+  margin: 0;
+
+  @media (min-width: 786px) {
+    display: none;
+  }
+}
+
+.service-container .service .ant-tabs-top > .ant-tabs-nav::before,
+.service-container .service .ant-tabs-bottom > .ant-tabs-nav::before,
+.service-container .service .ant-tabs-top > div > .ant-tabs-nav::before,
+.service-container .service .ant-tabs-bottom > div > .ant-tabs-nav::before {
+  border: none;
+}
+
+.service-overview {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.service-overview .ant-table-thead > tr .ant-table-cell {
+  background-color: #ffffff;
+  border-bottom: 0;
+}
+
+.service-overview
+  .ant-table-thead
+  > tr
+  > th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
+  background-color: transparent;
+}
+
+.service-overview h2,
+.service-overview div {
+  font-weight: 700;
+}
+
+.service-overview .total {
+  position: absolute;
+  left: 83%;
+  top: 172px;
+
+  @media (min-width: 786px) {
+    top: 188px;
+  }
+}
+
+.service-overview .ant-tabs-tab-btn {
+  font-size: 18px;
+}
+
+.service-overview .ant-table-tbody > tr > td:first-of-type {
+  color: #00aaf1;
+  font-size: 18px;
+}
+
+.service-overview .add-btn {
+  border-radius: 4px;
+}
