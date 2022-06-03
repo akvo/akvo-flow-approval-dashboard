@@ -1,60 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Row } from "antd";
 import Header from "../Components/Header/Header";
 import Main from "../Components/Main/Main";
 import ApproveData from "../Components/ApproveData/ApproveData";
-import useNotification from "../util/useNotification";
-import { useCookies } from "react-cookie";
-import api from "../lib/api";
-import store from "../lib/store";
-import { useNavigate } from "react-router";
-import { useFetchProfile } from "../util/useFetchProfile";
 
-const Dashboard = () => {
-  const { notify } = useNotification();
-  const navigate = useNavigate();
-  const { fetchProfile, loading } = useFetchProfile();
-  const [cookies] = useCookies(["AUTH_TOKEN"]);
-  const [dashboardData, setDashboardData] = useState(null);
-  const [pendingData, setPendingData] = useState(null);
-  const [approvedData, setApprovedData] = useState(null);
-
-  useEffect(() => {
-    if (cookies?.AUTH_TOKEN) {
-      const fetchForm = async () => {
-        if (loading.current) {
-          return;
-        }
-        loading.current = true;
-        await fetchProfile();
-        await api
-          .get(`/form`)
-          .then((res) => {
-            const { data } = res;
-            setDashboardData(data);
-            const pending = data.map((d) => d?.pending);
-            const approved = data.map((d) => d?.approved);
-            setPendingData(pending);
-            setApprovedData(approved);
-            store.update((s) => {
-              s.dashboardData = data;
-            });
-            api.setToken(cookies?.AUTH_TOKEN);
-          })
-          .catch((err) => {
-            notify({
-              type: "error",
-              message: err,
-            });
-          });
-        loading.current = false;
-      };
-      fetchForm();
-    } else {
-      navigate("/login");
-    }
-  }, [cookies?.AUTH_TOKEN, notify, navigate, loading]);
-
+const Dashboard = ({ pending, approved, dashboardData }) => {
   return (
     <div>
       <Header />
@@ -66,11 +16,11 @@ const Dashboard = () => {
               <Row>
                 <div>
                   Waiting for approval:
-                  <span style={{ color: "#C7302B" }}> {pendingData}</span>
+                  <span style={{ color: "#C7302B" }}> {pending}</span>
                 </div>
                 <div>
                   Approved data:
-                  <span style={{ color: "#27AE60" }}> {approvedData}</span>
+                  <span style={{ color: "#27AE60" }}> {approved}</span>
                 </div>
               </Row>
             </Row>
