@@ -11,7 +11,15 @@ Base.metadata.create_all(bind=engine)
 session = SessionLocal()
 
 webform_url = "https://webform.akvo.org/api"
-forms = [{"raw_id": 611800981, "prod_id": 628680982, "instance": "seap"}]
+forms = [{
+    "raw_id": 611800981,
+    "prod_id": 628680982,
+    "instance": "seap"
+}, {
+    "raw_id": 630280917,
+    "prod_id": 656830977,
+    "instance": "seap"
+}]
 
 
 def get_frame(file_id, rename):
@@ -50,7 +58,7 @@ for form in forms:
     raw = get_frame(raw_id, "raw")
     prod = get_frame(prod_id, "prod")
     merged = raw.merge(prod, on='variable_name')
-    webform = r.get(f"{webform_url}/generate/{instance}/{prod_id}")
+    webform = r.get(f"{webform_url}/generate/{instance}/{raw_id}")
     webform_id = webform.text
     webform = r.get(f"{webform_url}/form/{webform_id}")
     webform = webform.json()
@@ -63,6 +71,8 @@ for form in forms:
     if not form:
         form = add_form(session=session,
                         id=raw_id,
+                        instance=webform["alias"],
+                        survey_id=webform["surveyGroupId"],
                         prod_id=prod_id,
                         url=webform_id,
                         name=webform["name"])

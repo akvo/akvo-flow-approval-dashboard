@@ -34,6 +34,7 @@ def upgrade():
                           name='data_approval_status'),
                   nullable=False), sa.PrimaryKeyConstraint('id'),
         sa.Column('submitter', sa.String(), nullable=False),
+        sa.Column('submitted_at', sa.DateTime(), nullable=False),
         sa.Column('approved_by', sa.Integer(), nullable=True),
         sa.ForeignKeyConstraint(['approved_by'], ['user.id'],
                                 name='approved_by_data_constraint'),

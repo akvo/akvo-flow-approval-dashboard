@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List, Optional
 from typing_extensions import TypedDict
 from sqlalchemy.orm import Session
@@ -19,9 +20,14 @@ def get_data(session: Session, form: int, skip: int, status: DataStatus,
     return PaginatedData(data=data, count=count)
 
 
-def get_data_by_id(session: Session, id: int) -> Data:
-    data = session.query(Data).filter(Data.id == id).first()
-    return data
+def get_data_by_id(session: Session, id: int) -> DataBase:
+    return session.query(Data).filter(Data.id == id).first()
+
+
+def count_data(session: Session, form: Optional[int] = None) -> int:
+    if form:
+        return session.query(Data).filter(Data.form == form).count()
+    return session.query(Data).count()
 
 
 def add_data(session: Session,
@@ -29,6 +35,7 @@ def add_data(session: Session,
              device: str,
              name: str,
              submitter: str,
+             submitted_at: datetime,
              status: Optional[DataStatus] = DataStatus.pending,
              approved_by: Optional[int] = None,
              value: Optional[List[dict]] = None,
@@ -40,6 +47,7 @@ def add_data(session: Session,
                 value=value,
                 name=name,
                 submitter=submitter,
+                submitted_at=submitted_at,
                 approved_by=approved_by)
     session.add(data)
     session.commit()
