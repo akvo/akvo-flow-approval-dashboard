@@ -1,0 +1,31 @@
+#datapoints {
+  .content {
+    padding-top: 10px;
+
+    h3 {
+      &.total {
+        padding: 5px 10px;
+        background: #fff;
+        margin-bottom: 0px;
+
+        small {
+          color: #00aaf1;
+          font-size: 100%;
+        }
+      }
+    }
+
+    p {
+      span {
+        &.status-title {
+          min-width: 200px;
+          display: inline-block;
+        }
+      }
+
+      .status-count {
+        font-weight: bold;
+      }
+    }
+  }
+}

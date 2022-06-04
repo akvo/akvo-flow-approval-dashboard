@@ -19,3 +19,20 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+#root {
+  button {
+    &.ant-btn {
+      line-height: 0px;
+      font-weight: 500;
+      border-radius: 5px;
+    }
+  }
+
+  .ant-tabs {
+    .ant-tabs-tab {
+      font-weight: 500;
+      font-size: 1.17em;
+    }
+  }
+}
