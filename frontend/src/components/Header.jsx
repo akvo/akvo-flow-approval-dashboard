@@ -9,7 +9,7 @@ import {
   Image,
   Dropdown,
 } from "antd";
-import { MenuOutlined } from "@ant-design/icons";
+import { MenuOutlined, DownOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router";
 import { store } from "../lib";
 import { Link } from "react-router-dom";
@@ -56,33 +56,36 @@ const Header = () => {
             </Breadcrumb>
           </Col>
           <Col className="user" span={12} align="right">
-            <Dropdown
-              overlay={() => (
-                <Menu>
-                  <Menu.Item key="profile">
-                    <Link to="/profile">My Profile</Link>
-                  </Menu.Item>
-                  <Menu.Item key="handleLogOut" danger>
-                    <a onClick={handleLogOut}>Sign out</a>
-                  </Menu.Item>
-                </Menu>
-              )}
-              placement="bottomRight"
-              arrow
-            >
-              <div>
-                <span>{userName}</span>
-                <Avatar
-                  src={
-                    <Image
-                      src={user.picture}
-                      style={{ width: "32px", height: "32px" }}
-                      preview={false}
-                    />
-                  }
-                />
-              </div>
-            </Dropdown>
+            <div className="user-info">
+              <Dropdown
+                overlay={() => (
+                  <Menu>
+                    <Menu.Item key="profile">
+                      <Link to="/profile">My Profile</Link>
+                    </Menu.Item>
+                    <Menu.Item key="handleLogOut" danger>
+                      <a onClick={handleLogOut}>Sign out</a>
+                    </Menu.Item>
+                  </Menu>
+                )}
+                placement="bottomRight"
+                arrow
+              >
+                <div>
+                  <span>{userName}</span>
+                  <Avatar
+                    src={
+                      <Image
+                        src={user.picture}
+                        style={{ width: "32px", height: "32px" }}
+                        preview={false}
+                      />
+                    }
+                  />
+                  <DownOutlined />
+                </div>
+              </Dropdown>
+            </div>
           </Col>
           <Col className="header-menu-btn">
             <Button type="primary" ghost align="end">

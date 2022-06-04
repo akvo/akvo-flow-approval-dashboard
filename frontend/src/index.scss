@@ -21,6 +21,22 @@ code {
 }
 
 #root {
+  height: 100vh;
+  background-color: #f7f8fc;
+
+  .loading-container {
+    position: absolute;
+    z-index: 1;
+    width: 100vw;
+    height: calc(100vh - 78px);
+    text-align: center;
+
+    .ant-spin {
+      position: absolute;
+      top: 50%;
+    }
+  }
+
   button {
     &.ant-btn {
       line-height: 0px;

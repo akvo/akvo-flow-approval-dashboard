@@ -27,5 +27,25 @@
         font-weight: bold;
       }
     }
+
+    .ant-table {
+      .normalize {
+        font-weight: 500;
+        color: #000;
+      }
+
+      .datapoint-name,
+      .submitter {
+        font-weight: bold;
+      }
+
+      .datapoint-name {
+        color: #1890ff;
+      }
+
+      .row-dark {
+        background-color: #f7f8fc;
+      }
+    }
   }
 }

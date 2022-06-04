@@ -27,10 +27,11 @@ const App = () => {
           });
           api.setToken(res.data.id_token);
           setLoading(false);
-          if (location.pathname.includes("/login", "/")) {
+          if (location.pathname.includes(["/", "/login", "/dashboard"])) {
             navigate("/dashboard", {
               state: {
                 page: "Dashboard",
+                name: "dashboard",
               },
             });
           }
