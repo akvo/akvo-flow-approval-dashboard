@@ -1,6 +1,7 @@
 import os
 import sys
 import random
+from datetime import datetime
 from db.connection import Base, SessionLocal, engine
 from models.form import Form
 from models.data import DataStatus
@@ -37,6 +38,7 @@ for form in forms:
                         approved_by=approved_by,
                         form=form.id,
                         submitter=profile["name"],
+                        submitted_at=datetime.now(),
                         status=status,
                         device="Android Smartphone")
     print(f"Form: {form.name}, Data: {total}")

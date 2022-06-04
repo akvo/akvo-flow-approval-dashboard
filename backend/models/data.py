@@ -1,8 +1,9 @@
 import enum
+from datetime import datetime
 from pydantic import BaseModel
 from typing import Optional, List
 from sqlalchemy import Column, ForeignKey
-from sqlalchemy import Integer, String, Enum
+from sqlalchemy import Integer, DateTime, String, Enum
 from db.connection import Base
 from sqlalchemy.orm import relationship
 import sqlalchemy.dialects.postgresql as pg
@@ -21,6 +22,7 @@ class DataBase(BaseModel):
     name: str
     device: str
     submitter: str
+    submitted_at: str
     approved_by: Optional[str] = None
 
 
@@ -40,6 +42,7 @@ class Data(Base):
     value = Column(pg.ARRAY(pg.JSONB), nullable=True)
     status = Column(Enum(DataStatus), default=DataStatus.pending)
     submitter = Column(String, nullable=False)
+    submitted_at = Column(DateTime, nullable=False)
     approved_by = Column(Integer, ForeignKey(User.id), nullable=True)
     approved_by_user = relationship(User, foreign_keys=[approved_by])
 
@@ -47,6 +50,7 @@ class Data(Base):
                  form: int,
                  device: str,
                  submitter: str,
+                 submitted_at: datetime,
                  status: DataStatus,
                  approved_by: int,
                  value: Optional[List[dict]] = None,
@@ -56,6 +60,7 @@ class Data(Base):
         self.form = form
         self.device = device
         self.submitter = submitter
+        self.submitted_at = submitted_at
         self.value = value
         self.status = status
         self.approved_by = approved_by
@@ -67,10 +72,12 @@ class Data(Base):
     @property
     def serialize(self) -> DataBase:
         approved_by = self.approved_by_user.email if self.approved_by else None
+        submitted_at = self.submitted_at.strftime("%Y-%m-%d %H:%M")
         return {
             "id": self.id,
             "name": self.name,
             "device": self.device,
             "submitter": self.submitter,
+            "submitted_at": submitted_at,
             "approved_by": approved_by
         }

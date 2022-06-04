@@ -19,6 +19,8 @@ def upgrade():
     op.create_table(
         'form',
         sa.Column('id', sa.Integer(), primary_key=True),
+        sa.Column('instance', sa.String(), nullable=False),
+        sa.Column('survey_id', sa.Integer(), nullable=False),
         sa.Column('prod_id', sa.Integer(), nullable=False),
         sa.Column('url', sa.String(), nullable=False),
         sa.Column('name', sa.String(length=254), nullable=False),

@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Request, Depends, Form
 from util.auth0 import Auth0
 from fastapi.security import HTTPBearer
-from models.auth import Oauth2Base
 from models.user import UserBase
 from pydantic import SecretStr
 
@@ -13,9 +12,9 @@ security = HTTPBearer()
                  response_model=UserBase,
                  summary="Login",
                  tags=["Auth"])
-def login(
-    req: Request, username: str = Form(...), password: SecretStr = Form(...)
-) -> Oauth2Base:
+def login(req: Request,
+          username: str = Form(...),
+          password: SecretStr = Form(...)):
     auth0 = Auth0()
     token = auth0.get_token(username=username, password=password)
     id_token = token.get("id_token")
