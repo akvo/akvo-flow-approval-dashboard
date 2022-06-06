@@ -55,6 +55,8 @@ def get_by_id(req: Request,
               token: str = Depends(security)):
     auth0.verify(token.credentials)
     data = get_data_by_id(session=session, id=id)
+    if not data:
+        raise HTTPException(status_code=404, detail="Not found")
     form = get_form_by_id(session=session, id=data.form)
     questions = get_question_by_form(session=session, form=form.id)
     question_map = {}
@@ -68,5 +70,17 @@ def get_by_id(req: Request,
     webform = react_form(form)
     if not webform:
         raise HTTPException(status_code=404, detail="Not found")
+    qtype = {}
+    for question_group in webform.get("question_group"):
+        for question in question_group.get("question"):
+            qtype.update({question["id"]: question["type"]})
+    for val in data["initial_value"]:
+        val.update({"question": int(val["question"])})
+        if qtype.get(val["question"]) == "option":
+            val.update({"value": val["value"][0]})
+        if qtype.get(val["question"]) == "cascade":
+            val.update(
+                {"value": [int(str(v).split(":")[0]) for v in val["value"]]})
+            print(val)
     data.update({"forms": webform})
     return data
