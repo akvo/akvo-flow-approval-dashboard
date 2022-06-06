@@ -54,3 +54,14 @@ def add_data(session: Session,
     session.flush()
     session.refresh(data)
     return data
+
+
+def update_data_status(session: Session, id: int, status: DataStatus,
+                       approved_by: int) -> None:
+    data = session.query(Data).filter(Data.id == id).first()
+    data.status = status
+    data.approved_by = approved_by
+    session.commit()
+    session.flush()
+    session.refresh(data)
+    return data

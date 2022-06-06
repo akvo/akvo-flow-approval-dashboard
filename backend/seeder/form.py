@@ -68,14 +68,25 @@ for form in forms:
     questions = questions[["id", "prod_id"]]
     questions = questions.to_dict("records")
     form = get_form_by_id(session=session, id=raw_id)
+    prod_webform = r.get(f"{webform_url}/generate/{instance}/{prod_id}")
+    prod_webform = prod_webform.text
     if not form:
         form = add_form(session=session,
                         id=raw_id,
                         instance=webform["alias"],
                         survey_id=webform["surveyGroupId"],
                         prod_id=prod_id,
-                        url=webform_id,
+                        url=prod_webform,
                         name=webform["name"])
+    if form:
+        form.instance = webform["alias"]
+        form.survey_id = webform["surveyGroupId"]
+        form.prod_id = prod_id
+        form.url = prod_webform,
+        form.name = webform["name"]
+        session.commit()
+        session.flush()
+        session.refresh(form)
     for q in questions:
         question = get_question_by_id(session=session, id=q["id"])
         if not question:

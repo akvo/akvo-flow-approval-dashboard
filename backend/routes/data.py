@@ -1,6 +1,5 @@
 from math import ceil
 from uuid import uuid4
-from typing import List
 from fastapi import Request, APIRouter, Depends, HTTPException
 from fastapi.security import HTTPBearer
 from sqlalchemy.orm import Session
@@ -8,10 +7,11 @@ from db.connection import get_session
 from util.auth0 import Auth0
 from util.flow import react_form, webform_api
 from models.data import DataStatus, DataResponse, DataListResponse
-from models.submission import AnswerBase
+from models.submission import SubmissionBase
+from db.crud_user import get_user_by_email
 from db.crud_form import get_form_by_id
 from db.crud_question import get_question_by_form
-from db.crud_data import get_data, get_data_by_id
+from db.crud_data import get_data, get_data_by_id, update_data_status
 import requests as r
 
 data_route = APIRouter()
@@ -25,8 +25,8 @@ def transform_to_id_prod(data, questions):
         question_map.update({q.id: q.prod_id})
     data = data.to_webform
     for value in data["initial_value"]:
-        prod_question_id = question_map.get(value["question"])
-        if (prod_question_id):
+        prod_question_id = question_map.get(int(value["question"]))
+        if prod_question_id:
             value.update({"question": prod_question_id})
     return data
 
@@ -100,29 +100,37 @@ def get_by_id(req: Request,
                  summary="Approve Datapoint ID",
                  tags=["Data"])
 def update_data(req: Request,
-                app: str,
-                payload: List[AnswerBase],
+                payload: SubmissionBase,
                 id: int,
+                token: str = Depends(security),
                 session: Session = Depends(get_session)):
+    user = auth0.verify(token.credentials)
+    username = user.get("nickname") or user.get("name")
+    user = get_user_by_email(session=session, email=user.get("email"))
+    if not user:
+        raise HTTPException(status_code=401, detail="Not Authenticated")
     data = get_data_by_id(session=session, id=id)
     form = get_form_by_id(session=session, id=data.form)
     datapoint_id = "-".join(str(uuid4()).split("-")[1:4])
     payload_request = {
-        "responses": [p.serialize for p in payload],
+        "responses": [p.serialize for p in payload.answers],
         "dataPointId": datapoint_id,
-        "deviceId": data.device,
-        "dataPointName": "testing",
+        "deviceId": f"{data.device}, Approved by {username}",
+        "dataPointName": f"{data.id} - {data.name}",
         "formId": form.prod_id,
-        "formVersion": 0,
-        "submissionStart": 0,
-        "submissionStop": 0,
+        "formVersion": payload.version,
+        "submissionStart": 1654548804496,
+        "submissionStop": 1654548853278,
         "submissionDate": data.submitted_at.strftime("%Y-%m-%dT%XZ"),
-        "duration": 0,
         "username": data.submitter,
         "uuid": str(uuid4()),
-        "instance": app
+        "instance": payload.instance
     }
     result = r.post(f"{webform_api}/submit-form", json=payload_request)
     if result.status_code != 200:
         raise HTTPException(status_code=404, detail="Not found")
+    update_data_status(session=session,
+                       id=data.id,
+                       status=DataStatus.approved,
+                       approved_by=user.id)
     return result.json()
