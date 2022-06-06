@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: isco
+  name: anupng
 spec:
   replicas: 1
   strategy:
@@ -12,19 +12,19 @@ spec:
     type: RollingUpdate
   selector:
     matchLabels:
-      run: isco
+      run: anupng
   template:
     metadata:
       labels:
-        run: isco
-        isco-version: "${CI_COMMIT}"
+        run: anupng
+        anupng-version: "${CI_COMMIT}"
       annotations:
         prometheus.io/scrape: 'true'
         prometheus.io/port: '3000'
     spec:
       containers:
         - name: frontend
-          image: eu.gcr.io/akvo-lumen/isco/frontend:${CI_COMMIT}
+          image: eu.gcr.io/akvo-lumen/akvo-flow-approval-dashboard/frontend:${CI_COMMIT}
           ports:
             - containerPort: 80
           resources:
@@ -35,54 +35,20 @@ spec:
               cpu: "200m"
               memory: "64Mi"
         - name: backend
-          image: eu.gcr.io/akvo-lumen/isco/backend:${CI_COMMIT}
+          image: eu.gcr.io/akvo-lumen/akvo-flow-approval-dashboard/backend:${CI_COMMIT}
           ports:
             - containerPort: 5000
           env:
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
-                  name: isco
+                  name: anupng
                   key: database-url
             - name: SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: isco
+                  name: anupng
                   key: secret-key
-            - name: CLIENT_ID
-              valueFrom:
-                secretKeyRef:
-                  name: isco
-                  key: client-id
-            - name: CLIENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: isco
-                  key: client-secret
-            - name: WEBDOMAIN
-              valueFrom:
-                secretKeyRef:
-                  name: isco
-                  key: webdomain
-            - name: MAILJET_APIKEY
-              valueFrom:
-                secretKeyRef:
-                  name: isco
-                  key: mailjet-apikey
-            - name: MAILJET_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: isco
-                  key: mailjet-secret
-            - name: BUCKET_FOLDER
-              value: ${BUCKET_FOLDER}
-            - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: /secrets/credentials.json
-          volumeMounts:
-            - name: isco-secrets
-              mountPath: /secrets/credentials.json
-              subPath: isco-service-account.json
-              readOnly: true
           readinessProbe:
             httpGet:
               path: /health-check
@@ -101,6 +67,6 @@ spec:
               cpu: "500m"
               memory: "1024Mi"
       volumes:
-        - name: isco-secrets
+        - name: anupng-secrets
           secret:
-            secretName: isco
+            secretName: anupng

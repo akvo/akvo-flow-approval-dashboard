@@ -39,7 +39,7 @@ const Header = () => {
     <div className="header">
       <div className="header-container">
         <Row align="middle">
-          <Col className="header-menu" span={12} align="left">
+          <Col className="header-menu" span={16} align="left">
             {routeState?.breadcrumbs && (
               <Breadcrumb>
                 {routeState.breadcrumbs.map((x, xi) => (
@@ -57,7 +57,7 @@ const Header = () => {
               </Breadcrumb>
             )}
           </Col>
-          <Col className="user" span={12} align="right">
+          <Col className="user" span={8} align="right">
             <div className="user-info">
               <Dropdown
                 overlay={() => (
