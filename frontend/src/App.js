@@ -6,7 +6,7 @@ import { useCookies } from "react-cookie";
 import { message } from "antd";
 import { api, store } from "./lib";
 import { removeCookie } from "./util/helper";
-import { Home, Login, DataPoints } from "./pages";
+import { Home, Login, DataPoints, DataViews } from "./pages";
 
 const App = () => {
   const navigate = useNavigate();
@@ -64,6 +64,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Home />} />
           <Route path="/dashboard/:id" element={<DataPoints />} />
+          <Route path="/view/:id" element={<DataViews />} />
         </Routes>
       </div>
     </div>

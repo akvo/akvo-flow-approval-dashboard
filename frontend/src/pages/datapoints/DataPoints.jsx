@@ -2,41 +2,8 @@ import React, { useEffect, useState, useMemo } from "react";
 import "./datapoints.scss";
 import { Row, Col, Tabs, Table, Button } from "antd";
 import { AiOutlinePlus } from "react-icons/ai";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { api, store } from "../../lib";
-
-const columns = [
-  {
-    title: () => <span className="normalize">Sort By</span>,
-    dataIndex: "name",
-    width: "40%",
-    ellipsis: true,
-    className: "datapoint-name",
-  },
-  {
-    title: () => <span className="normalize">Submittant</span>,
-    dataIndex: "submitter",
-    ellipsis: true,
-    className: "submitter",
-  },
-  {
-    title: "Submitted Date",
-    dataIndex: "submitted_at",
-    ellipsis: true,
-  },
-  {
-    title: "",
-    dataIndex: "",
-    width: "75px",
-    render: () => {
-      return (
-        <Button className="add-btn" type="primary">
-          <AiOutlinePlus />
-        </Button>
-      );
-    },
-  },
-];
 
 const panes = [
   {
@@ -57,6 +24,7 @@ const panes = [
 const DataPoints = () => {
   const { id } = useParams();
   const { isLoggedIn } = store.useState((s) => s);
+  const navigate = useNavigate();
   const [data, setData] = useState({ data: [], total: 0 });
   const [selectedTab, setSelectedTab] = useState(panes[0].key);
   const [loading, setLoading] = useState(true);
@@ -69,6 +37,45 @@ const DataPoints = () => {
     setSelectedTab(activeKey);
     setStatus(activePane?.title.toLowerCase());
   };
+
+  const columns = [
+    {
+      title: () => <span className="normalize">Sort By</span>,
+      dataIndex: "name",
+      width: "40%",
+      ellipsis: true,
+      className: "datapoint-name",
+    },
+    {
+      title: () => <span className="normalize">Submittant</span>,
+      dataIndex: "submitter",
+      ellipsis: true,
+      className: "submitter",
+    },
+    {
+      title: "Submitted Date",
+      dataIndex: "submitted_at",
+      ellipsis: true,
+    },
+    {
+      title: "",
+      dataIndex: "",
+      width: "75px",
+      render: (_, value) => {
+        return (
+          <Button
+            onClick={() => {
+              navigate(`/view/${value.id}`);
+            }}
+            className="add-btn"
+            type="primary"
+          >
+            <AiOutlinePlus />
+          </Button>
+        );
+      },
+    },
+  ];
 
   useEffect(() => {
     if (isLoggedIn) {

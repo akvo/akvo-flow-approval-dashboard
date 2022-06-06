@@ -121,7 +121,7 @@ def react_form(form):
         result_questions = []
         for q in qg["question"]:
             rq = {
-                "id": q["id"].replace("Q", ""),
+                "id": int(q["id"].replace("Q", "")),
                 "name": q["text"],
                 "order": q.get("order"),
                 "type": q["type"],
@@ -133,22 +133,24 @@ def react_form(form):
                 dependencies = []
                 for d in q.get("dependency"):
                     dependencies.append({
-                        "id": d["question"].replace("Q", ""),
+                        "id": int(d["question"].replace("Q", "")),
                         "options": d["options"]
                     })
                 rq.update({"dependency": dependencies})
-            if q.get("type") == "options":
+            if q.get("type") == "option":
                 options = q.get("options")
-                rq.update({
-                    "option": options.get("option"),
-                })
+                option_list = [{
+                    "name": o.get("text"),
+                    "translations": o.get("translations")
+                } for o in options.get("option")]
+                rq.update({"option": option_list})
                 if options.get("allowMultiple"):
                     rq.update({"type": "multiple_option"})
                 if options.get("allowOther"):
                     rq.update({"allowOther": options.get("allowOther")})
             if q.get("type") == "cascade":
                 resource = q.get("cascadeResource")
-                endpoint = f"{webform_api}/cascade/{alias}/{resource}"
+                endpoint = f"/api/cascade/{alias}/{resource}"
                 rq.update({
                     "api": {
                         "endpoint": endpoint,
@@ -177,3 +179,10 @@ def react_form(form):
         })
     result.update({"question_group": result_question_groups})
     return result
+
+
+def get_cascade(instance: str, resource: str, id: int):
+    cascade = r.get(f"{webform_api}/cascade/{instance}/{resource}/{id}")
+    if cascade:
+        return cascade.json()
+    return None

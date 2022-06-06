@@ -7,6 +7,7 @@ from db.crud_data import add_data, get_data_by_id, count_data
 from faker import Faker
 import util.flow as flow
 from util.auth0 import Auth0
+# from db.truncator import truncate
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 Base.metadata.create_all(bind=engine)
@@ -24,6 +25,7 @@ auth0 = Auth0()
 refresh_token = auth0.get_refresh_token(username=sys.argv[1],
                                         password=sys.argv[2])
 
+# truncate(session=session, table="data")
 forms = session.query(Form).all()
 for form in forms:
     print(f"- SYNCING: {form.id} {form.name}")

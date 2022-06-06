@@ -9,7 +9,7 @@ from sqlalchemy.orm import relationship
 import sqlalchemy.dialects.postgresql as pg
 from .user import User
 from .form import Form
-from .webform import WebFormBase
+# from .webform import WebFormBase
 
 
 class DataStatus(enum.Enum):
