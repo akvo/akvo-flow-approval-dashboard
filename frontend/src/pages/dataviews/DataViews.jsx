@@ -5,19 +5,42 @@ import { useParams } from "react-router-dom";
 import { api, store } from "../../lib";
 import { Loading } from "../../components";
 
+const initForms = {
+  forms: {
+    name: "Loading",
+    question_group: [],
+  },
+  initial_value: [],
+};
+
 const DataViews = () => {
   const { data_id } = useParams();
   const { isLoggedIn } = store.useState((s) => s);
-  const [forms, setForms] = useState({
-    forms: {
-      name: "Loading",
-      question_group: [],
-    },
-    initial_value: [],
-  });
+  const [forms, setForms] = useState(initForms);
   const [loading, setLoading] = useState(true);
+
+  const questions = forms.forms.question_group
+    .map((q) => q.question)
+    .flatMap((q) => q);
+
   const onFinish = (data) => {
-    console.info(data);
+    const payload = Object.keys(data).map((k) => {
+      const q = k.split("-");
+      let value = data[k];
+      const question = questions.find(
+        (qs) => parseInt(qs["id"]) === parseInt(q[0])
+      );
+      if (question.original_type === "geo") {
+        value = { lat: data[k].lat, long: data[k].lng };
+      }
+      return {
+        questionId: parseInt(q[0]),
+        iteration: q.length === 2 ? parseInt(q[1]) : 0,
+        value: value,
+        answerType: question.original_type,
+      };
+    });
+    console.info(payload);
   };
 
   useEffect(() => {

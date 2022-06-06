@@ -64,20 +64,18 @@ const DataPoints = () => {
       dataIndex: "",
       width: "75px",
       render: (_, value) => {
+        const thisUrl = `/dashboard/${id}/${value.id}`;
+        const thisBreadCrumb = {
+          page: value.name,
+          target: thisUrl,
+        };
+        const thisRouteState = {
+          state: { breadcrumbs: [...routeState.breadcrumbs, thisBreadCrumb] },
+        };
         return (
           <Button
             onClick={() => {
-              navigate(`/dashboard/${id}/${value.id}`, {
-                state: {
-                  breadcrumbs: [
-                    ...routeState.breadcrumbs,
-                    {
-                      page: value.id,
-                      target: `/dashboard/${id}/${value.id}`,
-                    },
-                  ],
-                },
-              });
+              navigate(thisUrl, thisRouteState);
             }}
             className="add-btn"
             type="primary"

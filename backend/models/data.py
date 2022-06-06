@@ -9,7 +9,7 @@ from sqlalchemy.orm import relationship
 import sqlalchemy.dialects.postgresql as pg
 from .user import User
 from .form import Form
-# from .webform import WebFormBase
+from .webform import WebFormBase
 
 
 class DataStatus(enum.Enum):
@@ -37,8 +37,7 @@ class DataValue(BaseModel):
 class DataResponse(BaseModel):
     id: int
     form_id: int
-    # forms: Optional[WebFormBase] = None
-    forms: dict
+    forms: Optional[WebFormBase] = None
     initial_value: List[DataValue]
 
 

@@ -47,13 +47,14 @@ def get(req: Request,
 
 @data_route.get('/data/{id:path}',
                 response_model=DataResponse,
+                response_model_exclude_none=True,
                 summary="Webform Data By Datapoint ID",
                 tags=["Data"])
 def get_by_id(req: Request,
               id: int,
-              session: Session = Depends(get_session),
-              token: str = Depends(security)):
-    auth0.verify(token.credentials)
+              # token: str = Depends(security),
+              session: Session = Depends(get_session)):
+    # auth0.verify(token.credentials)
     data = get_data_by_id(session=session, id=id)
     if not data:
         raise HTTPException(status_code=404, detail="Not found")
@@ -73,7 +74,8 @@ def get_by_id(req: Request,
     qtype = {}
     for question_group in webform.get("question_group"):
         for question in question_group.get("question"):
-            qtype.update({question["id"]: question["type"]})
+            qid = question["id"].replace("Q", "")
+            qtype.update({int(qid): question["type"]})
     for val in data["initial_value"]:
         val.update({"question": int(val["question"])})
         if qtype.get(val["question"]) == "option":
@@ -81,6 +83,5 @@ def get_by_id(req: Request,
         if qtype.get(val["question"]) == "cascade":
             val.update(
                 {"value": [int(str(v).split(":")[0]) for v in val["value"]]})
-            print(val)
     data.update({"forms": webform})
     return data

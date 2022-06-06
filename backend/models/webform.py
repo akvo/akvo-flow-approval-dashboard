@@ -5,6 +5,17 @@ from pydantic import BaseModel, Field, validator
 from util.model import optional
 
 
+class ReactFormQuestionType(Enum):
+    cascade = "cascade"
+    multiple_option = "multiple_option"
+    number = "number"
+    option = "option"
+    text = "text"
+    date = "date"
+    photo = "photo"
+    geo = "geo"
+
+
 class WebformQuestionType(Enum):
     cascade = "cascade"
     caddisfly = "caddisfly"
@@ -19,59 +30,54 @@ class ValidationType(Enum):
     numeric = "numeric"
 
 
-class AltText(TypedDict):
+class Translations(TypedDict):
     language: str
-    text: str
-    type: str
+    text: str = Field(..., alias="name")
 
-
-class Level(TypedDict):
-    text: str
-
-
-class Levels(TypedDict):
-    level: List[Level]
+    class Config:
+        allow_population_by_field_name = True
 
 
 @optional('maxVal', 'minVal')
 class ValidationRule(BaseModel):
-    allowDecimal: bool
-    signed: bool
-    maxVal: Optional[float] = None
-    minVal: Optional[float] = None
-    validationType: ValidationType
+    maxVal: Optional[float] = Field(..., alias="max")
+    minVal: Optional[float] = Field(..., alias="min")
+
+    class Config:
+        allow_population_by_field_name = True
 
 
-@optional('altText')
-class Help(BaseModel):
-    altText: Optional[List[AltText]] = []
+@optional('translations')
+class Tooltip(BaseModel):
+    translations: Optional[List[Translations]] = None
     text: Optional[str] = ""
 
     @validator("text", pre=True, always=True)
     def set_text(cls, text):
         return text or ""
 
-    @validator("altText", pre=True, always=True)
-    def set_alt_text(cls, altText):
-        if altText == [None]:
-            return []
-        return altText or []
+    @validator("translations", pre=True, always=True)
+    def set_translations(cls, translations):
+        if translations == [None]:
+            return None
+        return translations or None
 
 
-@optional('altText')
+@optional('translations')
 class Option(BaseModel):
-    altText: Optional[List[AltText]] = Field(..., alias="translations")
+    translations: Optional[List[Translations]] = Field(...,
+                                                       alias="translations")
     value: str
     text: str = Field(..., alias="name")
 
     class Config:
         allow_population_by_field_name = True
 
-    @validator("altText", pre=True, always=True)
-    def set_alt_text(cls, altText):
-        if altText == [None]:
-            return []
-        return altText or []
+    @validator("translations", pre=True, always=True)
+    def set_translations(cls, translations):
+        if translations == [None]:
+            return None
+        return translations or None
 
 
 class DependencyQuestion(BaseModel):
@@ -86,23 +92,28 @@ class DependencyQuestion(BaseModel):
         return question.replace("Q", "")
 
 
-@optional('altText', 'cascadeResource', 'help', 'levels', 'validationRule',
-          'requireDoubleEntry', 'options', 'dependency')
+class CascadeApiResource(BaseModel):
+    endpoint: str
+    initial: Optional[int] = 0
+    list: Optional[bool] = False
+
+
+@optional('translations', 'cascadeResource', 'help', 'validationRule',
+          'options', 'validationRule', 'dependency')
 class WebformQuestion(BaseModel):
-    localeNameFlag: bool
-    altText: Optional[List[AltText]] = []
-    help: Optional[Help]
-    cascadeResource: str
     id: int
-    levels: Optional[Levels]
-    mandatory: bool = Field(..., alias="required")
-    order: int
     text: str = Field(..., alias="name")
-    type: WebformQuestionType
+    order: int
+    type: ReactFormQuestionType
+    mandatory: bool = Field(..., alias="required")
+    original_type: WebformQuestionType = None
+    options: Optional[List[Option]] = Field(..., alias="option")
+    cascadeResource: Optional[CascadeApiResource] = Field(..., alias="api")
     dependency: List[DependencyQuestion]
-    options: Optional[List[Option]] = None
-    validationRule: Optional[ValidationRule]
-    requireDoubleEntry: Optional[bool] = None
+    help: Optional[Tooltip] = Field(..., alias="tooltip")
+    translations: Optional[List[Translations]] = None
+    validationRule: ValidationRule = Field(..., alias="rule")
+    localeNameFlag: bool = Field(..., alias="datapoint_name")
 
     class Config:
         allow_population_by_field_name = True
@@ -111,46 +122,67 @@ class WebformQuestion(BaseModel):
     def set_id_value(cls, id):
         return id.replace("Q", "")
 
-    @validator("altText", pre=True, always=True)
-    def set_alt_text(cls, altText):
-        if altText == [None]:
-            return []
-        return altText or []
+    @validator("translations", pre=True, always=True)
+    def set_translations(cls, translations):
+        if translations == [None]:
+            return None
+        return translations or None
 
     @validator("options", pre=True, always=True)
-    def set_options(cls, options):
+    def set_options(cls, options, values):
         if options:
             return options["option"]
         return None
 
+    @validator("type", pre=True, always=True)
+    def set_type(cls, value, values):
+        if value == "free":
+            return "text"
+        return value
 
-@optional('altText')
+    @validator("original_type", always=True)
+    def validate_original_type(cls, value, values):
+        free_text = [
+            ReactFormQuestionType.text, ReactFormQuestionType.multiple_option,
+            ReactFormQuestionType.number
+        ]
+        if values["type"] in free_text:
+            return "free"
+        return values["type"]
+
+    @validator("cascadeResource", pre=True, always=True)
+    def validate_cascade_api(cls, value):
+        if value:
+            return {"endpoint": value}
+        return None
+
+
+@optional('translations')
 class WebformQuestionGroup(BaseModel):
-    altText: Optional[List[AltText]] = []
-    heading: str
+    translations: Optional[List[Translations]] = None
+    heading: str = Field(..., alias="name")
     question: List[WebformQuestion]
     repeatable: bool
 
-    @validator("altText", pre=True, always=True)
-    def set_alt_text(cls, altText):
-        return altText or []
+    class Config:
+        allow_population_by_field_name = True
+
+    @validator("translations", pre=True, always=True)
+    def set_translations(cls, translations):
+        return translations or None
 
 
-@optional('altText')
+@optional('translations')
 class WebFormBase(BaseModel):
     alias: str
-    altText: Optional[List[AltText]] = []
+    translations: Optional[List[Translations]] = None
     app: str
-    defaultLanguageCode: str
     name: str
-    questionGroup: List[WebformQuestionGroup]
-    surveyGroupId: int
-    surveyGroupName: str
-    surveyId: int
+    question_group: List[WebformQuestionGroup]
     version: float
 
-    @validator("altText", pre=True, always=True)
-    def set_alt_text(cls, altText):
-        if altText == [None]:
-            return []
-        return altText or []
+    @validator("translations", pre=True, always=True)
+    def set_translations(cls, translations):
+        if translations == [None]:
+            return None
+        return translations or None
