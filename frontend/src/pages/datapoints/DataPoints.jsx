@@ -35,57 +35,82 @@ const DataPoints = () => {
 
   const handleTabsChange = (activeKey) => {
     setLoading(true);
+    setCurrentPage(1);
     const activePane = panes.find((p) => p.key === activeKey);
     setSelectedTab(activeKey);
     setStatus(activePane?.title.toLowerCase());
   };
 
-  const columns = [
-    {
-      title: () => <span className="normalize">Sort By</span>,
-      dataIndex: "name",
-      width: "40%",
-      ellipsis: true,
-      className: "datapoint-name",
-    },
-    {
-      title: () => <span className="normalize">Submittant</span>,
-      dataIndex: "submitter",
-      ellipsis: true,
-      className: "submitter",
-    },
-    {
-      title: "Submitted Date",
-      dataIndex: "submitted_at",
-      ellipsis: true,
-    },
-    {
-      title: "",
-      dataIndex: "",
-      width: "75px",
-      render: (_, value) => {
-        const thisUrl = `/dashboard/${id}/${value.id}`;
-        const thisBreadCrumb = {
-          page: value.name,
-          target: thisUrl,
-        };
-        const thisRouteState = {
-          state: { breadcrumbs: [...routeState.breadcrumbs, thisBreadCrumb] },
-        };
-        return (
-          <Button
-            onClick={() => {
-              navigate(thisUrl, thisRouteState);
-            }}
-            className="add-btn"
-            type="primary"
-          >
-            <AiOutlinePlus />
-          </Button>
-        );
+  const columns = useMemo(() => {
+    const head_cols = [
+      {
+        title: () => <span className="normalize">Sort By</span>,
+        dataIndex: "name",
+        width: "40%",
+        ellipsis: true,
+        className: "datapoint-name",
       },
-    },
-  ];
+      {
+        title: () => <span className="normalize">Submittant</span>,
+        dataIndex: "submitter",
+        ellipsis: true,
+        className: "submitter",
+      },
+    ];
+    const tail_cols = [
+      {
+        title: "Submitted Date",
+        dataIndex: "submitted_at",
+        ellipsis: true,
+      },
+      {
+        title: "",
+        dataIndex: "",
+        width: "75px",
+        render: (_, value) => {
+          const thisUrl = `/dashboard/${id}/${value.id}`;
+          const thisBreadCrumb = {
+            page: value.name,
+            target: thisUrl,
+          };
+          const thisRouteState = {
+            state: {
+              breadcrumbs: [...routeState.breadcrumbs, thisBreadCrumb],
+              previewOnly: status === "approved",
+            },
+          };
+          return (
+            <Button
+              onClick={() => {
+                navigate(thisUrl, thisRouteState);
+              }}
+              className="add-btn"
+              type="primary"
+            >
+              <AiOutlinePlus />
+            </Button>
+          );
+        },
+      },
+    ];
+    if (status !== "pending") {
+      return [
+        ...head_cols,
+        {
+          title: () => (
+            <span className="normalize">
+              {status === "approved" ? "Approved By" : "Rejected By"}
+            </span>
+          ),
+          dataIndex: "approved_by",
+          ellipsis: true,
+          className: "submitter",
+        },
+        ...tail_cols,
+      ];
+    }
+    return [...head_cols, ...tail_cols];
+  }, [id, status, navigate, routeState]);
 
   useEffect(() => {
     if (isLoggedIn) {
