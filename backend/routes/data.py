@@ -1,10 +1,10 @@
-import requests as r
 from math import ceil
 from fastapi import Request, APIRouter, Depends, HTTPException
 from fastapi.security import HTTPBearer
 from sqlalchemy.orm import Session
 from db.connection import get_session
 from util.auth0 import Auth0
+from util.flow import react_form
 from models.data import DataStatus, DataResponse, DataListResponse
 from db.crud_form import get_form_by_id
 from db.crud_question import get_question_by_form
@@ -13,7 +13,6 @@ from db.crud_data import get_data, get_data_by_id
 data_route = APIRouter()
 security = HTTPBearer()
 auth0 = Auth0()
-webform_url = "https://webform.akvo.org/api/form"
 
 
 @data_route.get('/data',
@@ -66,7 +65,8 @@ def get_by_id(req: Request,
         prod_question_id = question_map.get(value["question"])
         if (prod_question_id):
             value.update({"question": prod_question_id})
-    webform = r.get(f"{webform_url}/{form.url}")
-    if webform.status_code == 200:
-        data.update({"forms": webform.json()})
+    webform = react_form(form)
+    if not webform:
+        raise HTTPException(status_code=404, detail="Not found")
+    data.update({"forms": webform})
     return data

@@ -37,8 +37,8 @@ class DataValue(BaseModel):
 class DataResponse(BaseModel):
     id: int
     form_id: int
-    forms: Optional[WebFormBase] = None
-    # forms: dict
+    # forms: Optional[WebFormBase] = None
+    forms: dict
     initial_value: List[DataValue]
 
 

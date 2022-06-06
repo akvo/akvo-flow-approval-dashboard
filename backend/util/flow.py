@@ -1,9 +1,21 @@
 import requests as r
+import json
 from util.auth0 import Auth0
 from models.form import Form
 from datetime import datetime
 
 instance_base = 'https://api-auth0.akvo.org/flow/orgs/'
+webform_api = "https://webform.akvo.org/api"
+webform_strings = [{
+    "name": "questionGroup",
+    "to": "question_group"
+}, {
+    "name": "answerValue",
+    "to": "options"
+}, {
+    "name": "altText",
+    "to": "translations"
+}]
 
 
 def get_data(uri, auth):
@@ -90,3 +102,78 @@ def get_page(form: Form, refresh_token: str):
             "submissionDate": submissionDate
         })
     return collections
+
+
+def react_form(form):
+    webform = r.get(f"{webform_api}/form/{form.url}")
+    if webform.status_code != 200:
+        return False
+    webform = webform.json()
+    webform = json.dumps(webform)
+    for strings in webform_strings:
+        webform = webform.replace(strings["name"], strings["to"])
+    webform = json.loads(webform)
+    result = {"name": webform["name"]}
+    result_question_groups = []
+    alias = webform["alias"]
+    question_groups = webform.get("question_group")
+    for qg in question_groups:
+        result_questions = []
+        for q in qg["question"]:
+            rq = {
+                "id": q["id"].replace("Q", ""),
+                "name": q["text"],
+                "order": q.get("order"),
+                "type": q["type"],
+                "required": q.get("mandatory")
+            }
+            if q.get("help"):
+                rq.update({"tooltip": q["help"]})
+            if q.get("dependency"):
+                dependencies = []
+                for d in q.get("dependency"):
+                    dependencies.append({
+                        "id": d["question"].replace("Q", ""),
+                        "options": d["options"]
+                    })
+                rq.update({"dependency": dependencies})
+            if q.get("type") == "options":
+                options = q.get("options")
+                rq.update({
+                    "option": options.get("option"),
+                })
+                if options.get("allowMultiple"):
+                    rq.update({"type": "multiple_option"})
+                if options.get("allowOther"):
+                    rq.update({"allowOther": options.get("allowOther")})
+            if q.get("type") == "cascade":
+                resource = q.get("cascadeResource")
+                endpoint = f"{webform_api}/cascade/{alias}/{resource}"
+                rq.update({
+                    "api": {
+                        "endpoint": endpoint,
+                        "initial": 0,
+                        "list": False
+                    },
+                })
+            if q.get("type") == "free":
+                validationRule = q.get("validationRule")
+                rule = {}
+                rq.update({"type": "text"})
+                if validationRule:
+                    if validationRule.get("validationType") == "numeric":
+                        rq.update({"type": "number"})
+                    if validationRule.get("minVal"):
+                        rule.update({"min": validationRule.get("minVal")})
+                    if validationRule.get("maxVal"):
+                        rule.update({"max": validationRule.get("maxVal")})
+                    if len(rule):
+                        rq.update({"rule": rule})
+            result_questions.append(rq)
+        result_question_groups.append({
+            "name": qg["heading"],
+            "question": result_questions,
+            "repeatable": qg.get("repeatable")
+        })
+    result.update({"question_group": result_question_groups})
+    return result
