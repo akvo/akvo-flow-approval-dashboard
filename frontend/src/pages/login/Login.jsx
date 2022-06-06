@@ -32,7 +32,12 @@ const Login = () => {
         });
         navigate("/dashboard", {
           state: {
-            page: "Dashboard",
+            breadcrumbs: [
+              {
+                page: "Dashboard",
+                target: "/dashboard",
+              },
+            ],
           },
         });
       })

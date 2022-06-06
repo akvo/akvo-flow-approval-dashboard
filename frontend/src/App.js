@@ -27,11 +27,18 @@ const App = () => {
           });
           api.setToken(res.data.id_token);
           setLoading(false);
-          if (location.pathname.includes(["/", "/login", "/dashboard"])) {
+          if (
+            location.pathname.includes(["/login", "/dashboard"]) ||
+            location.pathname === "/"
+          ) {
             navigate("/dashboard", {
               state: {
-                page: "Dashboard",
-                name: "dashboard",
+                breadcrumbs: [
+                  {
+                    page: "Dashboard",
+                    target: "/dashboard",
+                  },
+                ],
               },
             });
           }
@@ -64,7 +71,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Home />} />
           <Route path="/dashboard/:id" element={<DataPoints />} />
-          <Route path="/view/:id" element={<DataViews />} />
+          <Route path="/dashboard/:id/:data_id" element={<DataViews />} />
         </Routes>
       </div>
     </div>

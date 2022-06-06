@@ -14,6 +14,7 @@ import { useLocation, useNavigate } from "react-router";
 import { store } from "../lib";
 import { Link } from "react-router-dom";
 import { removeCookie } from "../util/helper";
+import { take } from "lodash";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -39,21 +40,22 @@ const Header = () => {
       <div className="header-container">
         <Row align="middle">
           <Col className="header-menu" span={12} align="left">
-            <Breadcrumb>
-              {routeState?.page && (
-                <Breadcrumb.Item>
-                  <Link
-                    to={routeState?.page?.toLowerCase()}
-                    state={{ page: "Dashboard" }}
-                  >
-                    {routeState?.page}
-                  </Link>
-                </Breadcrumb.Item>
-              )}
-              {routeState?.name && (
-                <Breadcrumb.Item>{routeState?.name}</Breadcrumb.Item>
-              )}
-            </Breadcrumb>
+            {routeState?.breadcrumbs && (
+              <Breadcrumb>
+                {routeState.breadcrumbs.map((x, xi) => (
+                  <Breadcrumb.Item key={xi}>
+                    <Link
+                      to={x.target}
+                      state={{
+                        breadcrumbs: take(routeState.breadcrumbs, xi + 1),
+                      }}
+                    >
+                      {x.page}
+                    </Link>
+                  </Breadcrumb.Item>
+                ))}
+              </Breadcrumb>
+            )}
           </Col>
           <Col className="user" span={12} align="right">
             <div className="user-info">

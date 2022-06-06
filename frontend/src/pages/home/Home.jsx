@@ -26,10 +26,16 @@ const Surveys = ({ data }) => {
   const navigate = useNavigate();
   const routeState = {
     state: {
-      back: "dashboard",
-      page: "Dashboard",
-      id: data.id,
-      name: data.name,
+      breadcrumbs: [
+        {
+          page: "Dashboard",
+          target: "/dashboard",
+        },
+        {
+          page: data.name,
+          target: `/dashboard/${data.id}`,
+        },
+      ],
     },
   };
   return (

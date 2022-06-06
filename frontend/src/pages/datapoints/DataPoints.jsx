@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useMemo } from "react";
+import "akvo-react-form/dist/index.css";
 import "./datapoints.scss";
 import { Row, Col, Tabs, Table, Button } from "antd";
 import { AiOutlinePlus } from "react-icons/ai";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { api, store } from "../../lib";
 
 const panes = [
@@ -24,6 +25,7 @@ const panes = [
 const DataPoints = () => {
   const { id } = useParams();
   const { isLoggedIn } = store.useState((s) => s);
+  const { state: routeState } = useLocation();
   const navigate = useNavigate();
   const [data, setData] = useState({ data: [], total: 0 });
   const [selectedTab, setSelectedTab] = useState(panes[0].key);
@@ -65,7 +67,17 @@ const DataPoints = () => {
         return (
           <Button
             onClick={() => {
-              navigate(`/view/${value.id}`);
+              navigate(`/dashboard/${id}/${value.id}`, {
+                state: {
+                  breadcrumbs: [
+                    ...routeState.breadcrumbs,
+                    {
+                      page: value.id,
+                      target: `/dashboard/${id}/${value.id}`,
+                    },
+                  ],
+                },
+              });
             }}
             className="add-btn"
             type="primary"

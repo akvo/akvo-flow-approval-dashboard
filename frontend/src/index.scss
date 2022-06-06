@@ -55,28 +55,4 @@ code {
       font-size: 1.17em;
     }
   }
-
-  /* WEBFORM */
-  .arf-field-label {
-    .arf-field-label-number {
-      padding-right: 5px;
-    }
-
-    div {
-      display: inline-block;
-    }
-  }
-
-  .arf-field {
-    .arf-field-geo,
-    .arf-field-cascade {
-      display: none;
-    }
-
-    .arf-field-cascade-api {
-      .arf-field-cascade-list {
-        margin-bottom: 10px;
-      }
-    }
-  }
 }
