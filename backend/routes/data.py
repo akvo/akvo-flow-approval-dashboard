@@ -1,19 +1,23 @@
+import requests as r
 from math import ceil
 from fastapi import Request, APIRouter, Depends, HTTPException
 from fastapi.security import HTTPBearer
 from sqlalchemy.orm import Session
 from db.connection import get_session
 from util.auth0 import Auth0
-from models.data import DataStatus, DataResponse
-from db.crud_data import get_data
+from models.data import DataStatus, DataResponse, DataListResponse
+from db.crud_form import get_form_by_id
+from db.crud_question import get_question_by_form
+from db.crud_data import get_data, get_data_by_id
 
 data_route = APIRouter()
 security = HTTPBearer()
 auth0 = Auth0()
+webform_url = "https://webform.akvo.org/api/form"
 
 
 @data_route.get('/data',
-                response_model=DataResponse,
+                response_model=DataListResponse,
                 summary="Data List",
                 tags=["Data"])
 def get(req: Request,
@@ -40,3 +44,29 @@ def get(req: Request,
         'total': data["count"],
         'total_page': total_page,
     }
+
+
+@data_route.get('/data/{id:path}',
+                response_model=DataResponse,
+                summary="Webform Data By Datapoint ID",
+                tags=["Data"])
+def get_by_id(req: Request,
+              id: int,
+              session: Session = Depends(get_session),
+              token: str = Depends(security)):
+    auth0.verify(token.credentials)
+    data = get_data_by_id(session=session, id=id)
+    form = get_form_by_id(session=session, id=data.form)
+    questions = get_question_by_form(session=session, form=form.id)
+    question_map = {}
+    for q in questions:
+        question_map.update({q.id: q.prod_id})
+    data = data.to_webform
+    for value in data["initial_value"]:
+        prod_question_id = question_map.get(value["question"])
+        if (prod_question_id):
+            value.update({"question": prod_question_id})
+    webform = r.get(f"{webform_url}/{form.url}")
+    if webform.status_code == 200:
+        data.update({"forms": webform.json()})
+    return data

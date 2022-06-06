@@ -1,7 +1,7 @@
 import enum
 from datetime import datetime
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional, List, Union
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy import Integer, DateTime, String, Enum
 from db.connection import Base
@@ -9,6 +9,7 @@ from sqlalchemy.orm import relationship
 import sqlalchemy.dialects.postgresql as pg
 from .user import User
 from .form import Form
+from .webform import WebFormBase
 
 
 class DataStatus(enum.Enum):
@@ -26,7 +27,22 @@ class DataBase(BaseModel):
     approved_by: Optional[str] = None
 
 
+class DataValue(BaseModel):
+    question: int
+    repeat_index: Optional[int] = None
+    value: Union[int, float, str, bool, dict, List[str], List[int],
+                 List[float], None]
+
+
 class DataResponse(BaseModel):
+    id: int
+    form_id: int
+    forms: Optional[WebFormBase] = None
+    # forms: dict
+    initial_value: List[DataValue]
+
+
+class DataListResponse(BaseModel):
     current: int
     data: List[DataBase]
     total: int
@@ -80,4 +96,12 @@ class Data(Base):
             "submitter": self.submitter,
             "submitted_at": submitted_at,
             "approved_by": approved_by
+        }
+
+    @property
+    def to_webform(self) -> DataResponse:
+        return {
+            "id": self.id,
+            "form_id": self.form,
+            "initial_value": self.value
         }

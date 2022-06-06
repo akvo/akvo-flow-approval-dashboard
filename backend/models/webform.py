@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import List, Optional
 from typing_extensions import TypedDict
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, Field, validator
 from util.model import optional
 
 
@@ -60,9 +60,12 @@ class Help(BaseModel):
 
 @optional('altText')
 class Option(BaseModel):
-    altText: Optional[List[AltText]] = []
+    altText: Optional[List[AltText]] = Field(..., alias="translations")
     value: str
-    text: str
+    text: str = Field(..., alias="name")
+
+    class Config:
+        allow_population_by_field_name = True
 
     @validator("altText", pre=True, always=True)
     def set_alt_text(cls, altText):
@@ -71,25 +74,16 @@ class Option(BaseModel):
         return altText or []
 
 
-class Options(BaseModel):
-    allowOther: bool
-    allowMultiple: bool
-    option: List[Option]
-
-
 class DependencyQuestion(BaseModel):
-    answerValue: List[str]
-    question: str
+    question: int = Field(..., alias='id')
+    answerValue: List[str] = Field(..., alias='options')
+
+    class Config:
+        allow_population_by_field_name = True
 
     @validator("question", pre=True, always=True)
-    def set_question_value(cls, question):
-        return f"Q{question}"
-
-    @validator("answerValue", pre=True, always=True)
-    def set_answer_value(cls, answerValue):
-        if "|" in answerValue:
-            return answerValue.split("|")
-        return [answerValue]
+    def set_id_value(cls, question):
+        return question.replace("Q", "")
 
 
 @optional('altText', 'cascadeResource', 'help', 'levels', 'validationRule',
@@ -99,26 +93,35 @@ class WebformQuestion(BaseModel):
     altText: Optional[List[AltText]] = []
     help: Optional[Help]
     cascadeResource: str
-    id: str
+    id: int
     levels: Optional[Levels]
-    mandatory: bool
+    mandatory: bool = Field(..., alias="required")
     order: int
-    text: str
+    text: str = Field(..., alias="name")
     type: WebformQuestionType
     dependency: List[DependencyQuestion]
-    options: Options
+    options: Optional[List[Option]] = None
     validationRule: Optional[ValidationRule]
     requireDoubleEntry: Optional[bool] = None
 
+    class Config:
+        allow_population_by_field_name = True
+
     @validator("id", pre=True, always=True)
     def set_id_value(cls, id):
-        return f"Q{id}"
+        return id.replace("Q", "")
 
     @validator("altText", pre=True, always=True)
     def set_alt_text(cls, altText):
         if altText == [None]:
             return []
         return altText or []
+
+    @validator("options", pre=True, always=True)
+    def set_options(cls, options):
+        if options:
+            return options["option"]
+        return None
 
 
 @optional('altText')

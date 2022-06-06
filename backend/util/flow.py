@@ -32,7 +32,7 @@ def data_handler(data, qType):
         if qType == 'PHOTO':
             return data.get('filename')
         if qType == 'GEO':
-            return {'lat': data.get('lat'), 'long': data.get('long')}
+            return {'lat': data.get('lat'), 'lng': data.get('long')}
     return None
 
 
@@ -80,8 +80,8 @@ def get_page(form: Form, refresh_token: str):
                         filter(lambda x: x["id"] == question_id, questions))
                     qtype = question[0]["type"]
                     responses.append({
-                        "id": question_id,
-                        "repeat": repeat,
+                        "question": question_id,
+                        "repeat_index": repeat,
                         "value": data_handler(value, qtype)
                     })
         submissionDate = handle_date(collection.get("submissionDate"))
