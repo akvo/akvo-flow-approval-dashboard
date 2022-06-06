@@ -5,7 +5,7 @@ set -euo pipefail
 
 RETRIES=10
 
-until psql -h db:5432 -U isco_user -w password -d isco -c "select 1" &>/dev/null 2>&1 || [ $RETRIES -eq 0 ];
+until psql -h db:5432 -U tcakvo -w password -d anu -c "select 1" &>/dev/null 2>&1 || [ $RETRIES -eq 0 ];
 do
   echo "Waiting for postgres server, $((RETRIES--)) remaining attempts..."
   sleep 1
