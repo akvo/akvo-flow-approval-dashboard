@@ -24,15 +24,13 @@ const DataViews = () => {
     .flatMap((q) => q);
 
   const onFinish = (data) => {
+    const instance = forms.forms.app;
     const payload = Object.keys(data).map((k) => {
       const q = k.split("-");
       let value = data[k];
       const question = questions.find(
         (qs) => parseInt(qs["id"]) === parseInt(q[0])
       );
-      if (question.original_type === "geo") {
-        value = { lat: data[k].lat, long: data[k].lng };
-      }
       return {
         questionId: parseInt(q[0]),
         iteration: q.length === 2 ? parseInt(q[1]) : 0,
@@ -40,7 +38,16 @@ const DataViews = () => {
         answerType: question.original_type,
       };
     });
-    console.info(payload);
+    api
+      .post(`/data/${data_id}?app=${instance}`, payload, {
+        "content-type": "application/json",
+      })
+      .then((res) => {
+        console.info(res);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   useEffect(() => {

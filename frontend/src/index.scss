@@ -21,6 +21,7 @@ code {
 }
 
 #root {
+  font-family: "Roboto", sans-serif;
   height: 100vh;
   background-color: #f7f8fc;
 
@@ -53,6 +54,16 @@ code {
     .ant-tabs-tab {
       font-weight: 500;
       font-size: 1.17em;
+    }
+  }
+
+  /* WEBFORM */
+  .arf-container {
+    .arf-repeat-input {
+      &.arf-field-title,
+      .arf-field {
+        display: inline-block;
+      }
     }
   }
 }

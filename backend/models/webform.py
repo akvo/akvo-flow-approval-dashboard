@@ -143,11 +143,13 @@ class WebformQuestion(BaseModel):
     @validator("original_type", always=True)
     def validate_original_type(cls, value, values):
         free_text = [
-            ReactFormQuestionType.text, ReactFormQuestionType.multiple_option,
+            ReactFormQuestionType.text,
             ReactFormQuestionType.number
         ]
         if values["type"] in free_text:
             return "free"
+        if values["type"] == ReactFormQuestionType.multiple_option:
+            return "option"
         return values["type"]
 
     @validator("cascadeResource", pre=True, always=True)
