@@ -9,6 +9,10 @@
   }
 
   .header-container {
+    .header-wrapper {
+      justify-content: space-between;
+    }
+
     .header-menu {
       display: none;
 
@@ -27,9 +31,20 @@
       }
     }
 
+    .user {
+      text-align: left;
+      text-align: -webkit-left;
+
+      @media (min-width: 786px) {
+        text-align: right;
+        text-align: -webkit-right;
+      }
+    }
+
     .user-info {
       width: fit-content;
       cursor: pointer;
+      margin: 0;
 
       .ant-dropdown-trigger {
         .ant-avatar {

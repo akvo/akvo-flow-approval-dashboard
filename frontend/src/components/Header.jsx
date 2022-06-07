@@ -38,7 +38,7 @@ const Header = () => {
   return (
     <div className="header">
       <div className="header-container">
-        <Row align="middle">
+        <Row align="middle" className="header-wrapper">
           <Col className="header-menu" span={16} align="left">
             {routeState?.breadcrumbs && (
               <Breadcrumb>
