@@ -128,7 +128,6 @@ const DataPoints = () => {
         )
         .then((res) => {
           const { data } = res;
-          console.log(data);
           setData(data);
           setLoading(false);
         })
