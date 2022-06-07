@@ -79,7 +79,7 @@
       "path": "ANU Household Raw/Household/User Registration",
       "allowDecimal": false,
       "allowSign": false,
-      "minVal": 0,
+      "minVal": 0.0,
       "maxVal": null,
       "allowExternalSources": false,
       "localeNameFlag": false,
@@ -299,7 +299,7 @@
       "path": "ANU Academia Test/Academia Test/Family Members",
       "allowDecimal": false,
       "allowSign": false,
-      "minVal": 0,
+      "minVal": 0.0,
       "maxVal": null,
       "allowExternalSources": false,
       "localeNameFlag": false,
@@ -353,10 +353,7 @@
       "allowLine": false,
       "allowPolygon": false,
       "optionList": null,
-      "questionOptions": [
-        651240974,
-        651240979
-      ],
+      "questionOptions": [651240974, 651240979],
       "questionDependency": null,
       "sourceId": null,
       "levelNames": null,
@@ -400,11 +397,7 @@
       "allowLine": false,
       "allowPolygon": false,
       "optionList": null,
-      "questionOptions": [
-        651240976,
-        651240978,
-        651240980
-      ],
+      "questionOptions": [651240976, 651240978, 651240980],
       "questionDependency": null,
       "sourceId": null,
       "levelNames": null,
@@ -448,10 +441,7 @@
       "allowLine": false,
       "allowPolygon": false,
       "optionList": null,
-      "questionOptions": [
-        651240975,
-        651240977
-      ],
+      "questionOptions": [651240975, 651240977],
       "questionDependency": null,
       "sourceId": null,
       "levelNames": null,

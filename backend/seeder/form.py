@@ -5,6 +5,7 @@ import requests as r
 from db.connection import Base, SessionLocal, engine
 from db.crud_form import get_form_by_id, add_form
 from db.crud_question import get_question_by_id, add_question
+from db.truncator import truncate
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 Base.metadata.create_all(bind=engine)
@@ -48,6 +49,8 @@ def get_frame(file_id, rename):
     return res
 
 
+truncate(session=session, table="question")
+truncate(session=session, table="form")
 for form in forms:
     instance = form["instance"]
     prod_id = form["prod_id"]
@@ -90,6 +93,7 @@ for form in forms:
     for q in questions:
         question = get_question_by_id(session=session, id=q["id"])
         if not question:
+            qid = q["id"]
             question = add_question(session=session,
                                     id=q["id"],
                                     prod_id=q["prod_id"],

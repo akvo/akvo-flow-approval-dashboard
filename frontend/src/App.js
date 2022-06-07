@@ -43,17 +43,15 @@ const App = () => {
             });
           }
         })
-        .catch((err) => {
-          if (err.response.status === 401) {
-            message.error("Your session is expired");
-            removeCookie("AUTH_TOKEN");
-            store.update((s) => {
-              s.isLoggedIn = false;
-              s.user = null;
-            });
-            setLoading(false);
-            navigate("/login");
-          }
+        .catch(() => {
+          message.error("Your session is expired");
+          removeCookie("AUTH_TOKEN");
+          store.update((s) => {
+            s.isLoggedIn = false;
+            s.user = null;
+          });
+          setLoading(false);
+          navigate("/login");
         });
     }
     if (loading && !cookies?.AUTH_TOKEN) {
