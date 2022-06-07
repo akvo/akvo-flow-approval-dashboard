@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import "akvo-react-form/dist/index.css";
 import "./datapoints.scss";
 import { Row, Col, Tabs, Table, Button } from "antd";
-import { AiOutlinePlus } from "react-icons/ai";
+import { AiOutlinePlus, AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { api, store } from "../../lib";
 
@@ -44,7 +44,15 @@ const DataPoints = () => {
   const columns = useMemo(() => {
     const head_cols = [
       {
-        title: () => <span className="normalize">Sort By</span>,
+        title: () => (
+          <span className="normalize sort">
+            <div className="sortIcons">
+              <AiOutlineUp />
+              <AiOutlineDown />
+            </div>
+            Sort By
+          </span>
+        ),
         dataIndex: "name",
         width: "40%",
         ellipsis: true,
@@ -120,6 +128,7 @@ const DataPoints = () => {
         )
         .then((res) => {
           const { data } = res;
+          console.log(data);
           setData(data);
           setLoading(false);
         })

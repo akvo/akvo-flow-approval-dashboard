@@ -28,6 +28,17 @@
       }
     }
 
+    .sort {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sortIcons {
+      display: flex;
+      flex-direction: column;
+    }
+
     .ant-table {
       .normalize {
         font-weight: 500;
