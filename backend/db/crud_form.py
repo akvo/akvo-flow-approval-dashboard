@@ -1,13 +1,23 @@
 from typing import List
 from sqlalchemy.orm import Session
+from models.data import Data, DataStatus
 from models.form import Form, FormSummary
+from sqlalchemy import and_
 
 
 def get_form(session: Session) -> List[FormSummary]:
     forms = session.query(Form).all()
     forms = [f.serialize for f in forms]
     for form in forms:
-        form.update({"pending": 0, "approved": 0, "rejected": 0})
+        for status in DataStatus:
+            data = session.query(Data).filter(
+                and_(Data.form == form["id"], Data.status == status)).count()
+            if status == DataStatus.pending:
+                form.update({"pending": data})
+            if status == DataStatus.approved:
+                form.update({"approved": data})
+            if status == DataStatus.rejected:
+                form.update({"rejected": data})
     return forms
 
 

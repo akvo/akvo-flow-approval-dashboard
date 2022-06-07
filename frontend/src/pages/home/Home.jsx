@@ -47,7 +47,7 @@ const Surveys = ({ data }) => {
       <div className="content">
         <h1>{data.name}</h1>
         <p>
-          <span className="status-title">Approved data</span>:
+          <span className="status-title">Approved Data</span>:
           <span className="status-count approved"> {data.approved}</span>
           <br />
           <span className="status-title">Pending Data</span>:
@@ -114,7 +114,7 @@ const Home = () => {
           </Col>
         </Row>
       </div>
-      <Row className="content-container" gutter={[16, 16]} justify="center">
+      <Row className="content-container" gutter={[16, 16]} justify="left">
         {surveyList.map((d, ix) => (
           <Surveys key={`data-${ix}`} data={d} />
         ))}
