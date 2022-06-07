@@ -1,4 +1,5 @@
 import enum
+import time
 from datetime import datetime
 from pydantic import BaseModel
 from typing import Optional, List, Union
@@ -24,6 +25,8 @@ class DataBase(BaseModel):
     device: str
     submitter: str
     submitted_at: str
+    created_at: str
+    duration: int
     approved_by: Optional[str] = None
 
 
@@ -58,6 +61,7 @@ class Data(Base):
     status = Column(Enum(DataStatus), default=DataStatus.pending)
     submitter = Column(String, nullable=False)
     submitted_at = Column(DateTime, nullable=False)
+    created_at = Column(DateTime, nullable=False)
     approved_by = Column(Integer, ForeignKey(User.id), nullable=True)
     approved_by_user = relationship(User, foreign_keys=[approved_by])
 
@@ -66,6 +70,7 @@ class Data(Base):
                  device: str,
                  submitter: str,
                  submitted_at: datetime,
+                 created_at: datetime,
                  status: DataStatus,
                  approved_by: int,
                  value: Optional[List[dict]] = None,
@@ -75,6 +80,7 @@ class Data(Base):
         self.form = form
         self.device = device
         self.submitter = submitter
+        self.created_at = created_at
         self.submitted_at = submitted_at
         self.value = value
         self.status = status
@@ -88,12 +94,17 @@ class Data(Base):
     def serialize(self) -> DataBase:
         approved_by = self.approved_by_user.email if self.approved_by else None
         submitted_at = self.submitted_at.strftime("%Y-%m-%d %H:%M")
+        created_at = self.created_at.strftime("%Y-%m-%d %H:%M")
+        duration = time.mktime(self.submitted_at.timetuple()) - time.mktime(
+            self.created_at.timetuple())
         return {
             "id": self.id,
             "name": self.name,
             "device": self.device,
             "submitter": self.submitter,
             "submitted_at": submitted_at,
+            "created_at": created_at,
+            "duration": duration,
             "approved_by": approved_by
         }
 

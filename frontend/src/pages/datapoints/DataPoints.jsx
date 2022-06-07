@@ -64,6 +64,11 @@ const DataPoints = () => {
         ellipsis: true,
       },
       {
+        title: "Duration",
+        dataIndex: "duration",
+        ellipsis: true,
+      },
+      {
         title: "",
         dataIndex: "",
         width: "75px",

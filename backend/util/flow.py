@@ -99,7 +99,8 @@ def get_page(form: Form, refresh_token: str):
         submissionDate = handle_date(collection.get("submissionDate"))
         collection.update({
             "responses": responses,
-            "submissionDate": submissionDate
+            "submissionDate": submissionDate,
+            "duration": collection.get("surveyalTime")
         })
     return collections
 

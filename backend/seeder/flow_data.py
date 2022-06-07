@@ -1,17 +1,20 @@
 import os
 import sys
 import json
+import time
+from datetime import datetime
 from db.connection import Base, SessionLocal, engine
 from models.form import Form
 from db.crud_data import add_data, get_data_by_id, count_data
 from faker import Faker
 import util.flow as flow
 from util.auth0 import Auth0
-# from db.truncator import truncate
+from db.truncator import truncate
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 Base.metadata.create_all(bind=engine)
 session = SessionLocal()
+
 
 debug_records = True
 fake = Faker()
@@ -25,7 +28,9 @@ auth0 = Auth0()
 refresh_token = auth0.get_refresh_token(username=sys.argv[1],
                                         password=sys.argv[2])
 
-# truncate(session=session, table="data")
+if "--truncate" in sys.argv:
+    truncate(session=session, table="data")
+
 forms = session.query(Form).all()
 for form in forms:
     print(f"- SYNCING: {form.id} {form.name}")
@@ -36,12 +41,18 @@ for form in forms:
         stored_data = get_data_by_id(session=session, id=id)
         if not stored_data:
             new_records += 1
+            created_at = result["submissionDate"]
+            duration = result.get("duration")
+            if duration:
+                created_at = time.mktime(created_at.timetuple()) - duration
+                created_at = datetime.fromtimestamp(created_at)
             add_data(session=session,
                      id=result["id"],
                      name=result["displayName"],
                      form=form.id,
                      submitter=result["submitter"],
                      submitted_at=result["submissionDate"],
+                     created_at=created_at,
                      device=result["deviceIdentifier"],
                      value=result["responses"])
             print("  NEW SUBMISSION: {} - {}".format(

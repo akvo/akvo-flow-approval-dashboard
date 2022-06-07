@@ -1,3 +1,4 @@
+import time
 from math import ceil
 from uuid import uuid4
 from fastapi import Request, APIRouter, Depends, HTTPException
@@ -99,28 +100,30 @@ def get_by_id(req: Request,
 @data_route.post('/data/{id:path}',
                  summary="Approve Datapoint ID",
                  tags=["Data"])
-def update_data(req: Request,
-                payload: SubmissionBase,
-                id: int,
-                token: str = Depends(security),
-                session: Session = Depends(get_session)):
+def approve_data(req: Request,
+                 payload: SubmissionBase,
+                 id: int,
+                 token: str = Depends(security),
+                 session: Session = Depends(get_session)):
     user = auth0.verify(token.credentials)
-    username = user.get("nickname") or user.get("name")
     user = get_user_by_email(session=session, email=user.get("email"))
     if not user:
         raise HTTPException(status_code=401, detail="Not Authenticated")
     data = get_data_by_id(session=session, id=id)
     form = get_form_by_id(session=session, id=data.form)
     datapoint_id = "-".join(str(uuid4()).split("-")[1:4])
+    duration = time.mktime(data.submitted_at.timetuple()) - time.mktime(
+        data.created_at.timetuple())
     payload_request = {
         "responses": [p.serialize for p in payload.answers],
         "dataPointId": datapoint_id,
-        "deviceId": f"{data.device}, Approved by {username}",
+        "deviceId": data.device,
         "dataPointName": f"{data.id} - {data.name}",
         "formId": form.prod_id,
         "formVersion": payload.version,
-        "submissionStart": 1654548804496,
-        "submissionStop": 1654548853278,
+        "submissionStart": int(data.created_at.timestamp() * 1000),
+        "submissionStop": int(data.submitted_at.timestamp() * 1000),
+        "duration": duration,
         "submissionDate": data.submitted_at.strftime("%Y-%m-%dT%XZ"),
         "username": data.submitter,
         "uuid": str(uuid4()),

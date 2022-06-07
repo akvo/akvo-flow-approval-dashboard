@@ -16,7 +16,8 @@ def get_data(session: Session, form: int, skip: int, status: DataStatus,
     data = session.query(Data).filter(
         and_(Data.form == form, Data.status == status))
     count = data.count()
-    data = data.order_by(desc(Data.id)).offset(skip).limit(perpage).all()
+    data = data.order_by(desc(
+        Data.submitted_at)).offset(skip).limit(perpage).all()
     return PaginatedData(data=data, count=count)
 
 
@@ -36,6 +37,7 @@ def add_data(session: Session,
              name: str,
              submitter: str,
              submitted_at: datetime,
+             created_at: datetime,
              status: Optional[DataStatus] = DataStatus.pending,
              approved_by: Optional[int] = None,
              value: Optional[List[dict]] = None,
@@ -48,6 +50,7 @@ def add_data(session: Session,
                 name=name,
                 submitter=submitter,
                 submitted_at=submitted_at,
+                created_at=created_at,
                 approved_by=approved_by)
     session.add(data)
     session.commit()
