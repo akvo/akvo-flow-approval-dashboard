@@ -43,6 +43,7 @@ const Surveys = ({ data }) => {
       sm={24}
       md={12}
       onClick={() => navigate(`/dashboard/${data.id}`, routeState)}
+      style={{ width: "100%" }}
     >
       <div className="content">
         <h1>{data.name}</h1>
