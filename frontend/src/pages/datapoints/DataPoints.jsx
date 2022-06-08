@@ -5,6 +5,7 @@ import { Row, Col, Tabs, Table, Button } from "antd";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { api, store } from "../../lib";
+import { numToDuration } from "../../util/helper";
 
 const panes = [
   {
@@ -128,7 +129,16 @@ const DataPoints = () => {
         )
         .then((res) => {
           const { data } = res;
-          setData(data);
+          const scrubData = data?.data.map((d) => {
+            return {
+              ...d,
+              duration: numToDuration(d?.duration),
+            };
+          });
+          setData({
+            ...data,
+            data: scrubData,
+          });
           setLoading(false);
         })
         .catch(() => {

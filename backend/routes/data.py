@@ -1,7 +1,9 @@
 import time
 from math import ceil
 from uuid import uuid4
-from fastapi import Request, APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
+from fastapi import Request, Response
+from starlette.status import HTTP_204_NO_CONTENT
 from fastapi.security import HTTPBearer
 from sqlalchemy.orm import Session
 from db.connection import get_session
@@ -137,3 +139,26 @@ def approve_data(req: Request,
                        status=DataStatus.approved,
                        approved_by=user.id)
     return result.json()
+
+
+@data_route.put('/data/{id:path}',
+                summary="Update Data Status",
+                status_code=HTTP_204_NO_CONTENT,
+                tags=["Data"])
+def reject_data(req: Request,
+                id: int,
+                status: DataStatus,
+                token: str = Depends(security),
+                session: Session = Depends(get_session)):
+    if status == DataStatus.approved:
+        raise HTTPException(status_code=401,
+                            detail="Use POST Request for Approving Data")
+    user = auth0.verify(token.credentials)
+    user = get_user_by_email(session=session, email=user.get("email"))
+    if not user:
+        raise HTTPException(status_code=401, detail="Not Authenticated")
+    update_data_status(session=session,
+                       id=id,
+                       status=status,
+                       approved_by=user.id)
+    return Response(status_code=HTTP_204_NO_CONTENT)
