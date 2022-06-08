@@ -30,11 +30,15 @@ prepare_deployment () {
 
     sed -e "s/\${CI_COMMIT}/${CI_COMMIT}/g;" \
         ci/k8s/deployment.yml.template > ci/k8s/deployment.yml
+
+    sed -e "s/\${CI_COMMIT}/${CI_COMMIT}/g;" \
+        ci/k8s/cronjob.yml.template > ci/k8s/cronjob.yml
 }
 
 apply_deployment () {
     kubectl apply -f ci/k8s/deployment.yml
     kubectl apply -f ci/k8s/service.yml
+    kubectl apply -f ci/k8s/cronjob.yml
 }
 
 auth

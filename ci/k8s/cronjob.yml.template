@@ -1,0 +1,58 @@
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: jobs-anupng
+spec:
+  schedule: "0 0 * * *"
+  startingDeadlineSeconds: 600
+  concurrencyPolicy: Allow
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 3
+  jobTemplate:
+    metadata:
+      labels:
+        cronjob: jobs-anupng
+        jobowner: tech-consultancy
+    spec:
+      template:
+        metadata:
+          labels:
+            cronjob: jobs-anupng
+        spec:
+          containers:
+            - name: jobs-anupng
+              image: eu.gcr.io/akvo-lumen/akvo-flow-approval-dashboard/backend:${CI_COMMIT}
+              resources:
+                requests:
+                  cpu: "50m"
+                  memory: "256Mi"
+                limits:
+                  cpu: "1000m"
+                  memory: "768Mi"
+              env:
+                - name: DATABASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: anupng
+                      key: database-url
+                - name: SECRET_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: anupng
+                      key: secret-key
+                - name: FLOW_EMAIL
+                  valueFrom:
+                    secretKeyRef:
+                      name: anupng
+                      key: flow-email
+                - name: FLOW_PWD
+                  valueFrom:
+                    secretKeyRef:
+                      name: anupng
+                      key: flow-pwd
+          restartPolicy: Never
+          volumes:
+            - name: anupng-secrets
+          secret:
+            secretName: anupng
