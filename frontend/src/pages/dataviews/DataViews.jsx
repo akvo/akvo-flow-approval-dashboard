@@ -32,36 +32,38 @@ const DataViews = () => {
     setSubmitting(true);
     const instance = forms.forms.app;
     const version = forms.forms.version;
-    const answers = Object.keys(data).map((k) => {
-      const q = k.split("-");
-      const value = data[k];
-      const question = questions.find(
-        (qs) => parseInt(qs["id"]) === parseInt(q[0])
-      );
-      let answer = {
-        questionId: parseInt(q[0]),
-        iteration: q.length === 2 ? parseInt(q[1]) : 0,
-        value: value,
-        answerType: question.original_type,
-      };
-      if (question?.api && value) {
-        const cascadeApi = question.api.endpoint;
-        const cascadeValue = answer.value.map((v, vi) => {
-          if (!vi) {
+    const answers = Object.keys(data)
+      .map((k) => {
+        const q = k.split("-");
+        const value = data[k];
+        const question = questions.find(
+          (qs) => parseInt(qs["id"]) === parseInt(q[0])
+        );
+        let answer = {
+          questionId: parseInt(q[0]),
+          iteration: q.length === 2 ? parseInt(q[1]) : 0,
+          value: value,
+          answerType: question.original_type,
+        };
+        if (question?.api && value) {
+          const cascadeApi = question.api.endpoint;
+          const cascadeValue = answer.value.map((v, vi) => {
+            if (!vi) {
+              return {
+                api: `${cascadeApi}/0`,
+                id: v,
+              };
+            }
             return {
-              api: `${cascadeApi}/0`,
+              api: `${cascadeApi}/${answer.value[vi - 1]}`,
               id: v,
             };
-          }
-          return {
-            api: `${cascadeApi}/${answer.value[vi - 1]}`,
-            id: v,
-          };
-        });
-        answer = { ...answer, value: cascadeValue };
-      }
-      return answer;
-    });
+          });
+          answer = { ...answer, value: cascadeValue };
+        }
+        return answer;
+      })
+      .filter((x) => x?.value);
     const payload = { answers: answers, instance: instance, version: version };
     api
       .post(`/data/${data_id}`, payload, {
