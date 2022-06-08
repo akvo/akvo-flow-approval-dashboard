@@ -84,6 +84,25 @@ const DataViews = () => {
       });
   };
 
+  const handleRejectOnClick = () => {
+    api
+      .put(`/data/${data_id}?status=rejected`, {
+        "content-type": "application/json",
+      })
+      .then(() => {
+        const breadcrumbs = dropRight(routeState.breadcrumbs);
+        const before = takeRight(breadcrumbs)[0];
+        message.info(`Successfully updated`);
+        setTimeout(() => {
+          navigate(before.target, { state: { breadcrumbs: breadcrumbs } });
+          setSubmitting(false);
+        }, 1000);
+      })
+      .catch(() => {
+        message.info(`Internal Server Error`);
+      });
+  };
+
   useEffect(() => {
     if (isLoggedIn) {
       api.get(`/data/${data_id}`).then((res) => {
@@ -111,7 +130,13 @@ const DataViews = () => {
                   disabled: previewOnly ? previewOnly : submitting,
                 }}
                 extraButton={
-                  extraButton ? <Button type="primary">Reject</Button> : ""
+                  isLoggedIn && extraButton ? (
+                    <Button type="primary" onClick={handleRejectOnClick} danger>
+                      Reject
+                    </Button>
+                  ) : (
+                    ""
+                  )
                 }
               />
             </div>
