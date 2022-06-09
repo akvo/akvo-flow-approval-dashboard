@@ -17,7 +17,6 @@ const initForms = {
 const DataViews = () => {
   const { data_id } = useParams();
   const navigate = useNavigate();
-  const { extraButton } = store.useState((s) => s);
   const { state: routeState } = useLocation();
   const { isLoggedIn } = store.useState((s) => s);
   const [forms, setForms] = useState(initForms);
@@ -130,13 +129,9 @@ const DataViews = () => {
                   disabled: previewOnly ? previewOnly : submitting,
                 }}
                 extraButton={
-                  isLoggedIn && extraButton ? (
-                    <Button type="primary" onClick={handleRejectOnClick} danger>
-                      Reject
-                    </Button>
-                  ) : (
-                    ""
-                  )
+                  <Button type="primary" onClick={handleRejectOnClick} danger>
+                    Reject
+                  </Button>
                 }
               />
             </div>

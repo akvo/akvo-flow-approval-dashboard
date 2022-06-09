@@ -88,9 +88,6 @@ const DataPoints = () => {
           return (
             <Button
               onClick={() => {
-                store.update((s) => {
-                  s.extraButton = true;
-                });
                 navigate(thisUrl, thisRouteState);
               }}
               className="add-btn"
