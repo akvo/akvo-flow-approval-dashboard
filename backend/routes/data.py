@@ -45,13 +45,13 @@ def get(req: Request,
         perpage: int = 10,
         session: Session = Depends(get_session),
         token: str = Depends(security)):
-    print(token)
-    auth0.verify(session=session, token=token.credentials)
+    user = auth0.verify(session=session, token=token.credentials)
     data = get_data(session=session,
                     form=form_id,
                     status=status,
                     skip=(perpage * (page - 1)),
-                    perpage=perpage)
+                    perpage=perpage,
+                    device=user.get("devices"))
     if not data["count"]:
         raise HTTPException(status_code=404, detail="Not found")
     total_page = ceil(data["count"] / 10) if data["count"] > 0 else 0

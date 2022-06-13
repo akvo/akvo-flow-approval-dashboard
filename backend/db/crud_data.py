@@ -11,10 +11,19 @@ class PaginatedData(TypedDict):
     count: int
 
 
-def get_data(session: Session, form: int, skip: int, status: DataStatus,
-             perpage: int) -> PaginatedData:
-    data = session.query(Data).filter(
-        and_(Data.form == form, Data.status == status))
+def get_data(session: Session,
+             form: int,
+             skip: int,
+             status: DataStatus,
+             perpage: int,
+             device: Optional[List[str]] = None) -> PaginatedData:
+    data = session.query(Data)
+    if not device:
+        data = data.filter(and_(Data.form == form, Data.status == status))
+    if device:
+        data = data.filter(
+            and_(Data.form == form, Data.status == status,
+                 Data.device.in_(device)))
     count = data.count()
     data = data.order_by(desc(
         Data.submitted_at)).offset(skip).limit(perpage).all()
