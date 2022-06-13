@@ -47,7 +47,7 @@ const DataPoints = () => {
       {
         title: () => <span className="normalize">Sort By</span>,
         dataIndex: "name",
-        width: "40%",
+        width: "35%",
         ellipsis: true,
         className: "datapoint-name",
       },
@@ -56,6 +56,12 @@ const DataPoints = () => {
         dataIndex: "submitter",
         ellipsis: true,
         className: "submitter",
+      },
+      {
+        title: () => <span className="normalize">Device</span>,
+        dataIndex: "device",
+        ellipsis: true,
+        className: "device",
       },
     ];
     const tail_cols = [
