@@ -11,7 +11,6 @@ from util.auth0 import Auth0
 from util.flow import react_form, webform_api
 from models.data import DataStatus, DataResponse, DataListResponse
 from models.submission import SubmissionBase
-from db.crud_user import get_user_by_email
 from db.crud_form import get_form_by_id
 from db.crud_question import get_question_by_form
 from db.crud_data import get_data, get_data_by_id, update_data_status
@@ -46,7 +45,8 @@ def get(req: Request,
         perpage: int = 10,
         session: Session = Depends(get_session),
         token: str = Depends(security)):
-    auth0.verify(token.credentials)
+    print(token)
+    auth0.verify(session=session, token=token.credentials)
     data = get_data(session=session,
                     form=form_id,
                     status=status,
@@ -74,7 +74,7 @@ def get_by_id(req: Request,
               id: int,
               token: str = Depends(security),
               session: Session = Depends(get_session)):
-    auth0.verify(token.credentials)
+    auth0.verify(session=session, token=token.credentials)
     data = get_data_by_id(session=session, id=id)
     if not data:
         raise HTTPException(status_code=404, detail="Not found")
@@ -109,10 +109,7 @@ def update_data(req: Request,
                 id: int,
                 token: str = Depends(security),
                 session: Session = Depends(get_session)):
-    user = auth0.verify(token.credentials)
-    user = get_user_by_email(session=session, email=user.get("email"))
-    if not user:
-        raise HTTPException(status_code=401, detail="Not Authenticated")
+    user = auth0.verify(sesion=session, token=token.credentials)
     data = get_data_by_id(session=session, id=id)
     form = get_form_by_id(session=session, id=data.form)
     datapoint_id = "-".join(str(uuid4()).split("-")[1:4])
@@ -158,5 +155,5 @@ def update_data(req: Request,
     update_data_status(session=session,
                        id=data.id,
                        status=status,
-                       approved_by=user.id)
+                       approved_by=user.get("id"))
     return Response(status_code=HTTP_204_NO_CONTENT)

@@ -7,13 +7,13 @@ from .user_device import UserDevice
 
 
 class UserBase(BaseModel):
+    id: int
     nickname: Optional[str] = None
     name: str
     picture: Optional[str] = None
     updated_at: str
     email: str
     email_verified: bool
-    is_admin: bool
     id_token: str
     devices: List[str] = []
 
