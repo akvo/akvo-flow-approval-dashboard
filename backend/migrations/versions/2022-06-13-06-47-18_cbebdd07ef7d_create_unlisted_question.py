@@ -18,7 +18,13 @@ depends_on = None
 def upgrade():
     op.create_table(
         'unlisted_question', sa.Column('id', sa.Integer(), primary_key=True),
+        sa.Column('form',
+                  sa.Integer(),
+                  sa.ForeignKey('form.id', ondelete="CASCADE"),
+                  nullable=False),
         sa.Column('variable', sa.String(), nullable=False),
+        sa.ForeignKeyConstraint(['form'], ['form.id'],
+                                name='form_unlisted_question_constraint'),
         sa.PrimaryKeyConstraint('id'))
     op.create_index(op.f('ix_unlisted_question_id'),
                     'unlisted_question', ['id'],

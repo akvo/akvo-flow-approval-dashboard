@@ -105,6 +105,19 @@ def get_page(form: Form, refresh_token: str):
     return collections
 
 
+def get_form_definition(survey_id: int, form_id: int, instance: str,
+                        refresh_token: str):
+    auth0 = Auth0()
+    headers = auth0.get_headers(refresh_token=refresh_token)
+    instance_uri = '{}{}'.format(instance_base, instance)
+    form_definition = get_data('{}/surveys/{}'.format(instance_uri, survey_id),
+                               headers)
+    form_definition = form_definition.get('forms')
+    form_definition = list(
+        filter(lambda x: int(x['id']) == form_id, form_definition))[0]
+    return form_definition
+
+
 def react_form(form):
     webform = r.get(f"{webform_api}/form/{form.url}")
     if webform.status_code != 200:

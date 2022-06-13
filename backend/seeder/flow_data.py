@@ -21,7 +21,7 @@ fake = Faker()
 approver_email = "support@akvo.org"
 total = 10
 if len(sys.argv) < 2:
-    print("Please provide your token")
+    print("Please provide your user name and password")
     exit()
 
 auth0 = Auth0()
