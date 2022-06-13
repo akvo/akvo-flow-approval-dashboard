@@ -79,9 +79,11 @@ const Profile = () => {
   }, [search, displayDevices]);
 
   const addNewDevice = () => {
+    const currentValue = form.getFieldValue(["devices"]);
     setDevices([newDevice, ...devices]);
     setNewDevice(null);
     setSearch(null);
+    form.setFieldsValue({ devices: [newDevice, ...currentValue] });
   };
 
   return (
@@ -110,7 +112,7 @@ const Profile = () => {
                 prefix={<SearchOutlined />}
                 suffix={
                   newDevice ? (
-                    <Button onClick={addNewDevice}>Add New</Button>
+                    <Button onClick={addNewDevice}>Add to Device List</Button>
                   ) : null
                 }
               />
