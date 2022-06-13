@@ -83,11 +83,17 @@ const Profile = () => {
       </Col>
       <Col className="devices">
         <h2>Select devices</h2>
-        <Row align="middle">
-          <Col span={10}>
-            <Checkbox.Group options={options} default={["Apple"]} />
-          </Col>
-        </Row>
+        <Checkbox.Group style={{ width: "100%" }}>
+          <Row align="middle">
+            {options.map((dv) => {
+              return (
+                <Col span={8} key={dv.value}>
+                  <Checkbox value={dv.value}>{dv.label}</Checkbox>
+                </Col>
+              );
+            })}
+          </Row>
+        </Checkbox.Group>
       </Col>
     </div>
   );
