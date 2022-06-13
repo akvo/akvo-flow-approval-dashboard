@@ -14,13 +14,13 @@ import {
 import { Loading } from "../../components";
 import { toTitleCase } from "../../util/helper";
 import { SearchOutlined } from "@ant-design/icons";
-import example from "./example.json";
 
 const Profile = () => {
   const [form] = Form.useForm();
   const [search, setSearch] = useState(null);
   const [devices, setDevices] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [newDevice, setNewDevice] = useState(null);
   const { user, isLoggedIn } = store.useState((s) => s);
   const username = user && toTitleCase(user?.nickname);
 
@@ -29,10 +29,7 @@ const Profile = () => {
       api
         .get(`/device`)
         .then((res) => {
-          setDevices([
-            ...res.data,
-            ...example.filter((x) => !res.data.includes(x)),
-          ]);
+          setDevices(res.data);
           setLoading(false);
         })
         .catch(() => {
@@ -68,6 +65,25 @@ const Profile = () => {
     return devices.map((x) => ({ show: true, value: x }));
   }, [devices, search]);
 
+  useEffect(() => {
+    if (search?.length) {
+      const hasSearchResult = displayDevices.filter((d) => d.show);
+      if (!hasSearchResult.length) {
+        setNewDevice(search);
+      } else {
+        setNewDevice(null);
+      }
+    } else {
+      setNewDevice(null);
+    }
+  }, [search, displayDevices]);
+
+  const addNewDevice = () => {
+    setDevices([newDevice, ...devices]);
+    setNewDevice(null);
+    setSearch(null);
+  };
+
   return (
     <div id="profile" className="main">
       <Loading isLoading={loading} />
@@ -88,9 +104,15 @@ const Profile = () => {
                     setSearch(null);
                   }
                 }}
+                value={search}
                 size="large"
                 placeholder="Search Device"
                 prefix={<SearchOutlined />}
+                suffix={
+                  newDevice ? (
+                    <Button onClick={addNewDevice}>Add New</Button>
+                  ) : null
+                }
               />
               <Form
                 form={form}
