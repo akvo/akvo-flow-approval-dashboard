@@ -10,6 +10,7 @@ from pydantic import SecretStr
 
 auth_route = APIRouter()
 security = HTTPBearer()
+auth0 = Auth0()
 
 
 @auth_route.post('/login',
@@ -22,7 +23,6 @@ def login(
         password: SecretStr = Form(...),
         session: Session = Depends(get_session),
 ):
-    auth0 = Auth0()
     token = auth0.get_token(username=username, password=password)
     id_token = token.get("id_token")
     data = auth0.verify(id_token)
@@ -44,7 +44,6 @@ def login(
 def profile(req: Request,
             session: Session = Depends(get_session),
             token: str = Depends(security)):
-    auth0 = Auth0()
     data = auth0.verify(token.credentials)
     user = get_user_by_email(session=session, email=data["email"])
     if not user:
