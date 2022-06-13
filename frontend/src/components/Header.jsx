@@ -63,7 +63,19 @@ const Header = () => {
                 overlay={() => (
                   <Menu>
                     <Menu.Item key="profile">
-                      <Link to="/profile">My Profile</Link>
+                      <Link
+                        to="/profile"
+                        state={{
+                          breadcrumbs: [
+                            {
+                              page: "Dashboard",
+                              target: "/dashboard",
+                            },
+                          ],
+                        }}
+                      >
+                        My Profile
+                      </Link>
                     </Menu.Item>
                     <Menu.Item key="handleLogOut" danger>
                       <a onClick={handleLogOut}>Sign out</a>
