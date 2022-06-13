@@ -1,0 +1,11 @@
+#profile {
+  min-height: calc(100vh - 78px);
+  max-width: 100vw;
+  margin: auto;
+  padding: 30px 70px;
+
+  .devices {
+    margin: 20px 0;
+    padding: 10px 0;
+  }
+}
