@@ -71,6 +71,10 @@ const Header = () => {
                               page: "Dashboard",
                               target: "/dashboard",
                             },
+                            {
+                              page: "Profile",
+                              target: "/profile",
+                            },
                           ],
                         }}
                       >

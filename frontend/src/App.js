@@ -28,7 +28,7 @@ const App = () => {
           api.setToken(res.data.id_token);
           setLoading(false);
           if (
-            location.pathname.includes(["/login", "/dashboard"]) ||
+            ["login", "dashboard"].includes(location.pathname) ||
             location.pathname === "/"
           ) {
             navigate("/dashboard", {
@@ -37,6 +37,22 @@ const App = () => {
                   {
                     page: "Dashboard",
                     target: "/dashboard",
+                  },
+                ],
+              },
+            });
+          }
+          if (location.pathname === "/profile") {
+            navigate("/profile", {
+              state: {
+                breadcrumbs: [
+                  {
+                    page: "Dashboard",
+                    target: "/dashboard",
+                  },
+                  {
+                    page: "Profile",
+                    target: "/profile",
                   },
                 ],
               },

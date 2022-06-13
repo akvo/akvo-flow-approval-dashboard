@@ -87,7 +87,15 @@ const DataPoints = () => {
           };
           const thisRouteState = {
             state: {
-              breadcrumbs: [...routeState.breadcrumbs, thisBreadCrumb],
+              breadcrumbs: routeState?.breadcrumbs
+                ? [...routeState.breadcrumbs, thisBreadCrumb]
+                : [
+                    {
+                      page: "Dashboard",
+                      target: "/dashboard",
+                    },
+                    thisBreadCrumb,
+                  ],
               previewOnly: status === "approved",
             },
           };
