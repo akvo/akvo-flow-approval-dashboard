@@ -1,12 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import "./profile.scss";
 import { api, store } from "../../lib";
-import { Col, Row, Divider, Form, Checkbox, Button, message } from "antd";
+import {
+  Col,
+  Row,
+  Divider,
+  Form,
+  Checkbox,
+  Input,
+  Button,
+  message,
+} from "antd";
 import { Loading } from "../../components";
 import { toTitleCase } from "../../util/helper";
+import { SearchOutlined } from "@ant-design/icons";
+import example from "./example.json";
 
 const Profile = () => {
   const [form] = Form.useForm();
+  const [search, setSearch] = useState(null);
   const [devices, setDevices] = useState([]);
   const [loading, setLoading] = useState(true);
   const { user, isLoggedIn } = store.useState((s) => s);
@@ -17,7 +29,10 @@ const Profile = () => {
       api
         .get(`/device`)
         .then((res) => {
-          setDevices(res.data);
+          setDevices([
+            ...res.data,
+            ...example.filter((x) => !res.data.includes(x)),
+          ]);
           setLoading(false);
         })
         .catch(() => {
@@ -40,6 +55,19 @@ const Profile = () => {
       });
   };
 
+  const displayDevices = useMemo(() => {
+    if (search) {
+      const result = devices.map((d) => {
+        if (d.toLowerCase().includes(search.toLowerCase())) {
+          return { show: true, value: d };
+        }
+        return { show: false, value: d };
+      });
+      return result;
+    }
+    return devices.map((x) => ({ show: true, value: x }));
+  }, [devices, search]);
+
   return (
     <div id="profile" className="main">
       <Loading isLoading={loading} />
@@ -52,18 +80,38 @@ const Profile = () => {
               <p>Email: {user?.name}</p>
               <Divider />
               <h1>Devices</h1>
+              <Input
+                onChange={({ target }) => {
+                  if (target.value.length) {
+                    setSearch(target.value);
+                  } else {
+                    setSearch(null);
+                  }
+                }}
+                size="large"
+                placeholder="Search Device"
+                prefix={<SearchOutlined />}
+              />
               <Form
                 form={form}
                 onFinish={onFinish}
                 initialValues={{ devices: user?.devices || [] }}
+                className="device-list"
               >
                 <Form.Item name="devices">
-                  <Checkbox.Group style={{ width: "100%" }}>
+                  <Checkbox.Group>
                     <Row align="middle">
-                      {devices.map((dv, idv) => {
+                      {displayDevices.map((dv, idv) => {
                         return (
-                          <Col span={8} key={idv} align="left">
-                            <Checkbox value={dv}>{dv}</Checkbox>
+                          <Col
+                            xs={24}
+                            sm={12}
+                            md={6}
+                            key={idv}
+                            align="left"
+                            style={{ display: dv.show ? "block" : "none" }}
+                          >
+                            <Checkbox value={dv.value}>{dv.value}</Checkbox>
                           </Col>
                         );
                       })}
