@@ -30,7 +30,7 @@ def login(
     if not user:
         raise HTTPException(status_code=401, detail="Not Authorized")
     data.update({
-        "id_token": token.credentials,
+        "id_token": id_token,
         "is_admin": True,
         "devices": [ud.device for ud in user.devices]
     })
