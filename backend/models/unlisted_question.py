@@ -5,14 +5,15 @@ from .form import Form
 
 
 class UnlistedQuestion(Base):
-    __tablename__ = "question"
+    __tablename__ = "unlisted_question"
     id = Column(Integer, primary_key=True, index=True, nullable=True)
-    variable = Column(String, unique=True, nullable=False)
     form = Column(Integer, ForeignKey(Form.id))
+    variable = Column(String, unique=True, nullable=False)
 
-    def __init__(self, id: int, variable: str):
+    def __init__(self, id: int, form: int, variable: str):
         self.id = id
+        self.form = form
         self.variable = variable
 
     def __repr__(self) -> int:
-        return f"<Question {self.id}>"
+        return f"<UnlistedQuestion {self.id}>"

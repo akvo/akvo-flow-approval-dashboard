@@ -15,6 +15,7 @@ from db.crud_user import get_user_by_email
 from db.crud_form import get_form_by_id
 from db.crud_question import get_question_by_form
 from db.crud_data import get_data, get_data_by_id, update_data_status
+from db.crud_unlisted_question import get_unlisted_by_variable
 import requests as r
 
 data_route = APIRouter()
@@ -101,12 +102,13 @@ def get_by_id(req: Request,
 
 @data_route.post('/data/{id:path}',
                  summary="Approve Datapoint ID",
+                 status_code=HTTP_204_NO_CONTENT,
                  tags=["Data"])
-def approve_data(req: Request,
-                 payload: SubmissionBase,
-                 id: int,
-                 token: str = Depends(security),
-                 session: Session = Depends(get_session)):
+def update_data(req: Request,
+                payload: SubmissionBase,
+                id: int,
+                token: str = Depends(security),
+                session: Session = Depends(get_session)):
     user = auth0.verify(token.credentials)
     user = get_user_by_email(session=session, email=user.get("email"))
     if not user:
@@ -116,8 +118,27 @@ def approve_data(req: Request,
     datapoint_id = "-".join(str(uuid4()).split("-")[1:4])
     duration = time.mktime(data.submitted_at.timetuple()) - time.mktime(
         data.created_at.timetuple())
+    status_question = get_unlisted_by_variable(session=session,
+                                               form=form.id,
+                                               variable="approval_status")
+    instance_question = get_unlisted_by_variable(session=session,
+                                                 form=form.id,
+                                                 variable="instance_origin_id")
+    responses = [p.serialize for p in payload.answers]
+    status = list(
+        filter(lambda x: int(x["questionId"]) == status_question.id,
+               responses))
+    if not status:
+        raise HTTPException(status_code=404, detail="Status not found")
+    status = getattr(DataStatus, status[0]["value"].lower())
+    responses += [{
+        "questionId": instance_question.id,
+        "iteration": 0,
+        "answerType": "FREE_TEXT",
+        "value": id
+    }]
     payload_request = {
-        "responses": [p.serialize for p in payload.answers],
+        "responses": responses,
         "dataPointId": datapoint_id,
         "deviceId": data.device,
         "dataPointName": f"{data.id} - {data.name}",
@@ -136,29 +157,6 @@ def approve_data(req: Request,
         raise HTTPException(status_code=404, detail="Not found")
     update_data_status(session=session,
                        id=data.id,
-                       status=DataStatus.approved,
-                       approved_by=user.id)
-    return result.json()
-
-
-@data_route.put('/data/{id:path}',
-                summary="Update Data Status",
-                status_code=HTTP_204_NO_CONTENT,
-                tags=["Data"])
-def reject_data(req: Request,
-                id: int,
-                status: DataStatus,
-                token: str = Depends(security),
-                session: Session = Depends(get_session)):
-    if status == DataStatus.approved:
-        raise HTTPException(status_code=401,
-                            detail="Use POST Request for Approving Data")
-    user = auth0.verify(token.credentials)
-    user = get_user_by_email(session=session, email=user.get("email"))
-    if not user:
-        raise HTTPException(status_code=401, detail="Not Authenticated")
-    update_data_status(session=session,
-                       id=id,
                        status=status,
                        approved_by=user.id)
     return Response(status_code=HTTP_204_NO_CONTENT)

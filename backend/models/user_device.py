@@ -14,3 +14,7 @@ class UserDevice(Base):
 
     def __repr__(self):
         return f"<UserDevice {self.id}>"
+
+    @property
+    def lowercase(self):
+        return self.device.lower()
