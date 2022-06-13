@@ -28,7 +28,7 @@ const App = () => {
           api.setToken(res.data.id_token);
           setLoading(false);
           if (
-            ["login", "dashboard"].includes(location.pathname) ||
+            ["/login", "/dashboard"].includes(location.pathname) ||
             location.pathname === "/"
           ) {
             navigate("/dashboard", {
