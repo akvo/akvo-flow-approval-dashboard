@@ -95,7 +95,7 @@
   }
 
   .content-container {
-    padding: 30px 70px;
+    padding: 30px;
 
     .content {
       background: #fff;
@@ -106,6 +106,10 @@
       p {
         font-size: 1.2em;
       }
+    }
+
+    @media (min-width: 786px) {
+      padding: 30px 70px;
     }
   }
 }
