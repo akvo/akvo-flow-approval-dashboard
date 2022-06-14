@@ -76,7 +76,7 @@ const Login = () => {
                   </Form.Item>
                 </Col>
               </Row>
-              <Row>
+              <Row className="policy-checkbox">
                 <Form.Item>
                   <Checkbox>
                     I accept the terms of the offer of the
