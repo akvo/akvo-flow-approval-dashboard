@@ -1,4 +1,12 @@
 #home {
+  .intro-container {
+    @media (min-width: 786px) {
+      .ant-divider {
+        display: none;
+      }
+    }
+  }
+
   .content-container {
     padding: 0px 70px 15px;
 
@@ -13,6 +21,12 @@
 
       &:hover {
         box-shadow: 0 0 10px 0px #999999;
+      }
+    }
+
+    @media (min-width: 786px) {
+      .ant-divider {
+        display: none;
       }
     }
   }
