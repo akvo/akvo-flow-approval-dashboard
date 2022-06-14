@@ -109,7 +109,7 @@ def update_data(req: Request,
                 id: int,
                 token: str = Depends(security),
                 session: Session = Depends(get_session)):
-    user = auth0.verify(sesion=session, token=token.credentials)
+    user = auth0.verify(session=session, token=token.credentials)
     data = get_data_by_id(session=session, id=id)
     form = get_form_by_id(session=session, id=data.form)
     datapoint_id = "-".join(str(uuid4()).split("-")[1:4])
