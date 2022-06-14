@@ -1,6 +1,6 @@
 import React from "react";
 import "./login.scss";
-import { Button, Checkbox, Row, Col, Form, Input, message } from "antd";
+import { Image, Button, Checkbox, Row, Col, Form, Input, message } from "antd";
 import { useNavigate } from "react-router";
 import { useCookies } from "react-cookie";
 import { api, store } from "../../lib";
@@ -52,8 +52,15 @@ const Login = () => {
         type="flex"
         justify="center"
         align="middle"
-        style={{ minHeight: "100vh" }}
+        style={{ minHeight: "90vh" }}
       >
+        <Col align="middle" justify="center">
+          <Image
+            src=" https://marketing-pages.anu.edu.au/_anu/4/images/logos/2x_anu_logo_small.svg"
+            stye={{ maxWidth: "20px", width: "100%" }}
+            preview={false}
+          />
+        </Col>
         <Col span={24}>
           <Form onFinish={onFinish}>
             <div className="main-header">
