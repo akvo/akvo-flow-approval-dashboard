@@ -142,7 +142,7 @@ const Profile = () => {
                     </Row>
                   </Checkbox.Group>
                 </Form.Item>
-                <Row align="middle">
+                <Row align="end">
                   <Form.Item>
                     <Button type="primary" htmlType="submit">
                       Save
