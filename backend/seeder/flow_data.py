@@ -56,7 +56,7 @@ for form in forms:
                      device=result["deviceIdentifier"],
                      value=result["responses"])
             print("  NEW SUBMISSION: {} - {}".format(
-                result["deviceIdentifier"].upper(), result["dataPointId"]))
+                result["deviceIdentifier"].upper(), result["id"]))
         if debug_records:
             submission_date = result["submissionDate"].strftime("%Y-%m-%dT%XZ")
             result.update({"submissionDate": submission_date})
