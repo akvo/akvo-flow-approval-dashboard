@@ -1,15 +1,6 @@
 import React from "react";
-import {
-  Button,
-  Menu,
-  Breadcrumb,
-  Col,
-  Row,
-  Avatar,
-  Image,
-  Dropdown,
-} from "antd";
-import { MenuOutlined, DownOutlined } from "@ant-design/icons";
+import { Menu, Breadcrumb, Col, Row, Avatar, Image, Dropdown } from "antd";
+import { DownOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router";
 import { store } from "../lib";
 import { Link } from "react-router-dom";
@@ -39,6 +30,13 @@ const Header = () => {
     <div className="header">
       <div className="header-container">
         <Row align="middle" className="header-wrapper">
+          <Col className="header-logo">
+            <Image
+              src=" https://marketing-pages.anu.edu.au/_anu/4/images/logos/2x_anu_logo_small.svg"
+              stye={{ maxWidth: "5px", width: "32%" }}
+              preview={false}
+            />
+          </Col>
           <Col className="header-menu" span={16} align="left">
             {routeState?.breadcrumbs && (
               <Breadcrumb>
@@ -104,11 +102,6 @@ const Header = () => {
                 </div>
               </Dropdown>
             </div>
-          </Col>
-          <Col className="header-menu-btn">
-            <Button type="primary" ghost align="end">
-              <MenuOutlined />
-            </Button>
           </Col>
         </Row>
       </div>
