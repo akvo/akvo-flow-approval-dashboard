@@ -37,7 +37,7 @@ for form in forms:
     results = flow.get_page(refresh_token=refresh_token, form=form)
     new_records = 0
     for result in results:
-        id = int(result["dataPointId"])
+        id = int(result["id"])
         stored_data = get_data_by_id(session=session, id=id)
         if not stored_data:
             new_records += 1
