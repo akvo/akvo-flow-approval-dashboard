@@ -19,15 +19,6 @@ const App = () => {
   const [isTourOpen, setIsTourOpen] = useState(false);
   const [isShowingMore, setIsShowingMore] = useState(false);
 
-  const stateBreadcrumbs = [
-    {
-      page: location.pathname.toLocaleLowerCase().includes("dashboard")
-        ? "Dashboard"
-        : "Profile",
-      target: location.pathname,
-    },
-  ];
-
   useEffect(() => {
     if (loading && cookies?.AUTH_TOKEN) {
       api
