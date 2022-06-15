@@ -31,11 +31,27 @@ const Header = () => {
       <div className="header-container">
         <Row align="middle" className="header-wrapper">
           <Col className="header-logo">
-            <Image
-              src=" https://marketing-pages.anu.edu.au/_anu/4/images/logos/2x_anu_logo_small.svg"
-              stye={{ maxWidth: "5px", width: "32%" }}
-              preview={false}
-            />
+            <Link
+              to="/dashboard"
+              state={{
+                breadcrumbs: [
+                  {
+                    page: "Dashboard",
+                    target: "/dashboard",
+                  },
+                  {
+                    page: "Profile",
+                    target: "/profile",
+                  },
+                ],
+              }}
+            >
+              <Image
+                src=" https://marketing-pages.anu.edu.au/_anu/4/images/logos/2x_anu_logo_small.svg"
+                stye={{ maxWidth: "5px", width: "32%" }}
+                preview={false}
+              />
+            </Link>
           </Col>
           <Col className="header-menu" span={16} align="left">
             {routeState?.breadcrumbs && (

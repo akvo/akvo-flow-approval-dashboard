@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import "./home.scss";
-import { Row, Col, message, Button } from "antd";
+import { Row, Col, message, Button, Divider } from "antd";
 import { sumBy } from "lodash";
 import { Link } from "react-router-dom";
 import { api, store } from "../../lib";
@@ -62,6 +62,7 @@ const Surveys = ({ data }) => {
           </Button>
         </Row>
       </div>
+      <Divider />
     </Col>
   );
 };
@@ -114,6 +115,7 @@ const Home = () => {
             </Row>
           </Col>
         </Row>
+        <Divider />
       </div>
       <Row className="content-container" gutter={[16, 16]} justify="left">
         {surveyList.map((d, ix) => (
