@@ -130,7 +130,10 @@ const Profile = () => {
                           <Col
                             xs={24}
                             sm={12}
-                            md={6}
+                            md={8}
+                            lg={6}
+                            xl={4}
+                            xxl={3}
                             key={idv}
                             align="left"
                             style={{ display: dv.show ? "block" : "none" }}

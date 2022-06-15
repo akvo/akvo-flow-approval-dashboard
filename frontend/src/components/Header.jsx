@@ -26,50 +26,25 @@ const Header = () => {
     return "";
   }
 
-  return (
-    <div className="header">
+  return [
+    <div className="header" key="header">
       <div className="header-container">
         <Row align="middle" className="header-wrapper">
-          <Col className="header-logo">
+          <Col className="header-menu" span={16} align="left">
             <Link
               to="/dashboard"
+              className="header-logo"
               state={{
                 breadcrumbs: [
                   {
                     page: "Dashboard",
                     target: "/dashboard",
                   },
-                  {
-                    page: "Profile",
-                    target: "/profile",
-                  },
                 ],
               }}
             >
-              <Image
-                src=" https://marketing-pages.anu.edu.au/_anu/4/images/logos/2x_anu_logo_small.svg"
-                stye={{ maxWidth: "5px", width: "32%" }}
-                preview={false}
-              />
+              <Image src="/logo.svg" preview={false} />
             </Link>
-          </Col>
-          <Col className="header-menu" span={16} align="left">
-            {routeState?.breadcrumbs && (
-              <Breadcrumb>
-                {routeState.breadcrumbs.map((x, xi) => (
-                  <Breadcrumb.Item key={xi}>
-                    <Link
-                      to={x.target}
-                      state={{
-                        breadcrumbs: take(routeState.breadcrumbs, xi + 1),
-                      }}
-                    >
-                      {x.page}
-                    </Link>
-                  </Breadcrumb.Item>
-                ))}
-              </Breadcrumb>
-            )}
           </Col>
           <Col className="user" span={8} align="right">
             <div className="user-info">
@@ -121,8 +96,26 @@ const Header = () => {
           </Col>
         </Row>
       </div>
-    </div>
-  );
+    </div>,
+    <div className="breadcrumb-links" key="breadcrumb-links">
+      {routeState?.breadcrumbs && (
+        <Breadcrumb>
+          {routeState.breadcrumbs.map((x, xi) => (
+            <Breadcrumb.Item key={xi}>
+              <Link
+                to={x.target}
+                state={{
+                  breadcrumbs: take(routeState.breadcrumbs, xi + 1),
+                }}
+              >
+                {x.page}
+              </Link>
+            </Breadcrumb.Item>
+          ))}
+        </Breadcrumb>
+      )}
+    </div>,
+  ];
 };
 
 export default Header;

@@ -77,7 +77,7 @@ const App = () => {
   }, [cookies, navigate, location, loading]);
 
   return (
-    <div>
+    <div className="root-container">
       <Header />
       <div className="main">
         <Routes>

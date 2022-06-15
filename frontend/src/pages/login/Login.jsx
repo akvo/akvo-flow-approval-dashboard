@@ -52,16 +52,14 @@ const Login = () => {
         type="flex"
         justify="center"
         align="middle"
-        style={{ minHeight: "90vh" }}
+        style={{ minHeight: "100vh" }}
       >
-        <Col align="middle" justify="center">
-          <Image
-            src=" https://marketing-pages.anu.edu.au/_anu/4/images/logos/2x_anu_logo_small.svg"
-            stye={{ maxWidth: "20px", width: "100%" }}
-            preview={false}
-          />
-        </Col>
         <Col span={24}>
+          <Row justify="center">
+            <Col span={18} align="center">
+              <Image src="/logo.svg" className="logo" preview={false} />
+            </Col>
+          </Row>
           <Form onFinish={onFinish}>
             <div className="main-header">
               <h1>Log in to Akvo flow</h1>

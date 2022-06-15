@@ -1,6 +1,6 @@
 #home {
   .intro-container {
-    @media (min-width: 786px) {
+    @media (min-width: 426px) {
       .ant-divider {
         display: none;
       }
@@ -24,7 +24,7 @@
       }
     }
 
-    @media (min-width: 786px) {
+    @media (min-width: 426px) {
       .ant-divider {
         display: none;
       }

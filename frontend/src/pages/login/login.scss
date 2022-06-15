@@ -4,10 +4,15 @@
   font-family: "Roboto";
   padding: 10px;
 
+  .logo {
+    max-width: 80%;
+    padding-bottom: 30px;
+  }
+
   .ant-form {
     margin: auto;
 
-    @media (min-width: 786px) {
+    @media (min-width: 426px) {
       border: 1px solid #bfbfbf;
       border-radius: 10px;
     }
@@ -72,7 +77,7 @@
       line-height: 14px;
     }
 
-    @media (min-width: 786px) {
+    @media (min-width: 426px) {
       border-top: 1px solid #bfbfbf;
     }
   }

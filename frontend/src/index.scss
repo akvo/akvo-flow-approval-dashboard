@@ -23,13 +23,12 @@ code {
 #root {
   font-family: "Roboto", sans-serif;
   height: 100vh;
-  background-color: #fff;
 
-  .main {
-    background-color: #fff;
+  .root-container {
+    background-color: #f7f8fc;
 
-    @media (min-width: 786px) {
-      background-color: #f7f8fc;
+    @media (max-width: 426px) {
+      background-color: #fff;
     }
   }
 
