@@ -20,16 +20,5 @@
       "form_id": 656830977,
       "survey_id": 626430918
     }
-  },
-  {
-    "instance": "anu",
-    "raw": {
-      "form_id": 76060012,
-      "survey_id": 68060016
-    },
-    "prod": {
-      "form_id": 84240003,
-      "survey_id": 100300003
-    }
   }
 ]

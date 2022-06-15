@@ -38,6 +38,7 @@ const Surveys = ({ data }) => {
       ],
     },
   };
+
   return (
     <Col
       sm={24}
@@ -55,7 +56,7 @@ const Surveys = ({ data }) => {
           <span className="status-count pending"> {data.pending}</span>
         </p>
         <Row justify="end">
-          <Button type="primary" size="large">
+          <Button type="primary" size="large" className="view-btn">
             <Link to={`/dashboard/${data.id}`} state={routeState.state}>
               View
             </Link>

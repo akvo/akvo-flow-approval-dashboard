@@ -99,6 +99,7 @@ const Profile = () => {
               <Divider />
               <h1>Devices</h1>
               <Input
+                className="search_device"
                 onChange={({ target }) => {
                   if (target.value.length) {
                     setSearch(target.value);
@@ -147,7 +148,11 @@ const Profile = () => {
                 </Form.Item>
                 <Row align="end">
                   <Form.Item>
-                    <Button type="primary" htmlType="submit">
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      className="save-btn"
+                    >
                       Save
                     </Button>
                   </Form.Item>

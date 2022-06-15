@@ -1,5 +1,14 @@
 import React from "react";
-import { Menu, Breadcrumb, Col, Row, Avatar, Image, Dropdown } from "antd";
+import {
+  Menu,
+  Breadcrumb,
+  Col,
+  Row,
+  Avatar,
+  Image,
+  Dropdown,
+  Button,
+} from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router";
 import { store } from "../lib";
@@ -7,7 +16,7 @@ import { Link } from "react-router-dom";
 import { removeCookie } from "../util/helper";
 import { take } from "lodash";
 
-const Header = () => {
+const Header = ({ openTour }) => {
   const navigate = useNavigate();
   const { state: routeState } = useLocation();
   const { isLoggedIn, user } = store.useState((state) => state);
@@ -98,22 +107,27 @@ const Header = () => {
       </div>
     </div>,
     <div className="breadcrumb-links" key="breadcrumb-links">
-      {routeState?.breadcrumbs && (
-        <Breadcrumb>
-          {routeState.breadcrumbs.map((x, xi) => (
-            <Breadcrumb.Item key={xi}>
-              <Link
-                to={x.target}
-                state={{
-                  breadcrumbs: take(routeState.breadcrumbs, xi + 1),
-                }}
-              >
-                {x.page}
-              </Link>
-            </Breadcrumb.Item>
-          ))}
-        </Breadcrumb>
-      )}
+      <Row justify="space-between" align="middle">
+        {routeState?.breadcrumbs && (
+          <Breadcrumb>
+            {routeState.breadcrumbs.map((x, xi) => (
+              <Breadcrumb.Item key={xi}>
+                <Link
+                  to={x.target}
+                  state={{
+                    breadcrumbs: take(routeState.breadcrumbs, xi + 1),
+                  }}
+                >
+                  {x.page}
+                </Link>
+              </Breadcrumb.Item>
+            ))}
+          </Breadcrumb>
+        )}
+        <Col>
+          <Button onClick={openTour}>Page Tour</Button>
+        </Col>
+      </Row>
     </div>,
   ];
 };
