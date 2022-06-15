@@ -75,6 +75,8 @@ const DataPoints = () => {
         dataIndex: "duration",
         ellipsis: true,
       },
+    ];
+    const edit_cols = [
       {
         title: "",
         dataIndex: "",
@@ -128,6 +130,9 @@ const DataPoints = () => {
         },
         ...tail_cols,
       ];
+    }
+    if (status === "pending") {
+      return [...head_cols, ...tail_cols, ...edit_cols];
     }
     return [...head_cols, ...tail_cols];
   }, [id, status, navigate, routeState]);

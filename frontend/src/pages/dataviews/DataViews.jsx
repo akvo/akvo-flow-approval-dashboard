@@ -115,7 +115,7 @@ const DataViews = () => {
           <Col span={24}>
             <div className="content">
               {!!images.length && (
-                <Carousel dots={{ className: "carousel-dots" }}>
+                <Carousel dots={{ className: "carousel-dots" }} autoplay>
                   {images.map((i, ix) => (
                     <div key={`image-${ix}`} className="carousel-data">
                       <Row
