@@ -60,6 +60,7 @@ def get_frame(form_def, rename):
 
 truncate(session=session, table="question")
 truncate(session=session, table="form")
+truncate(session=session, table="unlisted_question")
 
 for form in forms:
     instance = form["instance"]
