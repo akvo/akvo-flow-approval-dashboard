@@ -99,7 +99,7 @@ const DataViews = () => {
           .filter((x) => x.type === "photo")
           .map((x) => ({
             text: x.name,
-            url: res.data.initial_value.find((i) => i.question == x.id)?.value,
+            url: res.data.initial_value.find((i) => i.question === x.id)?.value,
           }))
           .filter((x) => x.url);
         setImages(photos);
