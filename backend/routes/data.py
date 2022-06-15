@@ -8,7 +8,7 @@ from fastapi.security import HTTPBearer
 from sqlalchemy.orm import Session
 from db.connection import get_session
 from util.auth0 import Auth0
-from util.flow import react_form, webform_api
+from util.flow import react_form, webform_api, get_cascade_value
 from models.data import DataStatus, DataResponse, DataListResponse
 from models.submission import SubmissionBase
 from db.crud_form import get_form_by_id
@@ -85,17 +85,29 @@ def get_by_id(req: Request,
     if not webform:
         raise HTTPException(status_code=404, detail="Not found")
     qtype = {}
+    cascades = {}
     for question_group in webform.get("question_group"):
         for question in question_group.get("question"):
             qid = question["id"].replace("Q", "")
             qtype.update({int(qid): question["type"]})
+            if question["type"] == "cascade":
+                cascades.update({int(qid): question["cascadeResource"]})
     for val in data["initial_value"]:
         val.update({"question": int(val["question"])})
         if qtype.get(val["question"]) == "option":
             val.update({"value": val["value"][0]})
         if qtype.get(val["question"]) == "cascade":
-            val.update(
-                {"value": [int(str(v).split(":")[0]) for v in val["value"]]})
+            try:
+                val.update({
+                    "value": [int(str(v).split(":")[0]) for v in val["value"]]
+                })
+            except ValueError:
+                cascade_url = cascades[val["question"]]
+                cascade_value = get_cascade_value(cascade_url=cascade_url,
+                                                  payload=val["value"])
+                if not cascade_value:
+                    raise HTTPException(status_code=404, detail="Not found")
+                val.update({"value": cascade_value})
     data.update({"forms": webform})
     return data
 
