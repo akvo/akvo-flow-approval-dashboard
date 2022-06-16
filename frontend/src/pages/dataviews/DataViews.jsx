@@ -15,7 +15,8 @@ const initForms = {
   initial_value: [],
 };
 
-const DataViews = () => {
+const DataViews = ({ closeTour }) => {
+  closeTour();
   const { data_id } = useParams();
   const navigate = useNavigate();
   const { state: routeState } = useLocation();

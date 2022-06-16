@@ -8,7 +8,7 @@ import { message } from "antd";
 import { api, store } from "./lib";
 import { removeCookie } from "./util/helper";
 import { Home, Login, DataPoints, DataViews, Profile } from "./pages";
-import { Image, Input } from "antd";
+import { Input } from "antd";
 
 const App = () => {
   const navigate = useNavigate();
@@ -168,7 +168,7 @@ const App = () => {
       ),
     },
     {
-      selector: `#root`,
+      selector: `.content`,
       content: () => (
         <div>
           <h2>Form Data</h2>
@@ -178,6 +178,9 @@ const App = () => {
           </p>
         </div>
       ),
+      action: (node) => {
+        node.click();
+      },
     },
     {
       selector: `.ant-tabs-nav-list`,
@@ -206,7 +209,7 @@ const App = () => {
   ];
 
   useEffect(() => {
-    if (!tourStep || [4, 5, 6].includes(tourStep)) {
+    if (!tourStep || tourStep === 4) {
       navigate("/dashboard", {
         state: {
           breadcrumbs: [
@@ -218,7 +221,7 @@ const App = () => {
         },
       });
     }
-    if ([1, 2, 3].includes(tourStep)) {
+    if (tourStep === 1) {
       navigate("/profile", {
         state: {
           breadcrumbs: [
@@ -234,13 +237,7 @@ const App = () => {
         },
       });
     }
-    if (tourStep === 6) {
-      const dataPage = document.getElementsByClassName("view-btn");
-      if (dataPage) {
-        dataPage[0].click();
-      }
-    }
-  }, [tourStep]);
+  }, [tourStep, navigate]);
 
   return (
     <div className="root-container">
@@ -256,7 +253,10 @@ const App = () => {
           <Route path="/profile" element={<Profile tryout={tryNewDevice} />} />
           <Route path="/dashboard" element={<Home />} />
           <Route path="/dashboard/:id" element={<DataPoints />} />
-          <Route path="/dashboard/:id/:data_id" element={<DataViews />} />
+          <Route
+            path="/dashboard/:id/:data_id"
+            element={<DataViews closeTour={() => setIsTourOpen(false)} />}
+          />
         </Routes>
       </div>
       <Tour
