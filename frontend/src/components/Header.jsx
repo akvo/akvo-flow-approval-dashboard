@@ -59,30 +59,37 @@ const Header = ({ openTour }) => {
             <div className="user-info">
               <Dropdown
                 overlay={() => (
-                  <Menu>
-                    <Menu.Item key="profile">
-                      <Link
-                        to="/profile"
-                        state={{
-                          breadcrumbs: [
-                            {
-                              page: "Dashboard",
-                              target: "/dashboard",
-                            },
-                            {
-                              page: "Profile",
-                              target: "/profile",
-                            },
-                          ],
-                        }}
-                      >
-                        My Profile
-                      </Link>
-                    </Menu.Item>
-                    <Menu.Item key="handleLogOut" danger>
-                      <a onClick={handleLogOut}>Sign out</a>
-                    </Menu.Item>
-                  </Menu>
+                  <Menu
+                    items={[
+                      {
+                        key: "profile",
+                        label: (
+                          <Link
+                            to="/profile"
+                            state={{
+                              breadcrumbs: [
+                                {
+                                  page: "Dashboard",
+                                  target: "/dashboard",
+                                },
+                                {
+                                  page: "Profile",
+                                  target: "/profile",
+                                },
+                              ],
+                            }}
+                          >
+                            My Profile
+                          </Link>
+                        ),
+                      },
+                      {
+                        key: "logout",
+                        danger: true,
+                        label: <a onClick={handleLogOut}>Sign out</a>,
+                      },
+                    ]}
+                  />
                 )}
                 placement="bottomRight"
                 arrow

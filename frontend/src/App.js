@@ -8,8 +8,7 @@ import { message } from "antd";
 import { api, store } from "./lib";
 import { removeCookie } from "./util/helper";
 import { Home, Login, DataPoints, DataViews, Profile } from "./pages";
-import { Link } from "react-router-dom";
-import { Image } from "antd";
+import { Image, Input } from "antd";
 
 const App = () => {
   const navigate = useNavigate();
@@ -17,6 +16,8 @@ const App = () => {
   const [cookies] = useCookies(["AUTH_TOKEN"]);
   const [loading, setLoading] = useState(true);
   const [isTourOpen, setIsTourOpen] = useState(false);
+  const [tourStep, setTourStep] = useState(0);
+  const [tryNewDevice, setTryNewDevice] = useState(null);
   const [isShowingMore, setIsShowingMore] = useState(false);
 
   useEffect(() => {
@@ -91,70 +92,101 @@ const App = () => {
 
   const tourConfig = [
     {
-      selector: `[data-tour="my-first-step"]`,
-      content: `You will see the profile page first`,
-      action: () => {
-        <Link to={"/profile"} />;
-      },
-    },
-    {
-      selector: `#profile`,
-      content: `You are in the profile page now. Take a tour to see`,
-    },
-    {
-      selector: ".search_device",
-      content: `Type a value`,
-      action: (node) => {
-        node.focus();
-        node.querySelector(".ant-input").value = "Device";
-      },
-    },
-    {
-      selector: ".ant-checkbox-input",
-      content: `Check a device`,
-      action: (node) => {
-        node.checked = true;
-      },
-    },
-    {
-      selector: ".save-btn",
-      content: `Check a device`,
-      action: () => {
-        <Link to={"/dashboard"} />;
-      },
-    },
-    {
-      selector: `#home`,
-      content: `This is the dashboard page.`,
-    },
-    {
-      selector: `.view-btn`,
-      content: `Click here to see the list of pending, approved and rejected data`,
-      action: () => {
-        <Link to={"/profile"} />;
-      },
-    },
-    {
-      selector: `#datapoints`,
-      content: `This is a page where you can see the data.`,
-    },
-    {
-      selector: `.add-btn`,
-      content: `Click the button to see the page where you can edit data, either approve or reject data.`,
-      action: () => {
-        <Link to={"dashboard/611800981/650010916"} />;
-      },
-    },
-    {
-      selector: `#dataview`,
+      selector: "#root",
       content: () => (
         <div>
-          <p>You can edit data, either approve or reject data.</p>
-          <Image src="./viewData.png" />
+          <h2>Welcome to Approval Data Dashboard</h2>
+          <p>
+            <b>Next:</b> Configure your profile
+          </p>
+        </div>
+      ),
+    },
+    {
+      selector: `#root`,
+      content: () => (
+        <div>
+          <h2>Profile Page</h2>
+          <p>
+            Now you are in the profile page.
+            <br />
+            <b>Next:</b> Find Device
+          </p>
+        </div>
+      ),
+    },
+    {
+      selector: `.device-list`,
+      content: () => (
+        <div>
+          <h2>Profile Page | Device List</h2>
+          <p>Find the devices you want to assign to you.</p>
+          <b>Next:</b> Search / Add New Device
+        </div>
+      ),
+    },
+    {
+      selector: `.search-device`,
+      content: () => (
+        <div>
+          <h2>Profile Page | Search Device</h2>
+          <p>
+            Search the Device you want to assign.
+            <br />
+            <br />
+            <i>
+              Your device is not in the list? Type the device name in the search
+              box, <b>Add New</b> button will show.
+            </i>
+          </p>
+          <Input
+            onChange={(e) => setTryNewDevice(e.target.value)}
+            placeholder="Try to add new Device"
+          />
+        </div>
+      ),
+    },
+    {
+      selector: `#root`,
+      content: () => (
+        <div>
+          <h2>Dashboard</h2>
+          <p>Once you have setup the device, you can start approving data.</p>
         </div>
       ),
     },
   ];
+
+  useEffect(() => {
+    if (!tourStep || tourStep === 4) {
+      navigate("/dashboard", {
+        state: {
+          breadcrumbs: [
+            {
+              page: "Dashboard",
+              target: "/dashboard",
+            },
+          ],
+        },
+      });
+    }
+    if (tourStep === 1) {
+      navigate("/profile", {
+        state: {
+          breadcrumbs: [
+            {
+              page: "Dashboard",
+              target: "/dashboard",
+            },
+            {
+              page: "Profile",
+              target: "/profile",
+            },
+          ],
+        },
+      });
+    }
+  }, [tourStep]);
 
   return (
     <div className="root-container">
@@ -167,7 +199,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={<Profile tryout={tryNewDevice} />} />
           <Route path="/dashboard" element={<Home />} />
           <Route path="/dashboard/:id" element={<DataPoints />} />
           <Route path="/dashboard/:id/:data_id" element={<DataViews />} />
@@ -180,6 +212,7 @@ const App = () => {
         rounded={5}
         maskClassName="mask"
         accentColor={"#5cb7b7"}
+        getCurrentStep={setTourStep}
       />
     </div>
   );

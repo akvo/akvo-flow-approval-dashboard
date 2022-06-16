@@ -15,7 +15,7 @@ import { Loading } from "../../components";
 import { toTitleCase } from "../../util/helper";
 import { SearchOutlined } from "@ant-design/icons";
 
-const Profile = () => {
+const Profile = ({ tryout }) => {
   const [form] = Form.useForm();
   const [search, setSearch] = useState(null);
   const [devices, setDevices] = useState([]);
@@ -78,6 +78,14 @@ const Profile = () => {
     }
   }, [search, displayDevices]);
 
+  useEffect(() => {
+    if (tryout?.length) {
+      setSearch(tryout);
+    } else {
+      setSearch(null);
+    }
+  }, [tryout]);
+
   const addNewDevice = () => {
     const currentValue = form.getFieldValue(["devices"]);
     setDevices([newDevice, ...devices]);
@@ -99,7 +107,7 @@ const Profile = () => {
               <Divider />
               <h1>Devices</h1>
               <Input
-                className="search_device"
+                className="search-device"
                 onChange={({ target }) => {
                   if (target.value.length) {
                     setSearch(target.value);
