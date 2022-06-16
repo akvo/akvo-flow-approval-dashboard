@@ -143,6 +143,7 @@ const App = () => {
             onChange={(e) => setTryNewDevice(e.target.value)}
             placeholder="Try to add new Device"
           />
+          <b>Next:</b> Dashboard, Form List
         </div>
       ),
     },
@@ -155,10 +156,57 @@ const App = () => {
         </div>
       ),
     },
+    {
+      selector: `.content`,
+      content: () => (
+        <div>
+          <h2>Dashboard | Form List</h2>
+          <p>
+            Click View Button from one of the form card to go to the data list
+          </p>
+        </div>
+      ),
+    },
+    {
+      selector: `#root`,
+      content: () => (
+        <div>
+          <h2>Form Data</h2>
+          <p>
+            Here you can see list of available data that has been submitted by
+            enumerator
+          </p>
+        </div>
+      ),
+    },
+    {
+      selector: `.ant-tabs-nav-list`,
+      content: () => (
+        <div>
+          <h2>Form Data | Navigation Tab</h2>
+          <p>
+            This is the navigation to show the Form Data List filter by approval
+            status
+          </p>
+        </div>
+      ),
+    },
+    {
+      selector: `.add-btn`,
+      content: () => (
+        <div>
+          <h2>Form Data | View Detail</h2>
+          <p>
+            Click this button to navigate to the data details and start
+            approving
+          </p>
+        </div>
+      ),
+    },
   ];
 
   useEffect(() => {
-    if (!tourStep || tourStep === 4) {
+    if (!tourStep || [4, 5, 6].includes(tourStep)) {
       navigate("/dashboard", {
         state: {
           breadcrumbs: [
@@ -170,7 +218,7 @@ const App = () => {
         },
       });
     }
-    if (tourStep === 1) {
+    if ([1, 2, 3].includes(tourStep)) {
       navigate("/profile", {
         state: {
           breadcrumbs: [
@@ -185,6 +233,12 @@ const App = () => {
           ],
         },
       });
+    }
+    if (tourStep === 6) {
+      const dataPage = document.getElementsByClassName("view-btn");
+      if (dataPage) {
+        dataPage[0].click();
+      }
     }
   }, [tourStep]);
 
