@@ -1,4 +1,5 @@
 import json
+import re
 import os
 import sys
 import requests as r
@@ -69,6 +70,12 @@ form_file = open(form_json, "w")
 form_file.write(json.dumps(forms, indent=2))
 form_file.close()
 
+if "--truncate" in sys.argv:
+    truncate(session=session, table="question")
+    truncate(session=session, table="form")
+    truncate(session=session, table="unlisted_question")
+    logging.info("TRUNCATING question, unlisted_question and form table")
+
 
 def get_frame(form_def, form_name, rename):
     questions = []
@@ -90,16 +97,11 @@ def get_frame(form_def, form_name, rename):
     return res
 
 
-if "--truncate" in sys.argv:
-    truncate(session=session, table="question")
-    truncate(session=session, table="form")
-    truncate(session=session, table="unlisted_question")
-    logging.info("TRUNCATING question, unlisted_question and form table")
-
 for form in forms:
     instance = form["instance"]
     prod = form["prod"]
-    form_name = prod.get("name")
+    form_name = prod.get("name").title().strip()
+    form_name = re.sub(' +', ' ', form_name)
     prod_id = prod["form_id"]
     raw = form["raw"]
     raw_id = raw["form_id"]
@@ -121,6 +123,15 @@ for form in forms:
     questions = questions.to_dict("records")
     form = get_form_by_id(session=session, id=raw_id)
     prod_webform = prod["url"]
+    if form:
+        form.instance = instance
+        form.survey_id = raw["survey_id"]
+        form.prod_id = prod_id
+        form.url = prod_webform
+        form.name = form_name
+        session.commit()
+        session.flush()
+        session.refresh(form)
     if not form:
         form = add_form(session=session,
                         id=raw_id,
@@ -129,15 +140,6 @@ for form in forms:
                         prod_id=prod_id,
                         url=prod_webform,
                         name=form_name)
-    if form:
-        form.instance = instance
-        form.survey_id = raw["survey_id"]
-        form.prod_id = prod_id
-        form.url = prod_webform
-        form.name = prod_def["name"]
-        session.commit()
-        session.flush()
-        session.refresh(form)
     for var in required_unlisted:
         variable = prod_df[prod_df["variable_name"] == var]
         if not variable.shape[0]:

@@ -210,7 +210,7 @@ const App = () => {
   ];
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (isLoggedIn && isTourOpen) {
       if (!tourStep || tourStep === 4) {
         navigate("/dashboard", {
           state: {
@@ -240,7 +240,7 @@ const App = () => {
         });
       }
     }
-  }, [isLoggedIn, tourStep, navigate]);
+  }, [isLoggedIn, isTourOpen, tourStep, navigate]);
 
   return (
     <div className="root-container">

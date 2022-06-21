@@ -11,6 +11,11 @@
     padding: 0px 70px 15px;
 
     .content {
+      h1 {
+        min-height: 60px;
+        font-size: 1.17em;
+      }
+
       button {
         &.ant-btn {
           font-weight: bold;
