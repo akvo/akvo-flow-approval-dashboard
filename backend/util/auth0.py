@@ -1,4 +1,5 @@
 import jwt
+import logging
 from pydantic import BaseModel
 from jwt import PyJWKClient
 from sqlalchemy.orm import Session
@@ -63,7 +64,7 @@ class Auth0():
         }
         req = r.post(self.auth_domain, data=data)
         if req.status_code != 200:
-            print("Invalid Credentials")
+            logging.error("Invalid Credentials")
             exit()
         res = req.json()
         return res.get("refresh_token")

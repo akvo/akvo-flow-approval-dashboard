@@ -1,6 +1,7 @@
 import os
 import sys
 import random
+import logging
 from datetime import datetime
 from db.connection import Base, SessionLocal, engine
 from models.form import Form
@@ -13,6 +14,9 @@ from faker import Faker
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 Base.metadata.create_all(bind=engine)
 session = SessionLocal()
+
+if "--info" in sys.argv:
+    logging.getLogger().setLevel(logging.INFO)
 
 fake = Faker()
 approver_email = "support@akvo.org"
@@ -41,4 +45,4 @@ for form in forms:
                         submitted_at=datetime.now(),
                         status=status,
                         device="Android Smartphone")
-    print(f"Form: {form.name}, Data: {total}")
+    logging.info(f"Form: {form.name}, Data: {total}")

@@ -13,6 +13,7 @@ import { Input } from "antd";
 const App = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { isLoggedIn } = store.useState((s) => s);
   const [cookies] = useCookies(["AUTH_TOKEN"]);
   const [loading, setLoading] = useState(true);
   const [isTourOpen, setIsTourOpen] = useState(false);
@@ -209,35 +210,37 @@ const App = () => {
   ];
 
   useEffect(() => {
-    if (!tourStep || tourStep === 4) {
-      navigate("/dashboard", {
-        state: {
-          breadcrumbs: [
-            {
-              page: "Dashboard",
-              target: "/dashboard",
-            },
-          ],
-        },
-      });
+    if (isLoggedIn) {
+      if (!tourStep || tourStep === 4) {
+        navigate("/dashboard", {
+          state: {
+            breadcrumbs: [
+              {
+                page: "Dashboard",
+                target: "/dashboard",
+              },
+            ],
+          },
+        });
+      }
+      if (tourStep === 1) {
+        navigate("/profile", {
+          state: {
+            breadcrumbs: [
+              {
+                page: "Dashboard",
+                target: "/dashboard",
+              },
+              {
+                page: "Profile",
+                target: "/profile",
+              },
+            ],
+          },
+        });
+      }
     }
-    if (tourStep === 1) {
-      navigate("/profile", {
-        state: {
-          breadcrumbs: [
-            {
-              page: "Dashboard",
-              target: "/dashboard",
-            },
-            {
-              page: "Profile",
-              target: "/profile",
-            },
-          ],
-        },
-      });
-    }
-  }, [tourStep, navigate]);
+  }, [isLoggedIn, tourStep, navigate]);
 
   return (
     <div className="root-container">
