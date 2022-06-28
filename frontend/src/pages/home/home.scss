@@ -1,8 +1,21 @@
 #home {
+  .intro-container {
+    @media (min-width: 426px) {
+      .ant-divider {
+        display: none;
+      }
+    }
+  }
+
   .content-container {
     padding: 0px 70px 15px;
 
     .content {
+      h1 {
+        min-height: 60px;
+        font-size: 1.17em;
+      }
+
       button {
         &.ant-btn {
           font-weight: bold;
@@ -13,6 +26,12 @@
 
       &:hover {
         box-shadow: 0 0 10px 0px #999999;
+      }
+    }
+
+    @media (min-width: 426px) {
+      .ant-divider {
+        display: none;
       }
     }
   }

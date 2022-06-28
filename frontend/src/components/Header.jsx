@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Button,
   Menu,
   Breadcrumb,
   Col,
@@ -8,15 +7,16 @@ import {
   Avatar,
   Image,
   Dropdown,
+  Button,
 } from "antd";
-import { MenuOutlined, DownOutlined } from "@ant-design/icons";
+import { DownOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router";
 import { store } from "../lib";
 import { Link } from "react-router-dom";
 import { removeCookie } from "../util/helper";
 import { take } from "lodash";
 
-const Header = () => {
+const Header = ({ openTour }) => {
   const navigate = useNavigate();
   const { state: routeState } = useLocation();
   const { isLoggedIn, user } = store.useState((state) => state);
@@ -35,40 +35,61 @@ const Header = () => {
     return "";
   }
 
-  return (
-    <div className="header">
+  return [
+    <div className="header" key="header">
       <div className="header-container">
         <Row align="middle" className="header-wrapper">
           <Col className="header-menu" span={16} align="left">
-            {routeState?.breadcrumbs && (
-              <Breadcrumb>
-                {routeState.breadcrumbs.map((x, xi) => (
-                  <Breadcrumb.Item key={xi}>
-                    <Link
-                      to={x.target}
-                      state={{
-                        breadcrumbs: take(routeState.breadcrumbs, xi + 1),
-                      }}
-                    >
-                      {x.page}
-                    </Link>
-                  </Breadcrumb.Item>
-                ))}
-              </Breadcrumb>
-            )}
+            <Link
+              to="/dashboard"
+              className="header-logo"
+              state={{
+                breadcrumbs: [
+                  {
+                    page: "Dashboard",
+                    target: "/dashboard",
+                  },
+                ],
+              }}
+            >
+              <Image src="/logo.svg" preview={false} />
+            </Link>
           </Col>
           <Col className="user" span={8} align="right">
             <div className="user-info">
               <Dropdown
                 overlay={() => (
-                  <Menu>
-                    <Menu.Item key="profile">
-                      <Link to="/profile">My Profile</Link>
-                    </Menu.Item>
-                    <Menu.Item key="handleLogOut" danger>
-                      <a onClick={handleLogOut}>Sign out</a>
-                    </Menu.Item>
-                  </Menu>
+                  <Menu
+                    items={[
+                      {
+                        key: "profile",
+                        label: (
+                          <Link
+                            to="/profile"
+                            state={{
+                              breadcrumbs: [
+                                {
+                                  page: "Dashboard",
+                                  target: "/dashboard",
+                                },
+                                {
+                                  page: "Profile",
+                                  target: "/profile",
+                                },
+                              ],
+                            }}
+                          >
+                            My Profile
+                          </Link>
+                        ),
+                      },
+                      {
+                        key: "logout",
+                        danger: true,
+                        label: <a onClick={handleLogOut}>Sign out</a>,
+                      },
+                    ]}
+                  />
                 )}
                 placement="bottomRight"
                 arrow
@@ -89,15 +110,33 @@ const Header = () => {
               </Dropdown>
             </div>
           </Col>
-          <Col className="header-menu-btn">
-            <Button type="primary" ghost align="end">
-              <MenuOutlined />
-            </Button>
-          </Col>
         </Row>
       </div>
-    </div>
-  );
+    </div>,
+    <div className="breadcrumb-links" key="breadcrumb-links">
+      <Row justify="space-between" align="middle">
+        {routeState?.breadcrumbs && (
+          <Breadcrumb>
+            {routeState.breadcrumbs.map((x, xi) => (
+              <Breadcrumb.Item key={xi}>
+                <Link
+                  to={x.target}
+                  state={{
+                    breadcrumbs: take(routeState.breadcrumbs, xi + 1),
+                  }}
+                >
+                  {x.page}
+                </Link>
+              </Breadcrumb.Item>
+            ))}
+          </Breadcrumb>
+        )}
+        <Col>
+          <Button onClick={openTour}>Page Tour</Button>
+        </Col>
+      </Row>
+    </div>,
+  ];
 };
 
 export default Header;

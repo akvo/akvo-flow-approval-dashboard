@@ -47,7 +47,7 @@ const DataPoints = () => {
       {
         title: () => <span className="normalize">Sort By</span>,
         dataIndex: "name",
-        width: "40%",
+        width: "35%",
         ellipsis: true,
         className: "datapoint-name",
       },
@@ -56,6 +56,12 @@ const DataPoints = () => {
         dataIndex: "submitter",
         ellipsis: true,
         className: "submitter",
+      },
+      {
+        title: () => <span className="normalize">Device</span>,
+        dataIndex: "device",
+        ellipsis: true,
+        className: "device",
       },
     ];
     const tail_cols = [
@@ -69,6 +75,8 @@ const DataPoints = () => {
         dataIndex: "duration",
         ellipsis: true,
       },
+    ];
+    const edit_cols = [
       {
         title: "",
         dataIndex: "",
@@ -81,7 +89,15 @@ const DataPoints = () => {
           };
           const thisRouteState = {
             state: {
-              breadcrumbs: [...routeState.breadcrumbs, thisBreadCrumb],
+              breadcrumbs: routeState?.breadcrumbs
+                ? [...routeState.breadcrumbs, thisBreadCrumb]
+                : [
+                    {
+                      page: "Dashboard",
+                      target: "/dashboard",
+                    },
+                    thisBreadCrumb,
+                  ],
               previewOnly: status === "approved",
             },
           };
@@ -114,6 +130,9 @@ const DataPoints = () => {
         },
         ...tail_cols,
       ];
+    }
+    if (status === "pending") {
+      return [...head_cols, ...tail_cols, ...edit_cols];
     }
     return [...head_cols, ...tail_cols];
   }, [id, status, navigate, routeState]);

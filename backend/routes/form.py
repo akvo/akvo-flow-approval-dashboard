@@ -19,8 +19,8 @@ auth0 = Auth0()
                 tags=["Form"])
 def get(session: Session = Depends(get_session),
         token: str = Depends(security)):
-    auth0.verify(token.credentials)
-    form = get_form(session=session)
+    user = auth0.verify(session=session, token=token.credentials)
+    form = get_form(session=session, devices=user.get("devices"))
     return form
 
 

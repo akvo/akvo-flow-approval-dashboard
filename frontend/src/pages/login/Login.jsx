@@ -1,6 +1,6 @@
 import React from "react";
 import "./login.scss";
-import { Button, Checkbox, Row, Col, Form, Input, message } from "antd";
+import { Image, Button, Checkbox, Row, Col, Form, Input, message } from "antd";
 import { useNavigate } from "react-router";
 import { useCookies } from "react-cookie";
 import { api, store } from "../../lib";
@@ -55,6 +55,11 @@ const Login = () => {
         style={{ minHeight: "100vh" }}
       >
         <Col span={24}>
+          <Row justify="center">
+            <Col span={18} align="center">
+              <Image src="/logo.svg" className="logo" preview={false} />
+            </Col>
+          </Row>
           <Form onFinish={onFinish}>
             <div className="main-header">
               <h1>Log in to Akvo flow</h1>
@@ -76,7 +81,7 @@ const Login = () => {
                   </Form.Item>
                 </Col>
               </Row>
-              <Row>
+              <Row className="policy-checkbox">
                 <Form.Item>
                   <Checkbox>
                     I accept the terms of the offer of the

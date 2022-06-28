@@ -1,0 +1,22 @@
+#profile {
+  .content {
+    p {
+      margin-bottom: 0px;
+    }
+
+    .device-list {
+      min-width: 100%;
+
+      .ant-checkbox-group {
+        min-width: 100%;
+        width: 100%;
+        max-height: 300px;
+        overflow-y: scroll;
+        background: #f7f8fc;
+        padding: 20px;
+        border: 1px solid #d9d9d9;
+        margin-top: 10px;
+      }
+    }
+  }
+}

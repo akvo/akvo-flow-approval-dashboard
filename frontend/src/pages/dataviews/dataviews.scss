@@ -1,0 +1,61 @@
+#dataview {
+  .content {
+    padding: 0px;
+
+    .ant-carousel {
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 30px;
+
+      .carousel-dots {
+        bottom: -30px;
+
+        li {
+          margin: 0 3px;
+
+          button {
+            width: 15px;
+            height: 15px;
+            border-radius: 100%;
+            background: #6a6a6a;
+          }
+
+          &.slick-active {
+            button {
+              width: 15px;
+              height: 15px;
+              border-radius: 100%;
+            }
+          }
+        }
+      }
+
+      .carousel-data {
+        height: 294px;
+        background: #fafafb;
+
+        .carousel-image {
+          height: 270px;
+          overflow: hidden;
+
+          .ant-image {
+            img {
+              height: 200px;
+              box-shadow: 0 0 3px 0px #888888;
+            }
+          }
+        }
+
+        .carousel-text {
+          background: #f7f8fc;
+
+          p {
+            border-top: 1px solid #ddd;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 0px;
+          }
+        }
+      }
+    }
+  }
+}

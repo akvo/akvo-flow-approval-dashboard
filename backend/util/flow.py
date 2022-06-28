@@ -105,6 +105,19 @@ def get_page(form: Form, refresh_token: str):
     return collections
 
 
+def get_form_definition(survey_id: int, form_id: int, instance: str,
+                        refresh_token: str):
+    auth0 = Auth0()
+    headers = auth0.get_headers(refresh_token=refresh_token)
+    instance_uri = '{}{}'.format(instance_base, instance)
+    form_definition = get_data('{}/surveys/{}'.format(instance_uri, survey_id),
+                               headers)
+    form_definition = form_definition.get('forms')
+    form_definition = list(
+        filter(lambda x: int(x['id']) == form_id, form_definition))[0]
+    return form_definition
+
+
 def react_form(form):
     webform = r.get(f"{webform_api}/form/{form.url}")
     if webform.status_code != 200:
@@ -128,6 +141,19 @@ def react_form(form):
                 endpoint = f"/api/cascade/{alias}/{resource}"
                 q.update({"cascadeResource": endpoint})
     return webform
+
+
+def get_cascade_value(cascade_url: str, payload: str):
+    cascade_url = cascade_url.replace("api/cascade/", "cascade-path/")
+    cascade_query = [str(v).split(":")[0] for v in payload]
+    cascade_query = [f"q={v}&" for v in cascade_query]
+    cascade_query = "".join(cascade_query)
+    cascade_url = f"{webform_api}/{cascade_url}?{cascade_query}"
+    result = r.get(cascade_url)
+    if result.status_code != 200:
+        return False
+    result = result.json()
+    return [c["id"] for c in result]
 
 
 def get_cascade(instance: str, resource: str, id: int):

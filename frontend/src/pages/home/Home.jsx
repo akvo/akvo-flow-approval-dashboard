@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import "./home.scss";
-import { Row, Col, message, Button } from "antd";
+import { Row, Col, message, Button, Divider } from "antd";
 import { sumBy } from "lodash";
 import { Link } from "react-router-dom";
 import { api, store } from "../../lib";
@@ -38,6 +38,7 @@ const Surveys = ({ data }) => {
       ],
     },
   };
+
   return (
     <Col
       sm={24}
@@ -55,13 +56,14 @@ const Surveys = ({ data }) => {
           <span className="status-count pending"> {data.pending}</span>
         </p>
         <Row justify="end">
-          <Button type="primary" size="large">
+          <Button type="primary" size="large" className="view-btn">
             <Link to={`/dashboard/${data.id}`} state={routeState.state}>
               View
             </Link>
           </Button>
         </Row>
       </div>
+      <Divider />
     </Col>
   );
 };
@@ -114,6 +116,7 @@ const Home = () => {
             </Row>
           </Col>
         </Row>
+        <Divider />
       </div>
       <Row className="content-container" gutter={[16, 16]} justify="left">
         {surveyList.map((d, ix) => (

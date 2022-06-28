@@ -4,10 +4,19 @@
   font-family: "Roboto";
   padding: 10px;
 
+  .logo {
+    max-width: 80%;
+    padding-bottom: 30px;
+    margin-top: -80px;
+  }
+
   .ant-form {
-    border: 1px solid #bfbfbf;
-    border-radius: 10px;
     margin: auto;
+
+    @media (min-width: 426px) {
+      border: 1px solid #bfbfbf;
+      border-radius: 10px;
+    }
   }
 
   .main-header {
@@ -27,7 +36,6 @@
   .login-container {
     background-color: #ffffff;
     padding: 20px;
-    border-top: 1px solid #bfbfbf;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
 
@@ -36,6 +44,10 @@
         padding: 15px;
         border-radius: 4px;
       }
+    }
+
+    .policy-checkbox {
+      display: none;
     }
 
     .ant-input-affix-wrapper {
@@ -64,6 +76,10 @@
     .ant-checkbox + span {
       font-weight: 700;
       line-height: 14px;
+    }
+
+    @media (min-width: 426px) {
+      border-top: 1px solid #bfbfbf;
     }
   }
 }

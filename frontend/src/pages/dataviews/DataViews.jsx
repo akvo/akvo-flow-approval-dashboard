@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, message } from "antd";
+import "./dataviews.scss";
+import { Row, Col, message, Carousel, Image } from "antd";
 import { Webform } from "akvo-react-form";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { api, store } from "../../lib";
@@ -14,12 +15,14 @@ const initForms = {
   initial_value: [],
 };
 
-const DataViews = () => {
+const DataViews = ({ closeTour }) => {
+  closeTour();
   const { data_id } = useParams();
   const navigate = useNavigate();
   const { state: routeState } = useLocation();
   const { isLoggedIn } = store.useState((s) => s);
   const [forms, setForms] = useState(initForms);
+  const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(true);
   const { previewOnly } = routeState;
@@ -91,6 +94,16 @@ const DataViews = () => {
         setLoading(false);
         setSubmitting(false);
         setForms(res.data);
+        const photos = res.data.forms.question_group
+          .map((x) => x.question)
+          .flatMap((x) => x)
+          .filter((x) => x.type === "photo")
+          .map((x) => ({
+            text: x.name,
+            url: res.data.initial_value.find((i) => i.question === x.id)?.value,
+          }))
+          .filter((x) => x.url);
+        setImages(photos);
       });
     }
   }, [data_id, isLoggedIn]);
@@ -102,6 +115,25 @@ const DataViews = () => {
         <Row className="content-container">
           <Col span={24}>
             <div className="content">
+              {!!images.length && (
+                <Carousel dots={{ className: "carousel-dots" }} autoplay>
+                  {images.map((i, ix) => (
+                    <div key={`image-${ix}`} className="carousel-data">
+                      <Row
+                        type="flex"
+                        justify="center"
+                        align="middle"
+                        className="carousel-image"
+                      >
+                        <Image src={i.url} />
+                      </Row>
+                      <div className="carousel-text">
+                        <p>{i.text}</p>
+                      </div>
+                    </div>
+                  ))}
+                </Carousel>
+              )}
               <Webform
                 onFinish={onFinish}
                 forms={forms.forms}

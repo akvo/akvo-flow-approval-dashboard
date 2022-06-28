@@ -49,6 +49,16 @@ spec:
                 secretKeyRef:
                   name: anupng
                   key: secret-key
+            - name: FLOW_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: anupng
+                  key: flow-username
+            - name: FLOW_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: anupng
+                  key: flow-password
           readinessProbe:
             httpGet:
               path: /health-check

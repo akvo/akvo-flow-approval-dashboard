@@ -1,9 +1,12 @@
 import jwt
+import logging
 from pydantic import BaseModel
 from jwt import PyJWKClient
+from sqlalchemy.orm import Session
 import requests as r
 from pydantic import SecretStr
 from fastapi import HTTPException
+from db.crud_user import get_user_by_email
 
 
 class Oauth2Base(BaseModel):
@@ -61,20 +64,30 @@ class Auth0():
         }
         req = r.post(self.auth_domain, data=data)
         if req.status_code != 200:
-            print("Invalid Credentials")
+            logging.error("Invalid Credentials")
             exit()
         res = req.json()
         return res.get("refresh_token")
 
-    def verify(self, token: str):
+    def verify(self, session: Session, token: str):
         jwks_client = PyJWKClient(self.auth_jwks)
         try:
             signing_key = jwks_client.get_signing_key_from_jwt(token)
-            return jwt.decode(
+            user = jwt.decode(
                 token,
                 signing_key.key,
                 algorithms=["RS256"],
                 audience=self.client_id,
             )
+            userdb = get_user_by_email(session=session,
+                                       email=user.get("email"))
+            if not userdb:
+                raise HTTPException(status_code=401, detail="Unauthorized")
+            user.update({
+                "id": userdb.id,
+                "id_token": token,
+                "devices": [device.device for device in userdb.devices]
+            })
+            return user
         except jwt.exceptions.DecodeError:
             raise HTTPException(status_code=401, detail="Invalid Credentials")

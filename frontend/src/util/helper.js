@@ -19,3 +19,7 @@ export const numToDuration = (num) => {
   s = `${s === 0 ? "" : `${s < 10 ? `0${s}` : s}`}${s === 0 ? "" : "s"}`;
   return `${h} ${m} ${s}`;
 };
+
+export const toTitleCase = (word) => {
+  return `${word[0].toUpperCase()}${word.slice(1).toLowerCase()}`;
+};
