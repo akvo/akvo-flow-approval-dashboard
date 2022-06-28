@@ -55,12 +55,12 @@ spec:
                     secretKeyRef:
                       name: anupng
                       key: secret-key
-                - name: FLOW_EMAIL
+                - name: FLOW_USERNAME
                   valueFrom:
                     secretKeyRef:
                       name: anupng
                       key: flow-username
-                - name: FLOW_PWD
+                - name: FLOW_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       name: anupng
