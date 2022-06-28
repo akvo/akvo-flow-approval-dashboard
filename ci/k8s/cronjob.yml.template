@@ -1,4 +1,17 @@
 ---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: unep-gpml-seeder-${TIMESTAMP}
+spec:
+  template:
+    spec:
+      containers:
+      - name: unep-gpml-seeder
+        image: akvo/akvo-clojure-lein:20210124.114043.4437caf
+        command: ["/bin/bash", "-c"]
+        env:
+
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
@@ -46,12 +59,12 @@ spec:
                   valueFrom:
                     secretKeyRef:
                       name: anupng
-                      key: flow-email
+                      key: flow-username
                 - name: FLOW_PWD
                   valueFrom:
                     secretKeyRef:
                       name: anupng
-                      key: flow-pwd
+                      key: flow-password
           restartPolicy: Never
           volumes:
             - name: anupng-secrets
