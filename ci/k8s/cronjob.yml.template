@@ -1,5 +1,5 @@
 ---
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: jobs-anupng
@@ -23,6 +23,7 @@ spec:
           containers:
             - name: jobs-anupng
               image: eu.gcr.io/akvo-lumen/akvo-flow-approval-dashboard/backend:${CI_COMMIT}
+              command: ["python", "-m", "seeder.flow_data", "--info"]
               resources:
                 requests:
                   cpu: "50m"
