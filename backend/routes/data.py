@@ -86,6 +86,7 @@ def get_by_id(req: Request,
         raise HTTPException(status_code=404, detail="Not found")
     qtype = {}
     cascades = {}
+    warnings = []
     for question_group in webform.get("question_group"):
         for question in question_group.get("question"):
             qid = question["id"].replace("Q", "")
@@ -106,9 +107,15 @@ def get_by_id(req: Request,
                 cascade_value = get_cascade_value(cascade_url=cascade_url,
                                                   payload=val["value"])
                 if not cascade_value:
-                    raise HTTPException(status_code=404, detail="Not found")
+                    err_val = val["value"]
+                    warnings.append({
+                        "code": 1,
+                        "question": int(val["question"]),
+                        "message": f"cascade value is incorrect{err_val}"
+                    })
+                    val.update({"value": []})
                 val.update({"value": cascade_value})
-    data.update({"forms": webform})
+    data.update({"forms": webform, "warning": warnings})
     return data
 
 

@@ -37,11 +37,18 @@ class DataValue(BaseModel):
                  List[float], None]
 
 
+class DataWarning(BaseModel):
+    code: int
+    question: int
+    message: str
+
+
 class DataResponse(BaseModel):
     id: int
     form_id: int
     forms: Optional[WebFormBase] = None
     initial_value: List[DataValue]
+    warning: Optional[List[DataWarning]] = None
 
 
 class DataListResponse(BaseModel):
