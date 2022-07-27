@@ -84,24 +84,26 @@ def get_page(form: Form, refresh_token: str):
     for collection in collections:
         groups = collection.get("responses")
         responses = []
-        for group_id in groups:
-            for repeat, group_list in enumerate(groups[group_id]):
-                for question_id in group_list:
-                    value = groups[group_id][repeat][question_id]
-                    question = list(
-                        filter(lambda x: x["id"] == question_id, questions))
-                    qtype = question[0]["type"]
-                    responses.append({
-                        "question": question_id,
-                        "repeat_index": repeat,
-                        "value": data_handler(value, qtype)
-                    })
-        submissionDate = handle_date(collection.get("submissionDate"))
-        collection.update({
-            "responses": responses,
-            "submissionDate": submissionDate,
-            "duration": collection.get("surveyalTime")
-        })
+        if groups:
+            for group_id in groups:
+                for repeat, group_list in enumerate(groups[group_id]):
+                    for question_id in group_list:
+                        value = groups[group_id][repeat][question_id]
+                        question = list(
+                            filter(lambda x: x["id"] == question_id,
+                                   questions))
+                        qtype = question[0]["type"]
+                        responses.append({
+                            "question": question_id,
+                            "repeat_index": repeat,
+                            "value": data_handler(value, qtype)
+                        })
+            submissionDate = handle_date(collection.get("submissionDate"))
+            collection.update({
+                "responses": responses,
+                "submissionDate": submissionDate,
+                "duration": collection.get("surveyalTime")
+            })
     return collections
 
 

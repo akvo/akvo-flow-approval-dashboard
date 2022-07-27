@@ -62,8 +62,12 @@ for form in forms:
             logging.info("- NEW SUBMISSION: {} - {}".format(
                 result["deviceIdentifier"].upper(), result["id"]))
         if debug_records:
-            submission_date = result["submissionDate"].strftime("%Y-%m-%dT%XZ")
-            result.update({"submissionDate": submission_date})
+            try:
+                submission_date = result["submissionDate"].strftime(
+                    "%Y-%m-%dT%XZ")
+                result.update({"submissionDate": submission_date})
+            except Exception as e:
+                print(e)
     total_data = count_data(session=session, form=form.id)
     logging.info(f"NEW RECORDS: {new_records}")
     logging.info(f"TOTAL RECORDS: {total_data}\n")

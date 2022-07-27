@@ -21,7 +21,7 @@ class DataStatus(enum.Enum):
 
 class DataBase(BaseModel):
     id: int
-    name: str
+    name: Optional[str] = None
     device: str
     submitter: str
     submitted_at: str
@@ -106,7 +106,7 @@ class Data(Base):
             self.created_at.timetuple())
         return {
             "id": self.id,
-            "name": self.name,
+            "name": self.name or "ERROR",
             "device": self.device,
             "submitter": self.submitter,
             "submitted_at": submitted_at,
