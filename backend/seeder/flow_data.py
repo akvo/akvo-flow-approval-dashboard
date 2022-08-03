@@ -67,7 +67,8 @@ for form in forms:
                     "%Y-%m-%dT%XZ")
                 result.update({"submissionDate": submission_date})
             except Exception as e:
-                print(e)
+                submissionDate = result["submissionDate"]
+                print(f"{e}: {submissionDate}")
     total_data = count_data(session=session, form=form.id)
     logging.info(f"NEW RECORDS: {new_records}")
     logging.info(f"TOTAL RECORDS: {total_data}\n")

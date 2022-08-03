@@ -145,13 +145,19 @@ def react_form(form):
     return webform
 
 
+def get_cascade_string(name):
+    if ":" in name:
+        return name.split(":")[1]
+    return name
+
+
 def get_cascade_value(cascade_url: str, payload: str):
     cascade_url = cascade_url.replace("api/cascade/", "cascade-path/")
-    cascade_query = [str(v).split(":")[0] for v in payload]
+    cascade_query = [get_cascade_string(v) for v in payload]
     cascade_query = [f"q={v}&" for v in cascade_query]
     cascade_query = "".join(cascade_query)
-    cascade_url = f"{webform_api}/{cascade_url}?{cascade_query}"
-    result = r.get(cascade_url)
+    url = f"{webform_api}/{cascade_url}?{cascade_query}"
+    result = r.get(url)
     if result.status_code != 200:
         return False
     result = result.json()
