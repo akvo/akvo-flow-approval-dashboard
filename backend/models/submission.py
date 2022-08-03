@@ -15,8 +15,8 @@ class Geolocation(TypedDict):
     lng: float
 
 
-ValueVar = TypeVar('ValueVal', int, str, List[str], List[int], Geolocation,
-                   List[CascadeBase])
+ValueVar = TypeVar('ValueVal', float, int, str, List[str], List[int],
+                   List[CascadeBase], Geolocation)
 
 
 class AnswerBase(BaseModel):

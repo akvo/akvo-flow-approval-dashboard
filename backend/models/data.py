@@ -33,8 +33,8 @@ class DataBase(BaseModel):
 class DataValue(BaseModel):
     question: int
     repeat_index: Optional[int] = None
-    value: Union[int, float, str, bool, dict, List[int], List[str],
-                 List[float], None]
+    value: Union[float, int, str, List[float], List[int], List[str], bool,
+                 dict, None]
 
 
 class DataWarning(BaseModel):
