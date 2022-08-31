@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
-import "./dataviews.scss";
-import { Row, Col, message, Carousel, Image } from "antd";
-import { Webform } from "akvo-react-form";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { api, store } from "../../lib";
-import { Loading } from "../../components";
-import { dropRight, takeRight } from "lodash";
+import React, { useEffect, useState } from 'react';
+import './dataviews.scss';
+import { Row, Col, message, Carousel, Image } from 'antd';
+import { Webform } from 'akvo-react-form';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { api, store } from '../../lib';
+import { Loading } from '../../components';
+import { dropRight, takeRight } from 'lodash';
 
 const initForms = {
   forms: {
-    name: "Loading",
+    name: 'Loading',
     question_group: [],
   },
   initial_value: [],
@@ -25,7 +25,6 @@ const DataViews = ({ closeTour }) => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(true);
-  const { previewOnly } = routeState;
 
   const questions = forms.forms.question_group
     .map((q) => q.question)
@@ -37,10 +36,10 @@ const DataViews = ({ closeTour }) => {
     const version = forms.forms.version;
     const answers = Object.keys(data)
       .map((k) => {
-        const q = k.split("-");
+        const q = k.split('-');
         const value = data[k];
         const question = questions.find(
-          (qs) => parseInt(qs["id"]) === parseInt(q[0])
+          (qs) => parseInt(qs['id']) === parseInt(q[0])
         );
         let answer = {
           questionId: parseInt(q[0]),
@@ -70,19 +69,19 @@ const DataViews = ({ closeTour }) => {
     const payload = { answers: answers, instance: instance, version: version };
     api
       .post(`/data/${data_id}`, payload, {
-        "content-type": "application/json",
+        'content-type': 'application/json',
       })
       .then(() => {
         const breadcrumbs = dropRight(routeState.breadcrumbs);
         const before = takeRight(breadcrumbs)[0];
-        message.success("Success");
+        message.success('Success');
         setTimeout(() => {
           navigate(before.target, { state: { breadcrumbs: breadcrumbs } });
           setSubmitting(false);
         }, 1000);
       })
       .catch((err) => {
-        message.error("Internal Server Error");
+        message.error('Internal Server Error');
         setSubmitting(false);
         console.error(err);
       });
@@ -97,7 +96,7 @@ const DataViews = ({ closeTour }) => {
         const photos = res.data.forms.question_group
           .map((x) => x.question)
           .flatMap((x) => x)
-          .filter((x) => x.type === "photo")
+          .filter((x) => x.type === 'photo')
           .map((x) => ({
             text: x.name,
             url: res.data.initial_value.find((i) => i.question === x.id)?.value,
@@ -109,16 +108,25 @@ const DataViews = ({ closeTour }) => {
   }, [data_id, isLoggedIn]);
 
   return (
-    <div id="dataview" className="main">
+    <div
+      id="dataview"
+      className="main"
+    >
       <Loading isLoading={loading} />
       {!loading && (
         <Row className="content-container">
           <Col span={24}>
             <div className="content">
               {!!images.length && (
-                <Carousel dots={{ className: "carousel-dots" }} autoplay>
+                <Carousel
+                  dots={{ className: 'carousel-dots' }}
+                  autoplay
+                >
                   {images.map((i, ix) => (
-                    <div key={`image-${ix}`} className="carousel-data">
+                    <div
+                      key={`image-${ix}`}
+                      className="carousel-data"
+                    >
                       <Row
                         type="flex"
                         justify="center"
@@ -141,7 +149,9 @@ const DataViews = ({ closeTour }) => {
                 sidebar={true}
                 submitButtonSetting={{
                   loading: submitting,
-                  disabled: previewOnly ? previewOnly : submitting,
+                  disabled: routeState?.previewOnly
+                    ? routeState.previewOnly
+                    : submitting,
                 }}
               />
             </div>
